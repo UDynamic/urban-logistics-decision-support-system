@@ -34,29 +34,28 @@ const sleep = (milliseconds) => {
   await page.type('input[data-qa-id="cellphone-number-input"]', '09130398835');
 
   // Click the submit button (adjust the selector to match the one that says "ورود به وب اپلیکیشن اسنپ")
-  await page.waitForSelector('button[type="button"]', { visible: true });
-  await sleep(3000);
-  await page.click('button[type="button"]'); // Or a better selector if needed
+  await page.waitForSelector('#login-submit', { visible: true });
+  await page.click('#login-submit');
   await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
 
-    // 2. Login (replace selectors and credentials as needed)
-    //   await page.type('#username', 'yourUsername'); // Replace with actual selector
-    //   await page.type('#password', 'yourPassword'); // Replace with actual selector
-    //   await Promise.all([
-    //     page.click('#loginButton'), // Replace with actual selector
-    //     page.waitForNavigation({ waitUntil: 'networkidle2' }),
-    //   ]);
+  // 2. Login (replace selectors and credentials as needed)
+  //   await page.type('#username', 'yourUsername'); // Replace with actual selector
+  //   await page.type('#password', 'yourPassword'); // Replace with actual selector
+  //   await Promise.all([
+  //     page.click('#loginButton'), // Replace with actual selector
+  //     page.waitForNavigation({ waitUntil: 'networkidle2' }),
+  //   ]);
 
-    //   // 3. On menu page, navigate to main page (e.g., click a menu item)
-    //   await Promise.all([
-    //     page.click('#mainMenuItem'), // Replace with actual selector
-    //     page.waitForNavigation({ waitUntil: 'networkidle2' }),
-    //   ]);
+  //   // 3. On menu page, navigate to main page (e.g., click a menu item)
+  //   await Promise.all([
+  //     page.click('#mainMenuItem'), // Replace with actual selector
+  //     page.waitForNavigation({ waitUntil: 'networkidle2' }),
+  //   ]);
 
-    //   // 4. Now on main page, scrape as needed
-    //   const mainContent = await page.$eval('#mainContent', el => el.textContent); // Replace selector
-    //   console.log('Main Content:', mainContent);
-    await sleep(5000);
+  //   // 4. Now on main page, scrape as needed
+  //   const mainContent = await page.$eval('#mainContent', el => el.textContent); // Replace selector
+  //   console.log('Main Content:', mainContent);
+  await sleep(5000);
   await browser.close();
 })();

@@ -29,9 +29,6 @@ const sleep = (milliseconds) => {
     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Update this path if needed
   });
 
-
-
-
   const page = await browser.newPage();
 
   // Close the default blank tab
@@ -111,50 +108,98 @@ const sleep = (milliseconds) => {
   console.log('🚕 Cab request button detected and clicked!')
 
   // #########################################################
-  // 5. Canvas hover and focus
+  // 5. Canvas preparation
   // #########################################################
   await page.hover('canvas'); // Ensure canvas is focused
-  await page.mouse.wheel({ deltaY: 50000000 }); // Scroll down to zoom out
+
+  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
+  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
+  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
 
   const canvas = await page.$('canvas');
   const boundingBox = await canvas.boundingBox();
 
-  // Start from center of canvas
-  const startX = boundingBox.x + boundingBox.width / 2;
-  const startY = boundingBox.y + boundingBox.height / 2;
+  // #########################################################
+  // 6. Navigator Class
+  // #########################################################
+  class CanvasNavigator {
+    constructor(page, boundingBox, referenceWidth = 1000, baseStepLength = 100) {
+      this.page = page;
+      this.boundingBox = boundingBox;
+      this.baseStepLength = baseStepLength;
 
-  // Move right and up by 100px
-  let rightSteps = 31;
-  let upSteps = 13;
-  let leftSteps = 50;
-  let downSteps = 50;
-  let lenghtStep = 100;
-  const endX = startX - lenghtStep;
-  const endY = startY + lenghtStep;
+      this.startX = boundingBox.x + boundingBox.width / 2;
+      this.startY = boundingBox.y + boundingBox.height / 2;
 
-  // moving to the Right direction 
-  for (let i = 1; i <= rightSteps; i++) {
-    await page.mouse.move(startX, startY);
-    await page.mouse.down();
-    await page.mouse.move(endX, startY, { steps: 20 }); // smooth movement
-    await page.mouse.up();
-    console.log("➡️ ", i , " steps to the Right")
-  }
+      const scaleFactor = boundingBox.width / referenceWidth;
+      this.stepLength = baseStepLength * scaleFactor;
 
-    // moving to the top direction 
-    for (let i = 1; i <= upSteps; i++) {
-      await page.mouse.move(startX, startY);
-      await page.mouse.down();
-      await page.mouse.move(startX, endY, { steps: 20 }); // smooth movement
-      await page.mouse.up();
-      console.log("⬆️ ", i , " steps to the Top")
+      this.directionVectors = {
+        right: { x: -1, y: 0 },
+        up: { x: 0, y: 1 },
+        left: { x: 1, y: 0 },
+        down: { x: 0, y: -1 },
+      };
     }
 
+    async moveInDirection(direction, steps) {
+      const vector = this.directionVectors[direction];
+      if (!vector) {
+        throw new Error(`Unknown direction: ${direction}`);
+      }
+
+      console.log(`🚀 Starting to move ${steps} steps to the ${direction.toUpperCase()}`);
+
+      for (let i = 1; i <= steps; i++) {
+        const fromX = this.startX;
+        const fromY = this.startY;
+
+        const toX = fromX + vector.x * this.stepLength;
+        const toY = fromY + vector.y * this.stepLength;
+
+        await this.page.mouse.move(fromX, fromY);
+        await this.page.mouse.down();
+        await this.page.mouse.move(toX, toY, { steps: 20 });
+        await this.page.mouse.up();
+
+        console.log(`${i}/${steps} ➡️ Moved one step ${direction}`);
+      }
+
+      console.log(`✅ Finished ${direction.toUpperCase()} movement`);
+    }
+
+    async moveByPattern(pattern) {
+      for (const [direction, steps] of Object.entries(pattern)) {
+        await this.moveInDirection(direction, steps);
+      }
+    }
+  }
 
   // #########################################################
-  // 5. Canvas hover and focus
+  // 7. Movement patterns
   // #########################################################
 
+  // ! must add file or integrate database
+  const D01movementPattern = {
+    right: 28,
+    up: 14,
+  };
+
+  // #########################################################
+  // 7. Instantiate Navigation Class 
+  // #########################################################
+  const navigator = new CanvasNavigator(page, boundingBox);
+
+  console.log(boundingBox.width, boundingBox.height);
+
+  await navigator.moveByPattern(D01movementPattern);
+
+
+
+
+
+  // ---------------------------------------------------------
+  // ---------------------------------------------------------
   await sleep(50000);
   await browser.close();
 })();

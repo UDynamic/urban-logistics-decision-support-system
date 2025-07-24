@@ -114,8 +114,8 @@ const sleep = (milliseconds) => {
   // 5. Canvas hover and focus
   // #########################################################
   await page.hover('canvas'); // Ensure canvas is focused
-  await page.mouse.wheel({ deltaY: 500000 }); // Scroll down to zoom out
-  
+  await page.mouse.wheel({ deltaY: 50000000 }); // Scroll down to zoom out
+
   const canvas = await page.$('canvas');
   const boundingBox = await canvas.boundingBox();
 
@@ -124,13 +124,33 @@ const sleep = (milliseconds) => {
   const startY = boundingBox.y + boundingBox.height / 2;
 
   // Move right and up by 100px
-  const endX = startX - 300;
-  const endY = startY + 300;
+  let rightSteps = 31;
+  let upSteps = 13;
+  let leftSteps = 50;
+  let downSteps = 50;
+  let lenghtStep = 100;
+  const endX = startX - lenghtStep;
+  const endY = startY + lenghtStep;
 
-  await page.mouse.move(startX, startY);
-  await page.mouse.down();
-  await page.mouse.move(endX, endY, { steps: 20 }); // smooth movement
-  await page.mouse.up();
+  // moving to the Right direction 
+  for (let i = 1; i <= rightSteps; i++) {
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(endX, startY, { steps: 20 }); // smooth movement
+    await page.mouse.up();
+    console.log("➡️ ", i , " steps to the Right")
+  }
+
+    // moving to the top direction 
+    for (let i = 1; i <= upSteps; i++) {
+      await page.mouse.move(startX, startY);
+      await page.mouse.down();
+      await page.mouse.move(startX, endY, { steps: 20 }); // smooth movement
+      await page.mouse.up();
+      console.log("⬆️ ", i , " steps to the Top")
+    }
+
+
   // #########################################################
   // 5. Canvas hover and focus
   // #########################################################

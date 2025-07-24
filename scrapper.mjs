@@ -78,10 +78,10 @@ const sleep = (milliseconds) => {
       console.log('🔐 CAPTCHA submitted');
 
       // Optional: wait a little for the OTP input to load properly
-      await page.waitForTimeout(2000);
+      sleep(2000);
+    } else {
+      console.log('✅ No CAPTCHA dialog detected, continuing to OTP...');
     }
-    console.log('✅ No CAPTCHA dialog detected, continuing to OTP...');
-
     // #########################################################
     // 2. OTP input
     // #########################################################
@@ -109,6 +109,31 @@ const sleep = (milliseconds) => {
   await page.waitForSelector('#ChoiceCab', { visible: true });
   await page.click('#ChoiceCab');
   console.log('🚕 Cab request button detected and clicked!')
+
+  // #########################################################
+  // 5. Canvas hover and focus
+  // #########################################################
+  await page.hover('canvas'); // Ensure canvas is focused
+  await page.mouse.wheel({ deltaY: 500000 }); // Scroll down to zoom out
+  
+  const canvas = await page.$('canvas');
+  const boundingBox = await canvas.boundingBox();
+
+  // Start from center of canvas
+  const startX = boundingBox.x + boundingBox.width / 2;
+  const startY = boundingBox.y + boundingBox.height / 2;
+
+  // Move right and up by 100px
+  const endX = startX - 300;
+  const endY = startY + 300;
+
+  await page.mouse.move(startX, startY);
+  await page.mouse.down();
+  await page.mouse.move(endX, endY, { steps: 20 }); // smooth movement
+  await page.mouse.up();
+  // #########################################################
+  // 5. Canvas hover and focus
+  // #########################################################
 
   await sleep(50000);
   await browser.close();

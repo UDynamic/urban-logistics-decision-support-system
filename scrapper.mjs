@@ -25,6 +25,9 @@ const sleep = (milliseconds) => {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: false,
+    args: [
+      '--window-size=600,800',
+    ],  
     userDataDir: "./tmp",
     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Update this path if needed
   });
@@ -34,7 +37,6 @@ const sleep = (milliseconds) => {
   // Close the default blank tab
   const pages = await browser.pages();
   await pages[0].close();
-
 
   // #########################################################
   // 1. Go to login page
@@ -181,17 +183,14 @@ const sleep = (milliseconds) => {
 
   // ! must add file or integrate database
   const D01movementPattern = {
-    right: 28,
-    up: 14,
+    right: 26,
+    up: 12,
   };
 
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
   const navigator = new CanvasNavigator(page, boundingBox);
-
-  console.log(boundingBox.width, boundingBox.height);
-
   await navigator.moveByPattern(D01movementPattern);
 
 

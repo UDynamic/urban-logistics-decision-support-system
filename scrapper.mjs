@@ -125,7 +125,7 @@ const sleep = (milliseconds) => {
   // #########################################################
   // 6. Route Class
   // #########################################################
-  class RouteAnalyzer {
+  class routeScrapper {
     /**
      * @param {puppeteer.Page} page - Puppeteer page instance
      * @param {Object} districtDB - Object with district codes as keys, search terms as values
@@ -225,11 +225,8 @@ const sleep = (milliseconds) => {
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
-  const analyzer = new RouteAnalyzer(page, districtSearchMap, selectors);
-  await analyzer.run();
-
-
-
+  const scrapper = new routeScrapper(page, districtSearchMap, selectors);
+  await scrapper.run();
 
 
   // ---------------------------------------------------------

@@ -27,7 +27,7 @@ const sleep = (milliseconds) => {
     defaultViewport: false,
     args: [
       '--window-size=600,800',
-    ],  
+    ],
     userDataDir: "./tmp",
     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Update this path if needed
   });
@@ -122,76 +122,110 @@ const sleep = (milliseconds) => {
   const boundingBox = await canvas.boundingBox();
 
   // #########################################################
-  // 6. Navigator Class
+  // 6. Route Class
   // #########################################################
-  class CanvasNavigator {
-    constructor(page, boundingBox, referenceWidth = 1000, baseStepLength = 100) {
+  class RouteAnalyzer {
+    /**
+     * @param {puppeteer.Page} page - Puppeteer page instance
+     * @param {Object} districtDB - Object with district codes as keys, search terms as values
+     * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
+     */
+    constructor(page, districtDB, selectors) {
       this.page = page;
-      this.boundingBox = boundingBox;
-      this.baseStepLength = baseStepLength;
-
-      this.startX = boundingBox.x + boundingBox.width / 2;
-      this.startY = boundingBox.y + boundingBox.height / 2;
-
-      const scaleFactor = boundingBox.width / referenceWidth;
-      this.stepLength = baseStepLength * scaleFactor;
-
-      this.directionVectors = {
-        right: { x: -1, y: 0 },
-        up: { x: 0, y: 1 },
-        left: { x: 1, y: 0 },
-        down: { x: 0, y: -1 },
-      };
+      this.districtDB = districtDB;
+      this.selectors = selectors;
     }
 
-    async moveInDirection(direction, steps) {
-      const vector = this.directionVectors[direction];
-      if (!vector) {
-        throw new Error(`Unknown direction: ${direction}`);
+    // Main loop: for each origin, loop over all destinations
+    async run() {
+      const districtCodes = Object.keys(this.districtDB);
+
+      for (const originCode of districtCodes) {
+        const originName = this.districtDB[originCode];
+        console.log(`🚩 Origin: ${originCode} (${originName})`);
+
+        for (const destCode of districtCodes) {
+          const destinationName = this.districtDB[destCode];
+
+          if (originCode === destCode) {
+            console.log(`⏩ Skipping same district (${originCode})`);
+            continue;
+          }
+
+          console.log(`➡️ Route: ${originCode} ➡️ ${destCode}`);
+
+          try {
+            await this.setOrigin(originName);
+            await this.setDestination(destinationName);
+            await this.extractRouteData(originCode, destCode);
+          } catch (err) {
+            console.error(`❌ Failed route ${originCode} ➡️ ${destCode}:`, err.message);
+          }
+
+          await this.reset();
+        }
       }
 
-      console.log(`🚀 Starting to move ${steps} steps to the ${direction.toUpperCase()}`);
-
-      for (let i = 1; i <= steps; i++) {
-        const fromX = this.startX;
-        const fromY = this.startY;
-
-        const toX = fromX + vector.x * this.stepLength;
-        const toY = fromY + vector.y * this.stepLength;
-
-        await this.page.mouse.move(fromX, fromY);
-        await this.page.mouse.down();
-        await this.page.mouse.move(toX, toY, { steps: 20 });
-        await this.page.mouse.up();
-
-        console.log(`${i}/${steps} ➡️ Moved one step ${direction}`);
-      }
-
-      console.log(`✅ Finished ${direction.toUpperCase()} movement`);
+      console.log("✅ All routes analyzed.");
     }
 
-    async moveByPattern(pattern) {
-      for (const [direction, steps] of Object.entries(pattern)) {
-        await this.moveInDirection(direction, steps);
-      }
+    // Set origin by typing into the search input
+    async setOrigin(searchQuery) {
+      await this.page.waitForSelector(this.selectors.originInput, { visible: true });
+      await this.page.click(this.selectors.originInput, { clickCount: 3 });
+      await this.page.keyboard.press('Backspace');
+      await this.page.type(this.selectors.originInput, searchQuery, { delay: 50 });
+
+      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
+      await this.page.click(this.selectors.resultItem);
+      await this.page.click(this.selectors.originSubmit);
+    }
+
+    // Set destination by typing into the same or another input
+    async setDestination(searchQuery) {
+      await this.page.waitForSelector(this.selectors.destinationInput, { visible: true });
+      await this.page.click(this.selectors.destinationInput, { clickCount: 3 });
+      await this.page.keyboard.press('Backspace');
+      await this.page.type(this.selectors.destinationInput, searchQuery, { delay: 50 });
+
+      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
+      await this.page.click(this.selectors.resultItem);
+      await this.page.click(this.selectors.destinationSubmit);
+    }
+
+    // Placeholder: Implement how to extract the route info
+    async extractRouteData(originCode, destCode) {
+      console.log(`🔍 Extracting data for ${originCode} ➡️ ${destCode}`);
+      // TODO: Add your actual logic here (screenshot, scrape price/time, etc.)
+    }
+
+    // Clear or reset the interface between routes
+    async reset() {
+      // TODO: Implement if there's a "clear" or "reset" button
+      // Or just reload the page if it's cleaner
+      await this.page.reload({ waitUntil: 'networkidle2' });
     }
   }
 
   // #########################################################
-  // 7. Movement patterns
+  // 7. Route parameters
   // #########################################################
 
-  // ! must add file or integrate database
-  const D01movementPattern = {
-    right: 26,
-    up: 12,
+  // Define all selectors once
+  const selectors = {
+    originInput: 'input[data-qa-id="origin-search-input"]',          // example
+    destinationInput: 'input[data-qa-id="destination-search-input"]', // example
+    resultItem: 'ul li:first-child',
+    originSubmit: 'button[data-qa-id="origin-submit"]',
+    destinationSubmit: 'button[data-qa-id="destination-submit"]',
   };
+
 
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
-  const navigator = new CanvasNavigator(page, boundingBox);
-  await navigator.moveByPattern(D01movementPattern);
+  const analyzer = new RouteAnalyzer(page, districtSearchMap, selectors);
+  await analyzer.run();
 
 
 

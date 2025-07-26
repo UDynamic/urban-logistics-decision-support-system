@@ -2,6 +2,9 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
 import Districts from './data/Districts.json' with { type: 'json' };
+// Total neighborhoods: 408
+// total routs:  166464
+
 
 function askQuestion(query) {
   const rl = readline.createInterface({
@@ -119,8 +122,8 @@ const sleep = (milliseconds) => {
   await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
   await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
 
-  const canvas = await page.$('canvas');
-  const boundingBox = await canvas.boundingBox();
+  // const canvas = await page.$('canvas');
+  // const boundingBox = await canvas.boundingBox();
 
   // #########################################################
   // 6. Route Class
@@ -131,10 +134,10 @@ const sleep = (milliseconds) => {
      * @param {Object} districtDB - Object with district codes as keys, search terms as values
      * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
      */
-    constructor(page, districtDB, selectors) {
+    constructor(page, districtsDB, routeSelectors) {
       this.page = page;
-      this.districtDB = districtDB;
-      this.selectors = selectors;
+      this.districtsDB = districtsDB;
+      this.routeSelectors = routeSelectors;
     }
 
     // Main loop: for each origin, loop over all destinations

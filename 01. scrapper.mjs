@@ -210,13 +210,6 @@ const sleep = (milliseconds) => {
   // #########################################################
   // 7. Route parameters
   // #########################################################
-  // Define your district code-to-searchText mapping
-  const districtSearchMap = {
-    D01: "تهران‌پارس",
-    D02: "صادقیه",
-    D03: "تجریش",
-    // ... D04 to D22
-  };
 
   // Define all selectors once
   const selectors = {

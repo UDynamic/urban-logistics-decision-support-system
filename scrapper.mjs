@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
+import Districts from './data/Districts.json' with { type: 'json' };
 
 function askQuestion(query) {
   const rl = readline.createInterface({

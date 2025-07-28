@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
-import Districts from './data/Districts.json' with { type: 'json' };
+import districts from './data/Districts.json' with { type: 'json' };
 
 
 
@@ -23,7 +23,8 @@ const selectors = {
 
   // rout class selectors
   originSearchBtn: 'footer h6',
-  destinationInput: 'input[data-qa-id="destination-search-input"]', // example
+  originSearchInput: 'input[data-qa-id="search-input"]',
+  destinationInput: 'input[data-qa-id="destination-search-input"]',
   resultItem: 'ul li:first-child',
   originSubmit: 'button[data-qa-id="origin-submit"]',
   destinationSubmit: 'button[data-qa-id="destination-submit"]',
@@ -182,7 +183,7 @@ Total routs:  166464
 
     // origin inputed
     await page.waitForSelector(originSearchInput, { visible: true });
-    await page.type(originSearchInput, captchaSolution);
+    await page.type(originSearchInput, districts);
     sleep(5000)
   }
 

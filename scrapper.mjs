@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
-import districts from './data/Districts.json' with { type: 'json' };
+import districts from './data/districts.json' with { type: 'json' };
 
 
 
@@ -16,10 +16,10 @@ const selectors = {
   logInSubmitButton: '#login-submit',
   captchaDialog: 'div[role="dialog"]',
   captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
-  otpInputSelector: 'input[type="tel"]',
+  otpInputSelector: 'input',
 
   // menue
-  cabRequestBtn:'#ChoiceCab',
+  cabRequestBtn: '#ChoiceCab',
 
   // rout class selectors
   originSearchBtn: 'footer h6',
@@ -151,7 +151,7 @@ Total routs:  166464
 
     // Ask user to enter the OTP in console
     const otpCode = await askQuestion('🔑 Enter OTP code: ');
-    
+
     // Type the OTP into the web page (automatic submission)
     await page.type(selectors.otpInputSelector, otpCode);
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
@@ -180,11 +180,20 @@ Total routs:  166464
     // origin search bar selected
     await page.waitForSelector(selectors.originSearchBtn, { visible: true });
     await page.click(selectors.originSearchBtn);
+    await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
     // origin inputed
-    await page.waitForSelector(originSearchInput, { visible: true });
-    await page.type(originSearchInput, districts);
-    sleep(5000)
+    await page.waitForSelector(selectors.originSearchInput, { visible: true });
+
+    // console.log(`found ${districts[0].neighborhoods[0]} in ${districts[0]}`);
+    
+    const d01 = districts[0];
+    const nh01_01 = d01.neighborhoods[0];
+    console.log(`found ${nh01_01} in ${d01.district}`);
+    await page.focus(selectors.originSearchInput);
+    await page.type(selectors.originSearchInput, "ازگل", { delay: 100 });
+    
+    await sleep(5000);
   }
 
   // main scrapper process and logic
@@ -209,7 +218,7 @@ Total routs:  166464
         console.log(`🚩 Origin: ${originCode} (${originName})`);
 
         for (const destCode of districtCodes) {
-          const destinationName = this.districtDB[destCode];
+          const destinationName = this.Districts[destCode];
 
           if (originCode === destCode) {
             console.log(`⏩ Skipping same district (${originCode})`);
@@ -235,26 +244,26 @@ Total routs:  166464
 
     // Set origin by typing into the search input
     async setOrigin(searchQuery) {
-      await this.page.waitForSelector(this.selectors.originInput, { visible: true });
-      await this.page.click(this.selectors.originInput, { clickCount: 3 });
+      await this.page.waitForSelector(this.routeSelectors.originSearchInput, { visible: true });
+      await this.page.click(this.routeSelectors.originSearchInput, { clickCount: 3 });
       await this.page.keyboard.press('Backspace');
-      await this.page.type(this.selectors.originInput, searchQuery, { delay: 50 });
+      await this.page.type(this.routeSelectors.originSearchInput, searchQuery, { delay: 50 });
 
-      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
-      await this.page.click(this.selectors.resultItem);
-      await this.page.click(this.selectors.originSubmit);
+      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
+      await this.page.click(this.routeSelectors.resultItem);
+      await this.page.click(this.routeSelectors.originSubmit);
     }
 
     // Set destination by typing into the same or another input
     async setDestination(searchQuery) {
-      await this.page.waitForSelector(this.selectors.destinationInput, { visible: true });
-      await this.page.click(this.selectors.destinationInput, { clickCount: 3 });
+      await this.page.waitForSelector(this.routeSelectors.destinationInput, { visible: true });
+      await this.page.click(this.routeSelectors.destinationInput, { clickCount: 3 });
       await this.page.keyboard.press('Backspace');
-      await this.page.type(this.selectors.destinationInput, searchQuery, { delay: 50 });
+      await this.page.type(this.routeSelectors.destinationInput, searchQuery, { delay: 50 });
 
-      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
-      await this.page.click(this.selectors.resultItem);
-      await this.page.click(this.selectors.destinationSubmit);
+      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
+      await this.page.click(this.routeSelectors.resultItem);
+      await this.page.click(this.routeSelectors.destinationSubmit);
     }
 
     // Placeholder: Implement how to extract the route info
@@ -277,6 +286,13 @@ Total routs:  166464
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
+  // Create a district search map from the districts data
+  const districtSearchMap = {};
+  districts.forEach(district => {
+    const districtName = district.district || district.name || district.title;
+    districtSearchMap[district.id] = districtName;
+  });
+  
   const scrapper = new routeScrapper(page, districtSearchMap, selectors);
   await scrapper.run();
 

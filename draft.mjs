@@ -1,12 +1,5 @@
-import Districts from './data/Districts.json' with { type: 'json' };
+import districts from './data/districts.json' with { type: 'json' };
 
-
-const totalNeighborhoods = Districts.reduce((count, district) => {
-    return count + district.neighborhoods.length;
-}, 0);
-
-
-// Total neighborhoods: 408
-// total routs:  166464
-console.log(`Total neighborhoods: ${totalNeighborhoods}`);
-console.log("total routs: ", totalNeighborhoods * totalNeighborhoods);
+const d01 = districts[0];
+const nh01_01 = d01.neighborhoods[0];
+console.log(`found ${nh01_01} in ${d01.name}`);

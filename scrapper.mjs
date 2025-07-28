@@ -1,11 +1,50 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
-import Districts from './data/Districts.json' with { type: 'json' };
-// Total neighborhoods: 408
-// total routs:  166464
+import districts from './data/districts.json' with { type: 'json' };
 
 
+
+// #########################################################
+// 00. Selectors and parameters
+// #########################################################
+
+// Defining all selectors for modular design
+const selectors = {
+  // login selectors
+  phoneNumberInput: 'input[data-qa-id="cellphone-number-input"]',
+  logInSubmitButton: '#login-submit',
+  captchaDialog: 'div[role="dialog"]',
+  captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
+  otpInputSelector: 'input',
+
+  // menue
+  cabRequestBtn: '#ChoiceCab',
+
+  // rout class selectors
+  originSearchBtn: 'footer h6',
+  originSearchInput: 'input[data-qa-id="search-input"]',
+  destinationInput: 'input[data-qa-id="destination-search-input"]',
+  resultItem: 'ul li:first-child',
+  originSubmit: 'button[data-qa-id="origin-submit"]',
+  destinationSubmit: 'button[data-qa-id="destination-submit"]',
+};
+
+const urls = {
+  loginUrl: "https://app.snapp.taxi/login",
+  menueUrl: "https://app.snapp.taxi/"
+}
+
+const params = {
+  phoneNumber: '09130398835',
+}
+
+
+// #########################################################
+// 00. Helper Functions
+// #########################################################
+
+// Input data via console
 function askQuestion(query) {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -20,10 +59,27 @@ function askQuestion(query) {
   );
 }
 
-
+// sleep method for specific idle time
 const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
+
+/* neighborhood counter
+const totalNeighborhoods = Districts.reduce((count, district) => {
+    return count + district.neighborhoods.length;
+}, 0);
+console.log(`Total neighborhoods: ${totalNeighborhoods}`);
+console.log("total routs: ", totalNeighborhoods * totalNeighborhoods);
+
+## output:
+Total neighborhoods: 408
+Total routs:  166464
+*/
+
+
+// #########################################################
+// 01. Pupetteer setup & lunch
+// #########################################################
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -35,121 +91,134 @@ const sleep = (milliseconds) => {
     userDataDir: "./tmp",
     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Update this path if needed
   });
-
   const page = await browser.newPage();
 
-  // Close the default blank tab
+  // Closing the default first blank tab
   const pages = await browser.pages();
   await pages[0].close();
 
   // #########################################################
-  // 1. Go to login page
+  // 02. Loging in through log in page
   // #########################################################
 
-  const urlLanding = 'https://app.snapp.taxi/login';
-  await page.goto(urlLanding, { waitUntil: 'networkidle2' });
-  console.log('🔐 Login page loaded');
+  // login URL
+  await page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
+  console.log('🛬 Login page loaded');
 
-  const currentUrl = page.url()
-  if (currentUrl !== "https://app.snapp.taxi/") {
+  // User Data persistance (loged in automatically or must run authentication)
+  if (page.url() !== urls.menueUrl) {
+    console.log('🔐 not Authenticated, commencing authentication');
 
-    console.log('⛔ not Authenticated, commencing authentication');
     // Type the phone number
-    await page.waitForSelector('input[data-qa-id="cellphone-number-input"]', { visible: true })
-    await page.type('input[data-qa-id="cellphone-number-input"]', '09130398835');
-    console.log('🔐 Phone number entered');
+    await page.waitForSelector(selectors.phoneNumberInput, { visible: true })
+    await page.type(selectors.phoneNumberInput, params.phoneNumber);
+    console.log('📱 Phone number entered');
 
 
-    // Click the submit button (adjust the selector to match the one that says "ورود به وب اپلیکیشن اسنپ")
-    await page.waitForSelector('#login-submit', { visible: true });
-    await page.click('#login-submit');
-    console.log('🔐 Login button clicked');
+    // Click the submit button
+    await page.waitForSelector(selectors.logInSubmitButton, { visible: true });
+    await page.click(selectors.logInSubmitButton);
+    console.log('👆 Login button clicked');
 
-    const captchaDialog = await page.waitForSelector('div[role="dialog"]', {
+    // Captcha recognition
+    const captchaDialog = await page.waitForSelector(selectors.captchaDialog, {
       visible: true,
-      timeout: 3000, // Don't wait forever
+      timeout: 1000,
     });
 
-    if (captchaDialog) {
-      console.log('🔐 CAPTCHA dialog recognized');
+    // if there is captcha 
+    if (selectors.captchaDialog) {
+      console.log('⛔ CAPTCHA dialog recognized');
 
-      const captchaInput = await askQuestion('🔐 Enter CAPTCHA shown in image: ');
-      await page.type('input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]', captchaInput);
-      console.log('🔐 CAPTCHA entered');
+      // user input captcha solution
+      const captchaSolution = await askQuestion('🔐 Enter CAPTCHA shown in image: ');
+      await page.type(selectors.captchaInput, captchaSolution);
+      console.log('📝 CAPTCHA entered');
 
+      // captcha submission
       await page.keyboard.press('Enter');
-      console.log('🔐 CAPTCHA submitted');
-
-      // Optional: wait a little for the OTP input to load properly
-      sleep(2000);
+      console.log('👆 CAPTCHA submitted');
     } else {
-      console.log('✅ No CAPTCHA dialog detected, continuing to OTP...');
+      console.log('🆗 No CAPTCHA dialog detected, continuing to OTP...');
     }
     // #########################################################
     // 2. OTP input
     // #########################################################
 
     // Wait for OTP input field to appear
-    await page.waitForSelector('input[type="tel"]', { visible: true });
+    await page.waitForSelector(selectors.otpInputSelector, { visible: true });
     console.log('🔐 OTP input detected')
 
     // Ask user to enter the OTP in console
-    const otpCode = await askQuestion('🔐 Enter OTP code: ');
-    // Type the OTP into the web page
-    await page.type('input[type="tel"]', otpCode);
+    const otpCode = await askQuestion('🔑 Enter OTP code: ');
+
+    // Type the OTP into the web page (automatic submission)
+    await page.type(selectors.otpInputSelector, otpCode);
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
   }
-  // #########################################################
-  // 3. Middle popups
-  // #########################################################
-  // ignored for now
-  console.log('👍no popups detected!')
 
   // #########################################################
-  // 4. Click on the cab request
+  // 3. Middle popups for Menue
   // #########################################################
 
-  await page.waitForSelector('#ChoiceCab', { visible: true });
-  await page.click('#ChoiceCab');
+  // !TODO
+  console.log('🆗 no popups detected!')
+
+  // #########################################################
+  // 4. Urban logistics Micro service (from menue)
+  // #########################################################
+
+  // Cab Requestion from menue
+  await page.waitForSelector(selectors.cabRequestBtn, { visible: true });
+  await page.click(selectors.cabRequestBtn);
   console.log('🚕 Cab request button detected and clicked!')
-
-  // #########################################################
-  // 5. Canvas preparation
-  // #########################################################
-  await page.hover('canvas'); // Ensure canvas is focused
-
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-
-  // const canvas = await page.$('canvas');
-  // const boundingBox = await canvas.boundingBox();
 
   // #########################################################
   // 6. Route Class
   // #########################################################
+
+    // origin search bar selected
+    await page.waitForSelector(selectors.originSearchBtn, { visible: true });
+    await page.click(selectors.originSearchBtn);
+
+    // origin inputed
+    await page.waitForSelector(selectors.originSearchInput, { visible: true });
+    console.log("🔍 searchbar found and active");
+    // console.log(`found ${districts[0].neighborhoods[0]} in ${districts[0]}`);
+    
+    const d01 = districts[0];
+    const nh01_01 = d01.neighborhoods[0];
+    console.log(`found ${nh01_01} in ${d01.name}`);
+
+    // delay for if prevents fast typing
+    await page.type(selectors.originSearchInput, "ازگل", { delay: 100 });
+    
+    await sleep(5000);
+
+
+  // main scrapper process and logic
   class routeScrapper {
     /**
      * @param {puppeteer.Page} page - Puppeteer page instance
-     * @param {Object} districtDB - Object with district codes as keys, search terms as values
+     * @param {Object} Districts - Object with district codes as keys, search terms as values
      * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
      */
-    constructor(page, districtsDB, routeSelectors) {
+    constructor(page, Districts, routeSelectors) {
       this.page = page;
-      this.districtsDB = districtsDB;
+      this.Districts = Districts;
       this.routeSelectors = routeSelectors;
     }
 
     // Main loop: for each origin, loop over all destinations
     async run() {
-      const districtCodes = Object.keys(this.districtDB);
+      const districtCodes = Object.keys(this.Districts);
 
       for (const originCode of districtCodes) {
-        const originName = this.districtDB[originCode];
+        const originName = this.Districts[originCode];
         console.log(`🚩 Origin: ${originCode} (${originName})`);
 
         for (const destCode of districtCodes) {
-          const destinationName = this.districtDB[destCode];
+          const destinationName = this.Districts[destCode];
 
           if (originCode === destCode) {
             console.log(`⏩ Skipping same district (${originCode})`);
@@ -175,26 +244,26 @@ const sleep = (milliseconds) => {
 
     // Set origin by typing into the search input
     async setOrigin(searchQuery) {
-      await this.page.waitForSelector(this.selectors.originInput, { visible: true });
-      await this.page.click(this.selectors.originInput, { clickCount: 3 });
+      await this.page.waitForSelector(this.routeSelectors.originSearchInput, { visible: true });
+      await this.page.click(this.routeSelectors.originSearchInput, { clickCount: 3 });
       await this.page.keyboard.press('Backspace');
-      await this.page.type(this.selectors.originInput, searchQuery, { delay: 50 });
+      await this.page.type(this.routeSelectors.originSearchInput, searchQuery, { delay: 50 });
 
-      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
-      await this.page.click(this.selectors.resultItem);
-      await this.page.click(this.selectors.originSubmit);
+      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
+      await this.page.click(this.routeSelectors.resultItem);
+      await this.page.click(this.routeSelectors.originSubmit);
     }
 
     // Set destination by typing into the same or another input
     async setDestination(searchQuery) {
-      await this.page.waitForSelector(this.selectors.destinationInput, { visible: true });
-      await this.page.click(this.selectors.destinationInput, { clickCount: 3 });
+      await this.page.waitForSelector(this.routeSelectors.destinationInput, { visible: true });
+      await this.page.click(this.routeSelectors.destinationInput, { clickCount: 3 });
       await this.page.keyboard.press('Backspace');
-      await this.page.type(this.selectors.destinationInput, searchQuery, { delay: 50 });
+      await this.page.type(this.routeSelectors.destinationInput, searchQuery, { delay: 50 });
 
-      await this.page.waitForSelector(this.selectors.resultItem, { visible: true });
-      await this.page.click(this.selectors.resultItem);
-      await this.page.click(this.selectors.destinationSubmit);
+      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
+      await this.page.click(this.routeSelectors.resultItem);
+      await this.page.click(this.routeSelectors.destinationSubmit);
     }
 
     // Placeholder: Implement how to extract the route info
@@ -211,25 +280,21 @@ const sleep = (milliseconds) => {
     }
   }
 
-  // #########################################################
-  // 7. Route parameters
-  // #########################################################
 
-  // Define all selectors once
-  const selectors = {
-    originInput: 'input[data-qa-id="origin-search-input"]',          // example
-    destinationInput: 'input[data-qa-id="destination-search-input"]', // example
-    resultItem: 'ul li:first-child',
-    originSubmit: 'button[data-qa-id="origin-submit"]',
-    destinationSubmit: 'button[data-qa-id="destination-submit"]',
-  };
 
 
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
-  const scrapper = new routeScrapper(page, districtSearchMap, selectors);
-  await scrapper.run();
+  // Create a district search map from the districts data
+  const districtSearchMap = {};
+  districts.forEach(district => {
+    const districtName = district.district || district.name || district.title;
+    districtSearchMap[district.id] = districtName;
+  });
+  
+  // const scrapper = new routeScrapper(page, districtSearchMap, selectors);
+  // await scrapper.run();
 
 
   // ---------------------------------------------------------

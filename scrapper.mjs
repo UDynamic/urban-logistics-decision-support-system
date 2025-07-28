@@ -48,22 +48,22 @@ const sleep = (milliseconds) => {
 
   const urlLanding = 'https://app.snapp.taxi/login';
   await page.goto(urlLanding, { waitUntil: 'networkidle2' });
-  console.log('🔐 Login page loaded');
+  console.log('🛬 Login page loaded');
 
   const currentUrl = page.url()
   if (currentUrl !== "https://app.snapp.taxi/") {
 
-    console.log('⛔ not Authenticated, commencing authentication');
+    console.log('🔐 not Authenticated, commencing authentication');
     // Type the phone number
     await page.waitForSelector('input[data-qa-id="cellphone-number-input"]', { visible: true })
     await page.type('input[data-qa-id="cellphone-number-input"]', '09130398835');
-    console.log('🔐 Phone number entered');
+    console.log('📱 Phone number entered');
 
 
     // Click the submit button (adjust the selector to match the one that says "ورود به وب اپلیکیشن اسنپ")
     await page.waitForSelector('#login-submit', { visible: true });
     await page.click('#login-submit');
-    console.log('🔐 Login button clicked');
+    console.log('👆 Login button clicked');
 
     const captchaDialog = await page.waitForSelector('div[role="dialog"]', {
       visible: true,
@@ -71,19 +71,19 @@ const sleep = (milliseconds) => {
     });
 
     if (captchaDialog) {
-      console.log('🔐 CAPTCHA dialog recognized');
+      console.log('⛔ CAPTCHA dialog recognized');
 
       const captchaInput = await askQuestion('🔐 Enter CAPTCHA shown in image: ');
       await page.type('input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]', captchaInput);
-      console.log('🔐 CAPTCHA entered');
+      console.log('📝 CAPTCHA entered');
 
       await page.keyboard.press('Enter');
-      console.log('🔐 CAPTCHA submitted');
+      console.log('👆 CAPTCHA submitted');
 
       // Optional: wait a little for the OTP input to load properly
       sleep(2000);
     } else {
-      console.log('✅ No CAPTCHA dialog detected, continuing to OTP...');
+      console.log('🆗 No CAPTCHA dialog detected, continuing to OTP...');
     }
     // #########################################################
     // 2. OTP input
@@ -94,7 +94,7 @@ const sleep = (milliseconds) => {
     console.log('🔐 OTP input detected')
 
     // Ask user to enter the OTP in console
-    const otpCode = await askQuestion('🔐 Enter OTP code: ');
+    const otpCode = await askQuestion('🔑 Enter OTP code: ');
     // Type the OTP into the web page
     await page.type('input[type="tel"]', otpCode);
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
@@ -103,7 +103,7 @@ const sleep = (milliseconds) => {
   // 3. Middle popups
   // #########################################################
   // ignored for now
-  console.log('👍no popups detected!')
+  console.log('🆗 no popups detected!')
 
   // #########################################################
   // 4. Click on the cab request

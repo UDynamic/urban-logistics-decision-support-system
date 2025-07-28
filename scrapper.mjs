@@ -18,16 +18,20 @@ const selectors = {
   captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
   otpInputSelector: 'input',
 
+
+
+
   // menue
   cabRequestBtn: '#ChoiceCab',
 
   // rout class selectors
   originSearchBtn: 'footer h6',
   originSearchInput: 'input[data-qa-id="search-input"]',
-  destinationInput: 'input[data-qa-id="destination-search-input"]',
-  resultItem: 'ul li:first-child',
-  originSubmit: 'button[data-qa-id="origin-submit"]',
-  destinationSubmit: 'button[data-qa-id="destination-submit"]',
+  firstSearchLi: 'li[data-index="0"]',
+  originSearchSubmit: 'button[data-qa-id="confirm"]',
+  destinationSearchBtn: 'footer h6',
+  destinationSearchInput: 'input[data-qa-id="search-input"]',
+  destinationSearchSubmit: 'button[data-qa-id="confirm"]',
 };
 
 const urls = {
@@ -179,20 +183,36 @@ Total routs:  166464
 
     // origin search bar selected
     await page.waitForSelector(selectors.originSearchBtn, { visible: true });
-    await page.click(selectors.originSearchBtn);
+    await page.click(selectors.originSearchBtn, { clickCount: 3 });
 
     // origin inputed
     await page.waitForSelector(selectors.originSearchInput, { visible: true });
-    console.log("🔍 searchbar found and active");
-    // console.log(`found ${districts[0].neighborhoods[0]} in ${districts[0]}`);
+    console.log("🔍 origin searchbar found and active");
     
-    const d01 = districts[0];
-    const nh01_01 = d01.neighborhoods[0];
-    console.log(`found ${nh01_01} in ${d01.name}`);
-
     // delay for if prevents fast typing
-    await page.type(selectors.originSearchInput, "ازگل", { delay: 100 });
-    
+    await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 });
+    // console.log(`found & searched ${districts[0]} in ${districts[0].neighborhoods[0]}`);
+    console.log("🔍 origin typed");
+    await page.waitForSelector(selectors.firstSearchLi, { visible: true});
+    await page.click(selectors.firstSearchLi, { clickCount: 3 });
+    console.log("🔍 first item selected");
+    await page.waitForSelector(selectors.originSearchSubmit, {visible: true});
+    await page.click(selectors.originSearchSubmit, { clickCount: 3 });
+    console.log("🔍 origin submitted");
+
+
+    await page.waitForSelector(selectors.destinationSearchBtn, { visible: true });
+    await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
+    console.log("🔍 destination searchbar found and active");
+    await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 });
+    console.log("🔍 destination typed");
+    await page.waitForSelector(selectors.firstSearchLi, { visible: true});
+    await page.click(selectors.firstSearchLi, { clickCount: 3 });
+    console.log("🔍 first item selected");
+    await page.waitForSelector(selectors.destinationSearchSubmit, {visible: true});
+    await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
+    console.log("🔍 destination submitted");
+
     await sleep(5000);
 
 
@@ -200,21 +220,21 @@ Total routs:  166464
   class routeScrapper {
     /**
      * @param {puppeteer.Page} page - Puppeteer page instance
-     * @param {Object} Districts - Object with district codes as keys, search terms as values
+     * @param {Object} districts - Object with district codes as keys, search terms as values
      * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
      */
-    constructor(page, Districts, routeSelectors) {
+    constructor(page, districts, selectors) {
       this.page = page;
-      this.Districts = Districts;
-      this.routeSelectors = routeSelectors;
+      this.districts = districts;
+      this.selectors = selectors;
     }
 
     // Main loop: for each origin, loop over all destinations
     async run() {
-      const districtCodes = Object.keys(this.Districts);
+      const districtCodes = Object.keys(this.districts);
 
       for (const originCode of districtCodes) {
-        const originName = this.Districts[originCode];
+        const originName = this.districts[originCode];
         console.log(`🚩 Origin: ${originCode} (${originName})`);
 
         for (const destCode of districtCodes) {

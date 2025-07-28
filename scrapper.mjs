@@ -11,12 +11,32 @@ import Districts from './data/Districts.json' with { type: 'json' };
 
 // Defining all selectors for modular design
 const selectors = {
-  originInput: 'footer h6',
+  // login selectors
+  phoneNumberInput: 'input[data-qa-id="cellphone-number-input"]',
+  logInSubmitButton: '#login-submit',
+  captchaDialog: 'div[role="dialog"]',
+  captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
+  otpInputSelector: 'input[type="tel"]',
+
+  // menue
+  cabRequestBtn:'#ChoiceCab',
+
+  // rout class selectors
+  originSearchBtn: 'footer h6',
   destinationInput: 'input[data-qa-id="destination-search-input"]', // example
   resultItem: 'ul li:first-child',
   originSubmit: 'button[data-qa-id="origin-submit"]',
   destinationSubmit: 'button[data-qa-id="destination-submit"]',
 };
+
+const urls = {
+  loginUrl: "https://app.snapp.taxi/login",
+  menueUrl: "https://app.snapp.taxi/"
+}
+
+const params = {
+  phoneNumber: '09130398835',
+}
 
 
 // #########################################################
@@ -81,41 +101,42 @@ Total routs:  166464
   // #########################################################
 
   // login URL
-  await page.goto('https://app.snapp.taxi/login', { waitUntil: 'networkidle2' });
+  await page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
   console.log('🛬 Login page loaded');
 
   // User Data persistance (loged in automatically or must run authentication)
-  if (page.url() !== "https://app.snapp.taxi/") {
-
+  if (page.url() !== urls.menueUrl) {
     console.log('🔐 not Authenticated, commencing authentication');
+
     // Type the phone number
-    await page.waitForSelector('input[data-qa-id="cellphone-number-input"]', { visible: true })
-    await page.type('input[data-qa-id="cellphone-number-input"]', '09130398835');
+    await page.waitForSelector(selectors.phoneNumberInput, { visible: true })
+    await page.type(selectors.phoneNumberInput, params.phoneNumber);
     console.log('📱 Phone number entered');
 
 
-    // Click the submit button (adjust the selector to match the one that says "ورود به وب اپلیکیشن اسنپ")
-    await page.waitForSelector('#login-submit', { visible: true });
-    await page.click('#login-submit');
+    // Click the submit button
+    await page.waitForSelector(selectors.logInSubmitButton, { visible: true });
+    await page.click(selectors.logInSubmitButton);
     console.log('👆 Login button clicked');
 
-    const captchaDialog = await page.waitForSelector('div[role="dialog"]', {
+    // Captcha recognition
+    const captchaDialog = await page.waitForSelector(selectors.captchaDialog, {
       visible: true,
-      timeout: 3000, // Don't wait forever
+      timeout: 1000,
     });
 
-    if (captchaDialog) {
+    // if there is captcha 
+    if (selectors.captchaDialog) {
       console.log('⛔ CAPTCHA dialog recognized');
 
-      const captchaInput = await askQuestion('🔐 Enter CAPTCHA shown in image: ');
-      await page.type('input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]', captchaInput);
+      // user input captcha solution
+      const captchaSolution = await askQuestion('🔐 Enter CAPTCHA shown in image: ');
+      await page.type(selectors.captchaInput, captchaSolution);
       console.log('📝 CAPTCHA entered');
 
+      // captcha submission
       await page.keyboard.press('Enter');
       console.log('👆 CAPTCHA submitted');
-
-      // Optional: wait a little for the OTP input to load properly
-      sleep(2000);
     } else {
       console.log('🆗 No CAPTCHA dialog detected, continuing to OTP...');
     }
@@ -124,13 +145,14 @@ Total routs:  166464
     // #########################################################
 
     // Wait for OTP input field to appear
-    await page.waitForSelector('input[type="tel"]', { visible: true });
+    await page.waitForSelector(selectors.otpInputSelector, { visible: true });
     console.log('🔐 OTP input detected')
 
     // Ask user to enter the OTP in console
     const otpCode = await askQuestion('🔑 Enter OTP code: ');
-    // Type the OTP into the web page
-    await page.type('input[type="tel"]', otpCode);
+    
+    // Type the OTP into the web page (automatic submission)
+    await page.type(selectors.otpInputSelector, otpCode);
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
   }
 
@@ -146,18 +168,23 @@ Total routs:  166464
   // #########################################################
 
   // Cab Requestion from menue
-  await page.waitForSelector('#ChoiceCab', { visible: true });
-  await page.click('#ChoiceCab');
+  await page.waitForSelector(selectors.cabRequestBtn, { visible: true });
+  await page.click(selectors.cabRequestBtn);
   console.log('🚕 Cab request button detected and clicked!')
 
   // #########################################################
   // 6. Route Class
   // #########################################################
-  while (true) { 
-  await page.waitForSelector(selectors.originInput, { visible: true });
-  await page.click(selectors.originInput);
-  sleep(5000)
-}
+  while (true) {
+    // origin search bar selected
+    await page.waitForSelector(selectors.originSearchBtn, { visible: true });
+    await page.click(selectors.originSearchBtn);
+
+    // origin inputed
+    await page.waitForSelector(originSearchInput, { visible: true });
+    await page.type(originSearchInput, captchaSolution);
+    sleep(5000)
+  }
 
   // main scrapper process and logic
   class routeScrapper {

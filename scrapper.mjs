@@ -176,25 +176,25 @@ Total routs:  166464
   // #########################################################
   // 6. Route Class
   // #########################################################
-  while (true) {
+
     // origin search bar selected
     await page.waitForSelector(selectors.originSearchBtn, { visible: true });
     await page.click(selectors.originSearchBtn);
-    await page.waitForNavigation({ waitUntil: 'networkidle2' });
 
     // origin inputed
     await page.waitForSelector(selectors.originSearchInput, { visible: true });
-
+    console.log("🔍 searchbar found and active");
     // console.log(`found ${districts[0].neighborhoods[0]} in ${districts[0]}`);
     
     const d01 = districts[0];
     const nh01_01 = d01.neighborhoods[0];
-    console.log(`found ${nh01_01} in ${d01.district}`);
-    await page.focus(selectors.originSearchInput);
+    console.log(`found ${nh01_01} in ${d01.name}`);
+
+    // delay for if prevents fast typing
     await page.type(selectors.originSearchInput, "ازگل", { delay: 100 });
     
     await sleep(5000);
-  }
+
 
   // main scrapper process and logic
   class routeScrapper {
@@ -293,8 +293,8 @@ Total routs:  166464
     districtSearchMap[district.id] = districtName;
   });
   
-  const scrapper = new routeScrapper(page, districtSearchMap, selectors);
-  await scrapper.run();
+  // const scrapper = new routeScrapper(page, districtSearchMap, selectors);
+  // await scrapper.run();
 
 
   // ---------------------------------------------------------

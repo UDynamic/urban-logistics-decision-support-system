@@ -2,10 +2,28 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
 import Districts from './data/Districts.json' with { type: 'json' };
-// Total neighborhoods: 408
-// total routs:  166464
 
 
+
+// #########################################################
+// 00. Selectors and parameters
+// #########################################################
+
+// Defining all selectors for modular design
+const selectors = {
+  originInput: 'footer h6',
+  destinationInput: 'input[data-qa-id="destination-search-input"]', // example
+  resultItem: 'ul li:first-child',
+  originSubmit: 'button[data-qa-id="origin-submit"]',
+  destinationSubmit: 'button[data-qa-id="destination-submit"]',
+};
+
+
+// #########################################################
+// 00. Helper Functions
+// #########################################################
+
+// Input data via console
 function askQuestion(query) {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -20,10 +38,27 @@ function askQuestion(query) {
   );
 }
 
-
+// sleep method for specific idle time
 const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
+
+/* neighborhood counter
+const totalNeighborhoods = Districts.reduce((count, district) => {
+    return count + district.neighborhoods.length;
+}, 0);
+console.log(`Total neighborhoods: ${totalNeighborhoods}`);
+console.log("total routs: ", totalNeighborhoods * totalNeighborhoods);
+
+## output:
+Total neighborhoods: 408
+Total routs:  166464
+*/
+
+
+// #########################################################
+// 01. Pupetteer setup & lunch
+// #########################################################
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -35,23 +70,22 @@ const sleep = (milliseconds) => {
     userDataDir: "./tmp",
     executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Update this path if needed
   });
-
   const page = await browser.newPage();
 
-  // Close the default blank tab
+  // Closing the default first blank tab
   const pages = await browser.pages();
   await pages[0].close();
 
   // #########################################################
-  // 1. Go to login page
+  // 02. Loging in through log in page
   // #########################################################
 
-  const urlLanding = 'https://app.snapp.taxi/login';
-  await page.goto(urlLanding, { waitUntil: 'networkidle2' });
+  // login URL
+  await page.goto('https://app.snapp.taxi/login', { waitUntil: 'networkidle2' });
   console.log('🛬 Login page loaded');
 
-  const currentUrl = page.url()
-  if (currentUrl !== "https://app.snapp.taxi/") {
+  // User Data persistance (loged in automatically or must run authentication)
+  if (page.url() !== "https://app.snapp.taxi/") {
 
     console.log('🔐 not Authenticated, commencing authentication');
     // Type the phone number
@@ -99,53 +133,51 @@ const sleep = (milliseconds) => {
     await page.type('input[type="tel"]', otpCode);
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
   }
+
   // #########################################################
-  // 3. Middle popups
+  // 3. Middle popups for Menue
   // #########################################################
-  // ignored for now
+
+  // !TODO
   console.log('🆗 no popups detected!')
 
   // #########################################################
-  // 4. Click on the cab request
+  // 4. Urban logistics Micro service (from menue)
   // #########################################################
 
+  // Cab Requestion from menue
   await page.waitForSelector('#ChoiceCab', { visible: true });
   await page.click('#ChoiceCab');
   console.log('🚕 Cab request button detected and clicked!')
 
   // #########################################################
-  // 5. Canvas preparation
-  // #########################################################
-  await page.hover('canvas'); // Ensure canvas is focused
-
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-  await page.mouse.wheel({ deltaY: 5000 }); // Scroll down to zoom out
-
-  // const canvas = await page.$('canvas');
-  // const boundingBox = await canvas.boundingBox();
-
-  // #########################################################
   // 6. Route Class
   // #########################################################
+  while (true) { 
+  await page.waitForSelector(selectors.originInput, { visible: true });
+  await page.click(selectors.originInput);
+  sleep(5000)
+}
+
+  // main scrapper process and logic
   class routeScrapper {
     /**
      * @param {puppeteer.Page} page - Puppeteer page instance
-     * @param {Object} districtDB - Object with district codes as keys, search terms as values
+     * @param {Object} Districts - Object with district codes as keys, search terms as values
      * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
      */
-    constructor(page, districtsDB, routeSelectors) {
+    constructor(page, Districts, routeSelectors) {
       this.page = page;
-      this.districtsDB = districtsDB;
+      this.Districts = Districts;
       this.routeSelectors = routeSelectors;
     }
 
     // Main loop: for each origin, loop over all destinations
     async run() {
-      const districtCodes = Object.keys(this.districtDB);
+      const districtCodes = Object.keys(this.Districts);
 
       for (const originCode of districtCodes) {
-        const originName = this.districtDB[originCode];
+        const originName = this.Districts[originCode];
         console.log(`🚩 Origin: ${originCode} (${originName})`);
 
         for (const destCode of districtCodes) {
@@ -211,18 +243,7 @@ const sleep = (milliseconds) => {
     }
   }
 
-  // #########################################################
-  // 7. Route parameters
-  // #########################################################
 
-  // Define all selectors once
-  const selectors = {
-    originInput: 'input[data-qa-id="origin-search-input"]',          // example
-    destinationInput: 'input[data-qa-id="destination-search-input"]', // example
-    resultItem: 'ul li:first-child',
-    originSubmit: 'button[data-qa-id="origin-submit"]',
-    destinationSubmit: 'button[data-qa-id="destination-submit"]',
-  };
 
 
   // #########################################################

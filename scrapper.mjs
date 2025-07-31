@@ -70,7 +70,7 @@ const sleep = (milliseconds) => {
 
 // persian price text to math numbers
 function persianToNumber(str) {
-  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
   return Number(
     str
       .replace(/٬/g, '') // remove Persian thousands separator
@@ -204,7 +204,7 @@ Total routs:  166464
   await page.waitForSelector(selectors.originSearchInput, { visible: true, waitUntil: 'networkidle2' });
   console.log("🔍 origin searchbar found and active");
 
-  
+
   // Clear any existing text in search input
   await page.click(selectors.destinationSearchInput, { clickCount: 3 });
   await page.keyboard.press('Backspace');
@@ -223,13 +223,14 @@ Total routs:  166464
   sleep(500);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
   console.log("📤 origin submitted");
+  sleep(500);
 
   //destination search bar 
   await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
   console.log("🔍 destination searchbar found and active");
 
-  
+
   // Clear any existing text in search input
   await page.click(selectors.destinationSearchInput, { clickCount: 3 });
   await page.keyboard.press('Backspace');
@@ -249,9 +250,24 @@ Total routs:  166464
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
-  // Cab price
+  // Cab price text
+  const cabPriceText = await page.$eval(
+    '[data-qa-id="service-type-price-1"]',
+    el => el.textContent.trim()
+  );
+  console.log("💰 Price text:", cabPriceText);
+
+  // cab price to number
+  const cabpPriceNumber = persianToNumber(cabPriceText);
+  console.log("💰 Price as number:", cabpPriceNumber);
+
+  // TODO: database management for cab price
+
+  // transition to Bike price section
 
   // Bike price
+
+  // transition to Bike delivary price section
 
   // Bike delivary price
 

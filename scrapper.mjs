@@ -181,39 +181,55 @@ Total routs:  166464
   // 6. Route Class
   // #########################################################
 
-    // origin search bar selected
-    await page.waitForSelector(selectors.originSearchBtn, { visible: true });
-    await page.click(selectors.originSearchBtn, { clickCount: 3 });
+  // origin search bar selected
+  await page.waitForSelector(selectors.originSearchBtn, { visible: true });
+  await page.click(selectors.originSearchBtn, { clickCount: 3 });
 
-    // origin inputed
-    await page.waitForSelector(selectors.originSearchInput, { visible: true });
-    console.log("🔍 origin searchbar found and active");
-    
-    // delay for if prevents fast typing
-    await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 });
-    // console.log(`found & searched ${districts[0]} in ${districts[0].neighborhoods[0]}`);
-    console.log("🔍 origin typed");
-    await page.waitForSelector(selectors.firstSearchLi, { visible: true});
-    await page.click(selectors.firstSearchLi, { clickCount: 3 });
-    console.log("🔍 first item selected");
-    await page.waitForSelector(selectors.originSearchSubmit, {visible: true});
-    await page.click(selectors.originSearchSubmit, { clickCount: 3 });
-    console.log("🔍 origin submitted");
+  // origin inputed
+  await page.waitForSelector(selectors.originSearchInput, { visible: true });
+  console.log("🔍 origin searchbar found and active");
+
+  // delay for if prevents fast typing
+  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 });
+  console.log("🔍 origin typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("🔍 first item selected");
+
+  // submit origin
+  await page.waitForSelector(selectors.originSearchSubmit, { visible: true });
+  await page.click(selectors.originSearchSubmit, { clickCount: 3 });
+  console.log("🔍 origin submitted");
+
+  //destination search bar 
+  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true });
+  await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
+  console.log("🔍 destination searchbar found and active");
+
+  // destination search input
+  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 });
+  console.log("🔍 destination typed");
+
+// Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("🔍 first item selected");
+
+  // submit destination
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
+  await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
+  console.log("🔍 destination submitted");
+
+  // Cab price
+
+  // Bike price
+
+  // Bike delivary price
 
 
-    await page.waitForSelector(selectors.destinationSearchBtn, { visible: true });
-    await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
-    console.log("🔍 destination searchbar found and active");
-    await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 });
-    console.log("🔍 destination typed");
-    await page.waitForSelector(selectors.firstSearchLi, { visible: true});
-    await page.click(selectors.firstSearchLi, { clickCount: 3 });
-    console.log("🔍 first item selected");
-    await page.waitForSelector(selectors.destinationSearchSubmit, {visible: true});
-    await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
-    console.log("🔍 destination submitted");
-
-    await sleep(5000);
+  await sleep(5000);
 
 
   // main scrapper process and logic
@@ -300,22 +316,20 @@ Total routs:  166464
     }
   }
 
-
-
-
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
+  /*
   // Create a district search map from the districts data
-  const districtSearchMap = {};
-  districts.forEach(district => {
-    const districtName = district.district || district.name || district.title;
-    districtSearchMap[district.id] = districtName;
-  });
+  // const districtSearchMap = {};
+  // districts.forEach(district => {
+  //   const districtName = district.district || district.name || district.title;
+  //   districtSearchMap[district.id] = districtName;
+  // });
   
   // const scrapper = new routeScrapper(page, districtSearchMap, selectors);
   // await scrapper.run();
-
+  */
 
   // ---------------------------------------------------------
   // ---------------------------------------------------------

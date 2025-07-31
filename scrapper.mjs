@@ -70,14 +70,15 @@ const sleep = (milliseconds) => {
 
 // persian price text to math numbers
 function persianToNumber(str) {
-  const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-  return Number(
-    str
-      .replace(/٬/g, '') // remove Persian thousands separator
-      .split('')
-      .map(ch => persianDigits.indexOf(ch) !== -1 ? persianDigits.indexOf(ch) : ch)
-      .join('')
-  );
+  if (!str) return 0;
+
+  // Replace Persian and Arabic-Indic digits with English digits
+  const englishStr = str
+    .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))  // Persian
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)); // Arabic-Indic
+
+  // Remove any thousands separators like "٬" or ","
+  return Number(englishStr.replace(/[٬,]/g, ''));
 }
 
 
@@ -252,14 +253,14 @@ Total routs:  166464
 
   // Cab price text
   const cabPriceText = await page.$eval(
-    '[data-qa-id="service-type-price-1"]',
+    'footer ul li span',
     el => el.textContent.trim()
   );
-  console.log("💰 Price text:", cabPriceText);
+  console.log("💰 Price text:", JSON.stringify(cabPriceText));
 
   // cab price to number
-  const cabpPriceNumber = persianToNumber(cabPriceText);
-  console.log("💰 Price as number:", cabpPriceNumber);
+  const cabPriceNumber = persianToNumber(String(cabPriceText));
+  console.log("💰 Price as number:", JSON.stringify(cabPriceText));
 
   // TODO: database management for cab price
 

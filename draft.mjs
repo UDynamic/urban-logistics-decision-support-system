@@ -1,5 +1,21 @@
-import districts from './data/districts.json' with { type: 'json' };
+function persianToNumber(str) {
+    // const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    // return Number(
+    //   str
+    //     .replace(/٬/g, '') // remove Persian thousands separator
+    //     .split('')
+    //     .map(ch => persianDigits.indexOf(ch) !== -1 ? persianDigits.indexOf(ch) : ch)
+    //     .join('')
+    // );
+    if (!str) return 0;
 
-const d01 = districts[0];
-const nh01_01 = d01.neighborhoods[0];
-console.log(`found ${nh01_01} in ${d01.name}`);
+    // Replace Persian and Arabic-Indic digits with English digits
+    const englishStr = str
+      .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))  // Persian
+      .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)); // Arabic-Indic
+  
+    // Remove any thousands separators like "٬" or ","
+    return Number(englishStr.replace(/[٬,]/g, ''));
+  }
+
+  console.log(persianToNumber(۸۹٬۰۰۰));

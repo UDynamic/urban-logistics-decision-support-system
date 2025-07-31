@@ -1,3 +1,10 @@
-2025/07/31-15:40:08.937 da8 Reusing MANIFEST F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\IndexedDB\https_app.snapp.taxi_0.indexeddb.leveldb/MANIFEST-000001
-2025/07/31-15:40:08.938 da8 Recovering log #27
-2025/07/31-15:40:08.969 da8 Reusing old log F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\IndexedDB\https_app.snapp.taxi_0.indexeddb.leveldb/000027.log 
+2025/07/31-17:30:22.437 23e8 Reusing MANIFEST F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\IndexedDB\https_app.snapp.taxi_0.indexeddb.leveldb/MANIFEST-000001
+2025/07/31-17:30:22.438 23e8 Recovering log #27
+2025/07/31-17:30:22.498 23e8 Reusing old log F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\IndexedDB\https_app.snapp.taxi_0.indexeddb.leveldb/000027.log 
+2025/07/31-17:30:27.993 adc Level-0 table #32: started
+2025/07/31-17:30:28.183 adc Level-0 table #32: 635646 bytes OK
+2025/07/31-17:30:28.274 adc Delete type=0 #27
+2025/07/31-17:30:28.365 adc Compacting 1@1 + 1@2 files
+2025/07/31-17:30:28.510 adc Generated table #33@1: 8732 keys, 785297 bytes
+2025/07/31-17:30:28.510 adc Compacted 1@1 + 1@2 files => 785297 bytes
+2025/07/31-17:30:28.602 adc compacted to: files[ 0 0 1 0 0 0 0 ]

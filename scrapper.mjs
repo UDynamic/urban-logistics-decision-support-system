@@ -18,16 +18,20 @@ const selectors = {
   captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
   otpInputSelector: 'input',
 
+
+
+
   // menue
   cabRequestBtn: '#ChoiceCab',
 
   // rout class selectors
   originSearchBtn: 'footer h6',
   originSearchInput: 'input[data-qa-id="search-input"]',
-  destinationInput: 'input[data-qa-id="destination-search-input"]',
-  resultItem: 'ul li:first-child',
-  originSubmit: 'button[data-qa-id="origin-submit"]',
-  destinationSubmit: 'button[data-qa-id="destination-submit"]',
+  firstSearchLi: 'li[data-index="0"]',
+  originSearchSubmit: 'button[data-qa-id="confirm"]',
+  destinationSearchBtn: 'footer h6',
+  destinationSearchInput: 'input[data-qa-id="search-input"]',
+  destinationSearchSubmit: 'button[data-qa-id="confirm"]',
 };
 
 const urls = {
@@ -63,6 +67,20 @@ function askQuestion(query) {
 const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
+
+// persian price text to math numbers
+function persianToNumber(str) {
+  if (!str) return 0;
+
+  // Replace Persian and Arabic-Indic digits with English digits
+  const englishStr = str
+    .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))  // Persian
+    .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)); // Arabic-Indic
+
+  // Remove any thousands separators like "٬" or ","
+  return Number(englishStr.replace(/[٬,]/g, ''));
+}
+
 
 /* neighborhood counter
 const totalNeighborhoods = Districts.reduce((count, district) => {
@@ -169,7 +187,9 @@ Total routs:  166464
   // #########################################################
 
   // Cab Requestion from menue
-  await page.waitForSelector(selectors.cabRequestBtn, { visible: true });
+  await page.waitForSelector(selectors.cabRequestBtn, {
+    visible: true, waitUntil: 'networkidle2'
+  });
   await page.click(selectors.cabRequestBtn);
   console.log('🚕 Cab request button detected and clicked!')
 
@@ -177,44 +197,104 @@ Total routs:  166464
   // 6. Route Class
   // #########################################################
 
-    // origin search bar selected
-    await page.waitForSelector(selectors.originSearchBtn, { visible: true });
-    await page.click(selectors.originSearchBtn);
+  // origin search bar selected
+  await page.waitForSelector(selectors.originSearchBtn, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.originSearchBtn, { clickCount: 3 });
 
-    // origin inputed
-    await page.waitForSelector(selectors.originSearchInput, { visible: true });
-    console.log("🔍 searchbar found and active");
-    // console.log(`found ${districts[0].neighborhoods[0]} in ${districts[0]}`);
-    
-    const d01 = districts[0];
-    const nh01_01 = d01.neighborhoods[0];
-    console.log(`found ${nh01_01} in ${d01.name}`);
+  // origin inputed
+  await page.waitForSelector(selectors.originSearchInput, { visible: true, waitUntil: 'networkidle2' });
+  console.log("🔍 origin searchbar found and active");
 
-    // delay for if prevents fast typing
-    await page.type(selectors.originSearchInput, "ازگل", { delay: 100 });
-    
-    await sleep(5000);
+
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
+
+  // Type in origin search input
+  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 origin typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("👆 first item selected");
+
+  // submit origin
+  await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
+  sleep(500);
+  await page.click(selectors.originSearchSubmit, { clickCount: 3 });
+  console.log("📤 origin submitted");
+  sleep(500);
+
+  //destination search bar 
+  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
+  console.log("🔍 destination searchbar found and active");
+
+
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
+
+  // Type in destination search input
+  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 destination typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("👆 first item selected");
+
+  // submit destination
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
+  sleep(500);
+  await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
+  console.log("📤 destination submitted");
+
+  // Cab price text
+  const cabPriceText = await page.$eval(
+    'footer ul li span',
+    el => el.textContent.trim()
+  );
+  console.log("💰 Price text:", JSON.stringify(cabPriceText));
+
+  // cab price to number
+  const cabPriceNumber = persianToNumber(String(cabPriceText));
+  console.log("💰 Price as number:", JSON.stringify(cabPriceText));
+
+  // TODO: database management for cab price
+
+  // transition to Bike price section
+
+  // Bike price
+
+  // transition to Bike delivary price section
+
+  // Bike delivary price
+
+
+  await sleep(5000);
 
 
   // main scrapper process and logic
   class routeScrapper {
     /**
      * @param {puppeteer.Page} page - Puppeteer page instance
-     * @param {Object} Districts - Object with district codes as keys, search terms as values
+     * @param {Object} districts - Object with district codes as keys, search terms as values
      * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
      */
-    constructor(page, Districts, routeSelectors) {
+    constructor(page, districts, selectors) {
       this.page = page;
-      this.Districts = Districts;
-      this.routeSelectors = routeSelectors;
+      this.districts = districts;
+      this.selectors = selectors;
     }
 
     // Main loop: for each origin, loop over all destinations
     async run() {
-      const districtCodes = Object.keys(this.Districts);
+      const districtCodes = Object.keys(this.districts);
 
       for (const originCode of districtCodes) {
-        const originName = this.Districts[originCode];
+        const originName = this.districts[originCode];
         console.log(`🚩 Origin: ${originCode} (${originName})`);
 
         for (const destCode of districtCodes) {
@@ -280,22 +360,20 @@ Total routs:  166464
     }
   }
 
-
-
-
   // #########################################################
   // 7. Instantiate Navigation Class 
   // #########################################################
+  /*
   // Create a district search map from the districts data
-  const districtSearchMap = {};
-  districts.forEach(district => {
-    const districtName = district.district || district.name || district.title;
-    districtSearchMap[district.id] = districtName;
-  });
+  // const districtSearchMap = {};
+  // districts.forEach(district => {
+  //   const districtName = district.district || district.name || district.title;
+  //   districtSearchMap[district.id] = districtName;
+  // });
   
   // const scrapper = new routeScrapper(page, districtSearchMap, selectors);
   // await scrapper.run();
-
+  */
 
   // ---------------------------------------------------------
   // ---------------------------------------------------------

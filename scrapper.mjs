@@ -68,6 +68,19 @@ const sleep = (milliseconds) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
+// persian price text to math numbers
+function persianToNumber(str) {
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return Number(
+    str
+      .replace(/٬/g, '') // remove Persian thousands separator
+      .split('')
+      .map(ch => persianDigits.indexOf(ch) !== -1 ? persianDigits.indexOf(ch) : ch)
+      .join('')
+  );
+}
+
+
 /* neighborhood counter
 const totalNeighborhoods = Districts.reduce((count, district) => {
     return count + district.neighborhoods.length;
@@ -173,7 +186,9 @@ Total routs:  166464
   // #########################################################
 
   // Cab Requestion from menue
-  await page.waitForSelector(selectors.cabRequestBtn, { visible: true });
+  await page.waitForSelector(selectors.cabRequestBtn, {
+    visible: true, waitUntil: 'networkidle2'
+  });
   await page.click(selectors.cabRequestBtn);
   console.log('🚕 Cab request button detected and clicked!')
 
@@ -182,45 +197,57 @@ Total routs:  166464
   // #########################################################
 
   // origin search bar selected
-  await page.waitForSelector(selectors.originSearchBtn, { visible: true });
+  await page.waitForSelector(selectors.originSearchBtn, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.originSearchBtn, { clickCount: 3 });
 
   // origin inputed
-  await page.waitForSelector(selectors.originSearchInput, { visible: true });
+  await page.waitForSelector(selectors.originSearchInput, { visible: true, waitUntil: 'networkidle2' });
   console.log("🔍 origin searchbar found and active");
 
-  // delay for if prevents fast typing
-  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 });
-  console.log("🔍 origin typed");
+  
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
+
+  // Type in origin search input
+  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 origin typed");
 
   // Select first item in the search results
-  await page.waitForSelector(selectors.firstSearchLi, { visible: true });
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
-  console.log("🔍 first item selected");
+  console.log("👆 first item selected");
 
   // submit origin
-  await page.waitForSelector(selectors.originSearchSubmit, { visible: true });
+  await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
+  sleep(500);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
-  console.log("🔍 origin submitted");
+  console.log("📤 origin submitted");
 
   //destination search bar 
-  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true });
+  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
   console.log("🔍 destination searchbar found and active");
 
-  // destination search input
-  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 });
-  console.log("🔍 destination typed");
+  
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
 
-// Select first item in the search results
-  await page.waitForSelector(selectors.firstSearchLi, { visible: true });
+  // Type in destination search input
+  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 destination typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
-  console.log("🔍 first item selected");
+  console.log("👆 first item selected");
 
   // submit destination
-  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
+  sleep(500);
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
-  console.log("🔍 destination submitted");
+  console.log("📤 destination submitted");
 
   // Cab price
 

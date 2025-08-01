@@ -253,20 +253,22 @@ Total routs:  166464
   console.log("📤 destination submitted");
 
   // Cab price text
-  await page.waitForSelector('footer ul li span', {visible: true});
+  await page.waitForSelector('footer ul li span', { visible: true });
   const element = await page.$('footer ul li span');
   const cabPriceText = await page.evaluate(el => el.textContent.trim(), element);
-
-  console.log(typeof (cabPriceText), "\n*", cabPriceText);
-  console.log("💰 Price text:", JSON.stringify(cabPriceText));
+  console.log("💰🚕 cab Price text:", cabPriceText);
 
   // cab price to number
-  const cabPriceNumber = persianToNumber(String(cabPriceText));
-  console.log("💰 Price as number:", JSON.stringify(cabPriceText));
+  const cabPriceNumber = persianToNumber(cabPriceText);
+  console.log("💰🚕 cab price as number:", cabPriceNumber);
 
   // TODO: database management for cab price
 
+
+
   // transition to Bike price section
+  await page.waitForSelector('div[data-is-scrollable="false"] button:nth-of-type(2)', { visible: true });
+  await page.click('div[data-is-scrollable="false"] button:nth-of-type(2)', { clickCount: 3 });
 
   // Bike price
 

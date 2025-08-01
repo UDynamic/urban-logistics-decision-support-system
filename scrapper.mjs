@@ -32,6 +32,12 @@ const selectors = {
   destinationSearchBtn: 'footer h6',
   destinationSearchInput: 'input[data-qa-id="search-input"]',
   destinationSearchSubmit: 'button[data-qa-id="confirm"]',
+
+  cabPriceSelector: 'footer ul li span[data-qa-id="service-type-price-1"]',
+  bikePriceTab: 'footer div button:nth-of-type(2)',
+  bikePriceSelector: 'footer ul li span[data-qa-id="service-type-price-7"]',
+  bikeDelivaryTab: 'footer div button:nth-of-type(3)',
+  bikeDelivaryPriceSelector: 'footer ul li span[data-qa-id="service-type-price-5"]'
 };
 
 const urls = {
@@ -252,19 +258,9 @@ Total routs:  166464
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
-  // // Cab price text
-  // await page.waitForSelector('footer ul li span', { visible: true });
-  // const element = await page.$('footer ul li span');
-  // const cabPriceText = await page.evaluate(el => el.textContent.trim(), element);
-  // console.log("💰🚕 cab Price text:", cabPriceText);
 
-  // // cab price to number
-  // const cabPriceNumber = persianToNumber(cabPriceText);
-  // console.log("💰🚕 cab price as number:", cabPriceNumber);
-  // // TODO: database management for cab price
-
-  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-1"]', { visible: true })
-    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-1"]'))
+  page.waitForSelector(selectors.cabPriceSelector, { visible: true })
+    .then(() => page.$(selectors.cabPriceSelector))
     .then(element => page.evaluate(el => el.textContent.trim(), element))
     .then(cabPriceText => {
       console.log("💰🚕 cab Price text:", cabPriceText);
@@ -274,13 +270,13 @@ Total routs:  166464
       console.log("💰🚕 cab price as number:", cabPriceNumber);
 
       // Transition to Bike price section
-      return page.waitForSelector('footer div button:nth-of-type(2)', { visible: true });
+      return page.waitForSelector(selectors.bikePriceTab, { visible: true });
     })
-    .then(() => page.click('footer div button:nth-of-type(2)', { clickCount: 3 }))
+    .then(() => page.click(selectors.bikePriceTab, { clickCount: 3 }))
     .catch(err => console.error("❌ Error during price extraction:", err));
 
-  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-7"]', { visible: true })
-    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-7"]'))
+  page.waitForSelector(selectors.bikePriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikePriceSelector))
     .then(element => page.evaluate(el => el.textContent.trim(), element))
     .then(bikePriceText => {
       console.log("💰🏍️ Bike Price text:", bikePriceText);
@@ -290,13 +286,13 @@ Total routs:  166464
       console.log("💰🏍️ Bike price as number:", bikePriceNumber);
 
       // Transition to Bike price section
-      return page.waitForSelector('footer div button:nth-of-type(3)', { visible: true });
+      return page.waitForSelector(selectors.bikeDelivaryTab, { visible: true });
     })
-    .then(() => page.click('footer div button:nth-of-type(3)', { clickCount: 3 }))
+    .then(() => page.click(selectors.bikeDelivaryTab, { clickCount: 3 }))
     .catch(err => console.error("❌ Error during price extraction:", err));
 
-  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-5"]', { visible: true })
-    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-5"]'))
+  page.waitForSelector(selectors.bikeDelivaryPriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikeDelivaryPriceSelector))
     .then(element => page.evaluate(el => el.textContent.trim(), element))
     .then(bikeDelivaryPriceText => {
       console.log("💰🛵 Bike delivary Price text:", bikeDelivaryPriceText);
@@ -306,18 +302,6 @@ Total routs:  166464
       console.log("💰🛵 Bike delivary price as number:", bikeDelivaryPriceNumber);
     })
     .catch(err => console.error("❌ Error during price extraction:", err));
-  // // transition to Bike price section
-  // await page.waitForSelector('footer div button:nth-of-type(2)', { visible: true });
-  // await page.click('footer div button:nth-of-type(2)', { clickCount: 3 });
-
-  // Bike price
-
-  // transition to Bike delivary price section
-
-  // Bike delivary price
-
-
-  await sleep(5000);
 
 
   // main scrapper process and logic

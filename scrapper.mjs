@@ -227,10 +227,10 @@ Total routs:  166464
 
   // submit origin
   await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  await sleep(3000);
+  await sleep(2000);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
   console.log("📤 origin submitted");
-  await sleep(3000);
+  await sleep(2000);
 
   //destination search bar 
   await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
@@ -250,11 +250,11 @@ Total routs:  166464
   await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
   console.log("👆 first item selected");
-  await sleep(3000);
+  await sleep(2000);
 
   // submit destination
   await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
-  await sleep(4000);
+  await sleep(2000);
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
@@ -303,7 +303,7 @@ Total routs:  166464
     })
     .catch(err => console.error("❌ Error during price extraction:", err));
 
-
+    
 
   // ---------------------------------------------------------
   await sleep(50000);

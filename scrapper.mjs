@@ -32,6 +32,12 @@ const selectors = {
   destinationSearchBtn: 'footer h6',
   destinationSearchInput: 'input[data-qa-id="search-input"]',
   destinationSearchSubmit: 'button[data-qa-id="confirm"]',
+
+  cabPriceSelector: 'footer ul li span[data-qa-id="service-type-price-1"]',
+  bikePriceTab: 'footer div button:nth-of-type(2)',
+  bikePriceSelector: 'footer ul li span[data-qa-id="service-type-price-7"]',
+  bikeDelivaryTab: 'footer div button:nth-of-type(3)',
+  bikeDelivaryPriceSelector: 'footer ul li span[data-qa-id="service-type-price-5"]'
 };
 
 const urls = {
@@ -211,7 +217,7 @@ Total routs:  166464
   await page.keyboard.press('Backspace');
 
   // Type in origin search input
-  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 }); // delay for if prevents fast typing
+  await page.type(selectors.originSearchInput, "میدان راه آهن", { delay: 100 }); // delay for if prevents fast typing
   console.log("📝 origin typed");
 
   // Select first item in the search results
@@ -221,10 +227,10 @@ Total routs:  166464
 
   // submit origin
   await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  sleep(500);
+  sleep(3000);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
   console.log("📤 origin submitted");
-  sleep(500);
+  sleep(3000);
 
   //destination search bar 
   await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
@@ -237,43 +243,65 @@ Total routs:  166464
   await page.keyboard.press('Backspace');
 
   // Type in destination search input
-  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 }); // delay for if prevents fast typing
+  await page.type(selectors.destinationSearchInput, "دهکده المپیک", { delay: 100 }); // delay for if prevents fast typing
   console.log("📝 destination typed");
 
   // Select first item in the search results
   await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
   console.log("👆 first item selected");
+  sleep(3000);
 
   // submit destination
-  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  sleep(500);
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
+  sleep(4000);
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
-  // Cab price text
-  const cabPriceText = await page.$eval(
-    'footer ul li span',
-    el => el.textContent.trim()
-  );
-  console.log("💰 Price text:", JSON.stringify(cabPriceText));
 
-  // cab price to number
-  const cabPriceNumber = persianToNumber(String(cabPriceText));
-  console.log("💰 Price as number:", JSON.stringify(cabPriceText));
+  page.waitForSelector(selectors.cabPriceSelector, { visible: true })
+    .then(() => page.$(selectors.cabPriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(cabPriceText => {
+      console.log("💰🚕 cab Price text:", cabPriceText);
 
-  // TODO: database management for cab price
+      // Convert price to number
+      const cabPriceNumber = persianToNumber(cabPriceText);
+      console.log("💰🚕 cab price as number:", cabPriceNumber);
 
-  // transition to Bike price section
+      // Transition to Bike price section
+      return page.waitForSelector(selectors.bikePriceTab, { visible: true });
+    })
+    .then(() => page.click(selectors.bikePriceTab, { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
 
-  // Bike price
+  page.waitForSelector(selectors.bikePriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikePriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikePriceText => {
+      console.log("💰🏍️ Bike Price text:", bikePriceText);
 
-  // transition to Bike delivary price section
+      // Convert price to number
+      const bikePriceNumber = persianToNumber(bikePriceText);
+      console.log("💰🏍️ Bike price as number:", bikePriceNumber);
 
-  // Bike delivary price
+      // Transition to Bike price section
+      return page.waitForSelector(selectors.bikeDelivaryTab, { visible: true });
+    })
+    .then(() => page.click(selectors.bikeDelivaryTab, { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
 
+  page.waitForSelector(selectors.bikeDelivaryPriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikeDelivaryPriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikeDelivaryPriceText => {
+      console.log("💰🛵 Bike delivary Price text:", bikeDelivaryPriceText);
 
-  await sleep(5000);
+      // Convert price to number
+      const bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
+      console.log("💰🛵 Bike delivary price as number:", bikeDelivaryPriceNumber);
+    })
+    .catch(err => console.error("❌ Error during price extraction:", err));
 
 
   // main scrapper process and logic

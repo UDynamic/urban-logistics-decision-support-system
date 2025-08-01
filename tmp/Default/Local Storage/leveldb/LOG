@@ -1,5 +1,5 @@
-2025/07/31-17:30:21.637 3b3c Reusing MANIFEST F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\Local Storage\leveldb/MANIFEST-000001
-2025/07/31-17:30:21.640 3b3c Recovering log #73
-2025/07/31-17:30:21.643 3b3c Reusing old log F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\Local Storage\leveldb/000073.log 
-2025/07/31-17:30:54.039 d74 Level-0 table #77: started
-2025/07/31-17:30:54.103 d74 Level-0 table #77: 55701 bytes OK
+2025/08/01-15:56:29.621 2390 Reusing MANIFEST F:\Career\02. Software Engineer\07. Web Scrapping\01. Snapp heatmap\tmp\Default\Local Storage\leveldb/MANIFEST-000001
+2025/08/01-15:56:29.630 2390 Recovering log #85
+2025/08/01-15:56:29.631 2390 Level-0 table #88: started
+2025/08/01-15:56:29.667 2390 Level-0 table #88: 61267 bytes OK
+2025/08/01-15:56:29.883 2390 Delete type=0 #85

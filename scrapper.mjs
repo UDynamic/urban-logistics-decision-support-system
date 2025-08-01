@@ -221,10 +221,10 @@ Total routs:  166464
 
   // submit origin
   await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  sleep(500);
+  sleep(3000);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
   console.log("📤 origin submitted");
-  sleep(500);
+  sleep(3000);
 
   //destination search bar 
   await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
@@ -244,18 +244,20 @@ Total routs:  166464
   await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
   console.log("👆 first item selected");
+  sleep(3000);
 
   // submit destination
-  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  sleep(500);
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
+  sleep(4000);
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
   // Cab price text
-  const cabPriceText = await page.$eval(
-    'footer ul li span',
-    el => el.textContent.trim()
-  );
+  await page.waitForSelector('footer ul li span', {visible: true});
+  const element = await page.$('footer ul li span');
+  const cabPriceText = await page.evaluate(el => el.textContent.trim(), element);
+
+  console.log(typeof (cabPriceText), "\n*", cabPriceText);
   console.log("💰 Price text:", JSON.stringify(cabPriceText));
 
   // cab price to number

@@ -227,10 +227,10 @@ Total routs:  166464
 
   // submit origin
   await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  sleep(3000);
+  await sleep(3000);
   await page.click(selectors.originSearchSubmit, { clickCount: 3 });
   console.log("📤 origin submitted");
-  sleep(3000);
+  await sleep(3000);
 
   //destination search bar 
   await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
@@ -250,11 +250,11 @@ Total routs:  166464
   await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
   await page.click(selectors.firstSearchLi, { clickCount: 3 });
   console.log("👆 first item selected");
-  sleep(3000);
+  await sleep(3000);
 
   // submit destination
   await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
-  sleep(4000);
+  await sleep(4000);
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
@@ -304,106 +304,7 @@ Total routs:  166464
     .catch(err => console.error("❌ Error during price extraction:", err));
 
 
-  // main scrapper process and logic
-  class routeScrapper {
-    /**
-     * @param {puppeteer.Page} page - Puppeteer page instance
-     * @param {Object} districts - Object with district codes as keys, search terms as values
-     * @param {Object} selectors - All selectors needed for input fields, buttons, etc.
-     */
-    constructor(page, districts, selectors) {
-      this.page = page;
-      this.districts = districts;
-      this.selectors = selectors;
-    }
 
-    // Main loop: for each origin, loop over all destinations
-    async run() {
-      const districtCodes = Object.keys(this.districts);
-
-      for (const originCode of districtCodes) {
-        const originName = this.districts[originCode];
-        console.log(`🚩 Origin: ${originCode} (${originName})`);
-
-        for (const destCode of districtCodes) {
-          const destinationName = this.Districts[destCode];
-
-          if (originCode === destCode) {
-            console.log(`⏩ Skipping same district (${originCode})`);
-            continue;
-          }
-
-          console.log(`➡️ Route: ${originCode} ➡️ ${destCode}`);
-
-          try {
-            await this.setOrigin(originName);
-            await this.setDestination(destinationName);
-            await this.extractRouteData(originCode, destCode);
-          } catch (err) {
-            console.error(`❌ Failed route ${originCode} ➡️ ${destCode}:`, err.message);
-          }
-
-          await this.reset();
-        }
-      }
-
-      console.log("✅ All routes analyzed.");
-    }
-
-    // Set origin by typing into the search input
-    async setOrigin(searchQuery) {
-      await this.page.waitForSelector(this.routeSelectors.originSearchInput, { visible: true });
-      await this.page.click(this.routeSelectors.originSearchInput, { clickCount: 3 });
-      await this.page.keyboard.press('Backspace');
-      await this.page.type(this.routeSelectors.originSearchInput, searchQuery, { delay: 50 });
-
-      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
-      await this.page.click(this.routeSelectors.resultItem);
-      await this.page.click(this.routeSelectors.originSubmit);
-    }
-
-    // Set destination by typing into the same or another input
-    async setDestination(searchQuery) {
-      await this.page.waitForSelector(this.routeSelectors.destinationInput, { visible: true });
-      await this.page.click(this.routeSelectors.destinationInput, { clickCount: 3 });
-      await this.page.keyboard.press('Backspace');
-      await this.page.type(this.routeSelectors.destinationInput, searchQuery, { delay: 50 });
-
-      await this.page.waitForSelector(this.routeSelectors.resultItem, { visible: true });
-      await this.page.click(this.routeSelectors.resultItem);
-      await this.page.click(this.routeSelectors.destinationSubmit);
-    }
-
-    // Placeholder: Implement how to extract the route info
-    async extractRouteData(originCode, destCode) {
-      console.log(`🔍 Extracting data for ${originCode} ➡️ ${destCode}`);
-      // TODO: Add your actual logic here (screenshot, scrape price/time, etc.)
-    }
-
-    // Clear or reset the interface between routes
-    async reset() {
-      // TODO: Implement if there's a "clear" or "reset" button
-      // Or just reload the page if it's cleaner
-      await this.page.reload({ waitUntil: 'networkidle2' });
-    }
-  }
-
-  // #########################################################
-  // 7. Instantiate Navigation Class 
-  // #########################################################
-  /*
-  // Create a district search map from the districts data
-  // const districtSearchMap = {};
-  // districts.forEach(district => {
-  //   const districtName = district.district || district.name || district.title;
-  //   districtSearchMap[district.id] = districtName;
-  // });
-  
-  // const scrapper = new routeScrapper(page, districtSearchMap, selectors);
-  // await scrapper.run();
-  */
-
-  // ---------------------------------------------------------
   // ---------------------------------------------------------
   await sleep(50000);
   await browser.close();

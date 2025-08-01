@@ -211,7 +211,7 @@ Total routs:  166464
   await page.keyboard.press('Backspace');
 
   // Type in origin search input
-  await page.type(selectors.originSearchInput, "مترو قلهک", { delay: 100 }); // delay for if prevents fast typing
+  await page.type(selectors.originSearchInput, "میدان راه آهن", { delay: 100 }); // delay for if prevents fast typing
   console.log("📝 origin typed");
 
   // Select first item in the search results
@@ -237,7 +237,7 @@ Total routs:  166464
   await page.keyboard.press('Backspace');
 
   // Type in destination search input
-  await page.type(selectors.destinationSearchInput, "میدان ونک", { delay: 100 }); // delay for if prevents fast typing
+  await page.type(selectors.destinationSearchInput, "دهکده المپیک", { delay: 100 }); // delay for if prevents fast typing
   console.log("📝 destination typed");
 
   // Select first item in the search results
@@ -252,23 +252,63 @@ Total routs:  166464
   await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
   console.log("📤 destination submitted");
 
-  // Cab price text
-  await page.waitForSelector('footer ul li span', { visible: true });
-  const element = await page.$('footer ul li span');
-  const cabPriceText = await page.evaluate(el => el.textContent.trim(), element);
-  console.log("💰🚕 cab Price text:", cabPriceText);
+  // // Cab price text
+  // await page.waitForSelector('footer ul li span', { visible: true });
+  // const element = await page.$('footer ul li span');
+  // const cabPriceText = await page.evaluate(el => el.textContent.trim(), element);
+  // console.log("💰🚕 cab Price text:", cabPriceText);
 
-  // cab price to number
-  const cabPriceNumber = persianToNumber(cabPriceText);
-  console.log("💰🚕 cab price as number:", cabPriceNumber);
+  // // cab price to number
+  // const cabPriceNumber = persianToNumber(cabPriceText);
+  // console.log("💰🚕 cab price as number:", cabPriceNumber);
+  // // TODO: database management for cab price
 
-  // TODO: database management for cab price
+  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-1"]', { visible: true })
+    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-1"]'))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(cabPriceText => {
+      console.log("💰🚕 cab Price text:", cabPriceText);
 
+      // Convert price to number
+      const cabPriceNumber = persianToNumber(cabPriceText);
+      console.log("💰🚕 cab price as number:", cabPriceNumber);
 
+      // Transition to Bike price section
+      return page.waitForSelector('footer div button:nth-of-type(2)', { visible: true });
+    })
+    .then(() => page.click('footer div button:nth-of-type(2)', { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
 
-  // transition to Bike price section
-  await page.waitForSelector('div[data-is-scrollable="false"] button:nth-of-type(2)', { visible: true });
-  await page.click('div[data-is-scrollable="false"] button:nth-of-type(2)', { clickCount: 3 });
+  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-7"]', { visible: true })
+    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-7"]'))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikePriceText => {
+      console.log("💰🏍️ Bike Price text:", bikePriceText);
+
+      // Convert price to number
+      const bikePriceNumber = persianToNumber(bikePriceText);
+      console.log("💰🏍️ Bike price as number:", bikePriceNumber);
+
+      // Transition to Bike price section
+      return page.waitForSelector('footer div button:nth-of-type(3)', { visible: true });
+    })
+    .then(() => page.click('footer div button:nth-of-type(3)', { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
+
+  page.waitForSelector('footer ul li span[data-qa-id="service-type-price-5"]', { visible: true })
+    .then(() => page.$('footer ul li span[data-qa-id="service-type-price-5"]'))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikeDelivaryPriceText => {
+      console.log("💰🛵 Bike delivary Price text:", bikeDelivaryPriceText);
+
+      // Convert price to number
+      const bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
+      console.log("💰🛵 Bike delivary price as number:", bikeDelivaryPriceNumber);
+    })
+    .catch(err => console.error("❌ Error during price extraction:", err));
+  // // transition to Bike price section
+  // await page.waitForSelector('footer div button:nth-of-type(2)', { visible: true });
+  // await page.click('footer div button:nth-of-type(2)', { clickCount: 3 });
 
   // Bike price
 

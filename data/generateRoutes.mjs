@@ -1,4 +1,4 @@
-import districts from './data/districts.json' with { type: 'json' };
+import districts from './districts.json' with { type: 'json' };
 import fs from 'fs';
 
 function createNeighborhoodId(districtId, neighborhoodIndex) {

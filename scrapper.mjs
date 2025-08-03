@@ -31,7 +31,7 @@ const selectors = {
   destinationSearchSubmit: 'button[data-qa-id="confirm"]',
 
   // back button
-  backButton: 'button[aria-label="بازگشت"]',  
+  backButton: 'button[aria-label="بازگشت"]',
 
   cabPriceSelector: 'footer ul li span[data-qa-id="service-type-price-1"]',
   bikePriceTab: 'footer div button:nth-of-type(2)',
@@ -130,7 +130,7 @@ Total routs:  166464
 // 4. OOP implementation
 // #########################################################
 class PriceResult {
-  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, durationMs) {
+  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, ProcessdurationMs) {
     this.routeId = routeId;
 
     // Raw text
@@ -145,7 +145,7 @@ class PriceResult {
 
     // Metadata
     this.timestamp = new Date(); // Track when data was fetched
-    this.durationMs = durationMs; // Time spent for this iteration
+    this.ProcessdurationMs = ProcessdurationMs; // Time spent for this iteration
   }
 }
 
@@ -157,6 +157,10 @@ class PriceScraper {
 
   // Extracts all price types for a given route
   async extractPrice(route) {
+    // capturing the start time
+    const startTime = Date.now();
+
+    // 0. starting the process
     console.log(`\n[INFO] Extracting prices for route: ${route.id} (${route.origin.name} -> ${route.destination.name})`);
 
     // 1. Input origin
@@ -206,17 +210,22 @@ class PriceScraper {
     );
     console.log(`  [DATA] Bike delivery price: ${bikeDelivaryPriceText}`);
 
-    // 6. Return structured result
-    console.log(`[INFO] Extraction complete for route: ${route.id}`);
+    // 6. process complete, Back to menue for next route
+    const endTime = Date.now();
+    const durationMs = endTime - startTime;
+    console.log(`✅ Finished route ${route.id} in ${durationMs} ms`);
     await this.page.click(this.selectors.backButton);
     await sleep(1000);
     await this.page.click(this.selectors.backButton);
     await sleep(1000);
+
+    // 7. Return structured result
     return new PriceResult(
       route.id,
       cabPriceText,
       bikePriceText,
-      bikeDelivaryPriceText
+      bikeDelivaryPriceText,
+      ProcessdurationMs
     );
   }
 }

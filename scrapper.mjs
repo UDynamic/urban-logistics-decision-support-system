@@ -212,8 +212,8 @@ class PriceScraper {
 
     // 6. process complete, Back to menue for next route
     const endTime = Date.now();
-    const durationMs = endTime - startTime;
-    console.log(`✅ Finished route ${route.id} in ${durationMs} ms`);
+    const ProcessDurationMs = endTime - startTime;
+    console.log(`✅ Finished route ${route.id} in ${ProcessDurationMs} ms`);
     await this.page.click(this.selectors.backButton);
     await sleep(1000);
     await this.page.click(this.selectors.backButton);

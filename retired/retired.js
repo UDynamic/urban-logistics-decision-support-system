@@ -172,3 +172,107 @@
     */
   
     // ---------------------------------------------------------
+
+    // #########################################################
+  // 6. basic price extraction for cab and bike (before making the classes)
+  // #########################################################
+
+  // origin search bar selected
+  await page.waitForSelector(selectors.originSearchBtn, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.originSearchBtn, { clickCount: 3 });
+
+  // origin inputed
+  await page.waitForSelector(selectors.originSearchInput, { visible: true, waitUntil: 'networkidle2' });
+  console.log("🔍 origin searchbar found and active");
+
+
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
+
+  // Type in origin search input
+  await page.type(selectors.originSearchInput, "میدان راه آهن", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 origin typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("👆 first item selected");
+
+  // submit origin
+  await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
+  await sleep(2000);
+  await page.click(selectors.originSearchSubmit, { clickCount: 3 });
+  console.log("📤 origin submitted");
+  await sleep(2000);
+
+  //destination search bar 
+  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
+  console.log("🔍 destination searchbar found and active");
+
+
+  // Clear any existing text in search input
+  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
+  await page.keyboard.press('Backspace');
+
+  // Type in destination search input
+  await page.type(selectors.destinationSearchInput, "دهکده المپیک", { delay: 100 }); // delay for if prevents fast typing
+  console.log("📝 destination typed");
+
+  // Select first item in the search results
+  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
+  await page.click(selectors.firstSearchLi, { clickCount: 3 });
+  console.log("👆 first item selected");
+  await sleep(2000);
+
+  // submit destination
+  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
+  await sleep(2000);
+  await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
+  console.log("📤 destination submitted");
+
+
+  page.waitForSelector(selectors.cabPriceSelector, { visible: true })
+    .then(() => page.$(selectors.cabPriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(cabPriceText => {
+      console.log("💰🚕 cab Price text:", cabPriceText);
+
+      // Convert price to number
+      const cabPriceNumber = persianToNumber(cabPriceText);
+      console.log("💰🚕 cab price as number:", cabPriceNumber);
+
+      // Transition to Bike price section
+      return page.waitForSelector(selectors.bikePriceTab, { visible: true });
+    })
+    .then(() => page.click(selectors.bikePriceTab, { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
+
+  page.waitForSelector(selectors.bikePriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikePriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikePriceText => {
+      console.log("💰🏍️ Bike Price text:", bikePriceText);
+
+      // Convert price to number
+      const bikePriceNumber = persianToNumber(bikePriceText);
+      console.log("💰🏍️ Bike price as number:", bikePriceNumber);
+
+      // Transition to Bike price section
+      return page.waitForSelector(selectors.bikeDelivaryTab, { visible: true });
+    })
+    .then(() => page.click(selectors.bikeDelivaryTab, { clickCount: 3 }))
+    .catch(err => console.error("❌ Error during price extraction:", err));
+
+  page.waitForSelector(selectors.bikeDelivaryPriceSelector, { visible: true })
+    .then(() => page.$(selectors.bikeDelivaryPriceSelector))
+    .then(element => page.evaluate(el => el.textContent.trim(), element))
+    .then(bikeDelivaryPriceText => {
+      console.log("💰🛵 Bike delivary Price text:", bikeDelivaryPriceText);
+
+      // Convert price to number
+      const bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
+      console.log("💰🛵 Bike delivary price as number:", bikeDelivaryPriceNumber);
+    })
+    .catch(err => console.error("❌ Error during price extraction:", err));

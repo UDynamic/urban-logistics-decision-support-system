@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import readline from 'readline';
 import districts from './data/districts.json' with { type: 'json' };
-
+import routes from './data/routes.json' with { type: 'json' };
 
 
 // #########################################################
@@ -18,9 +18,6 @@ const selectors = {
   captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
   otpInputSelector: 'input',
 
-
-
-
   // menue
   cabRequestBtn: '#ChoiceCab',
 
@@ -32,6 +29,9 @@ const selectors = {
   destinationSearchBtn: 'footer h6',
   destinationSearchInput: 'input[data-qa-id="search-input"]',
   destinationSearchSubmit: 'button[data-qa-id="confirm"]',
+
+  // back button
+  backButton: 'button[aria-label="بازگشت"]',
 
   cabPriceSelector: 'footer ul li span[data-qa-id="service-type-price-1"]',
   bikePriceTab: 'footer div button:nth-of-type(2)',
@@ -49,6 +49,30 @@ const params = {
   phoneNumber: '09130398835',
 }
 
+const routesExample = [
+  {
+    "id": "D01_N01__D22_N13",
+    "origin": {
+      "id": "D01_N01",
+      "name": "ازگل"
+    },
+    "destination": {
+      "id": "D22_N13",
+      "name": "شهرک راه آهن"
+    }
+  },
+  {
+    "id": "D21_N13__D16_N01",
+    "origin": {
+      "id": "D21_N13",
+      "name": "چیتگر جنوبی (شهرک ۲۲ بهمن)"
+    },
+    "destination": {
+      "id": "D16_N01",
+      "name": "جوادیه"
+    }
+  }
+];
 
 // #########################################################
 // 00. Helper Functions
@@ -101,6 +125,112 @@ Total routs:  166464
 */
 
 
+
+// #########################################################
+// 4. OOP implementation
+// #########################################################
+class PriceResult {
+  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, ProcessDurationMs) {
+    this.routeId = routeId;
+
+    // Raw text
+    this.cabPriceText = cabPriceText;
+    this.bikePriceText = bikePriceText;
+    this.bikeDelivaryPriceText = bikeDelivaryPriceText;
+
+    // Numbers
+    this.cabPriceNumber = persianToNumber(cabPriceText);
+    this.bikePriceNumber = persianToNumber(bikePriceText);
+    this.bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
+
+    // Metadata
+    this.timestamp = new Date(); // Track when data was fetched
+    this.ProcessDurationMs = ProcessDurationMs; // Time spent for this iteration
+  }
+}
+
+class PriceScraper {
+  constructor(page, selectors) {
+    this.page = page;          // Puppeteer page instance
+    this.selectors = selectors; // Object with all CSS selectors
+  }
+
+  // Extracts all price types for a given route
+  async extractPrice(route) {
+    // capturing the start time
+    const startTime = Date.now();
+
+    // 0. starting the process
+    console.log(`\n[INFO] Extracting prices for route: ${route.id} (${route.origin.name} -> ${route.destination.name})`);
+
+    // 1. Input origin
+    console.log("[STEP] Entering origin...");
+    await this.page.click(this.selectors.originSearchBtn);
+    await this.page.type(this.selectors.originSearchInput, route.origin.name, { delay: 100 });
+    await sleep(3000);
+    await this.page.click(this.selectors.firstSearchLi);
+    await sleep(3000);
+    await this.page.click(this.selectors.originSearchSubmit);
+
+    // 2. Input destination
+    console.log("[STEP] Entering destination...");
+    await this.page.click(this.selectors.destinationSearchBtn);
+    await this.page.type(this.selectors.destinationSearchInput, route.destination.name, { delay: 100 });
+    await sleep(3000);
+    await this.page.click(this.selectors.firstSearchLi);
+    await sleep(3000);
+    await this.page.click(this.selectors.destinationSearchSubmit);
+
+    // 3. Extract cab price
+    console.log("[STEP] Extracting cab price...");
+    await sleep(3000);
+    const cabPriceText = await this.page.$eval(
+      this.selectors.cabPriceSelector,
+      el => el.textContent.trim()
+    );
+    console.log(`  [DATA] Cab price: ${cabPriceText}`);
+
+    // 4. Extract bike price
+    console.log("[STEP] Extracting bike price...");
+    await this.page.click(this.selectors.bikePriceTab);
+    await sleep(3000);
+    const bikePriceText = await this.page.$eval(
+      this.selectors.bikePriceSelector,
+      el => el.textContent.trim()
+    );
+    console.log(`  [DATA] Bike price: ${bikePriceText}`);
+
+    // 5. Extract bike delivery price
+    console.log("[STEP] Extracting bike delivery price...");
+    await this.page.click(this.selectors.bikeDelivaryTab);
+    await sleep(3000);
+    const bikeDelivaryPriceText = await this.page.$eval(
+      this.selectors.bikeDelivaryPriceSelector,
+      el => el.textContent.trim()
+    );
+    console.log(`  [DATA] Bike delivery price: ${bikeDelivaryPriceText}`);
+
+    // 6. process complete, Back to menue for next route
+    const endTime = Date.now();
+    const ProcessDurationMs = endTime - startTime;
+    console.log(`✅ Finished route ${route.id} in ${ProcessDurationMs} ms`);
+    await this.page.click(this.selectors.backButton);
+    await sleep(1000);
+    await this.page.click(this.selectors.backButton);
+    await sleep(1000);
+
+    // 7. Return structured result
+    return new PriceResult(
+      route.id,
+      cabPriceText,
+      bikePriceText,
+      bikeDelivaryPriceText,
+      ProcessDurationMs
+    );
+  }
+}
+
+
 // #########################################################
 // 01. Pupetteer setup & lunch
 // #########################################################
@@ -121,11 +251,8 @@ Total routs:  166464
   const pages = await browser.pages();
   await pages[0].close();
 
-  // #########################################################
-  // 02. Loging in through log in page
-  // #########################################################
-
   // login URL
+  console.log('🛬 Login page loading...');
   await page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
   console.log('🛬 Login page loaded');
 
@@ -181,16 +308,8 @@ Total routs:  166464
     await page.waitForNavigation({ waitUntil: 'networkidle2' });
   }
 
-  // #########################################################
-  // 3. Middle popups for Menue
-  // #########################################################
-
   // !TODO
   console.log('🆗 no popups detected!')
-
-  // #########################################################
-  // 4. Urban logistics Micro service (from menue)
-  // #########################################################
 
   // Cab Requestion from menue
   await page.waitForSelector(selectors.cabRequestBtn, {
@@ -199,111 +318,15 @@ Total routs:  166464
   await page.click(selectors.cabRequestBtn);
   console.log('🚕 Cab request button detected and clicked!')
 
-  // #########################################################
-  // 6. Route Class
-  // #########################################################
+  // initiation of the scraper
+  const scraper = new PriceScraper(page, selectors);
 
-  // origin search bar selected
-  await page.waitForSelector(selectors.originSearchBtn, { visible: true, waitUntil: 'networkidle2' });
-  await page.click(selectors.originSearchBtn, { clickCount: 3 });
+  // extraction of the prices for all routes
+  for (const route of routesExample) {
+    const priceResult = await scraper.extractPrice(route);
+    console.log('[RESULT]', priceResult);
+  }
 
-  // origin inputed
-  await page.waitForSelector(selectors.originSearchInput, { visible: true, waitUntil: 'networkidle2' });
-  console.log("🔍 origin searchbar found and active");
-
-
-  // Clear any existing text in search input
-  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
-  await page.keyboard.press('Backspace');
-
-  // Type in origin search input
-  await page.type(selectors.originSearchInput, "میدان راه آهن", { delay: 100 }); // delay for if prevents fast typing
-  console.log("📝 origin typed");
-
-  // Select first item in the search results
-  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
-  await page.click(selectors.firstSearchLi, { clickCount: 3 });
-  console.log("👆 first item selected");
-
-  // submit origin
-  await page.waitForSelector(selectors.originSearchSubmit, { visible: true, waitUntil: 'networkidle2' });
-  await sleep(2000);
-  await page.click(selectors.originSearchSubmit, { clickCount: 3 });
-  console.log("📤 origin submitted");
-  await sleep(2000);
-
-  //destination search bar 
-  await page.waitForSelector(selectors.destinationSearchBtn, { visible: true, waitUntil: 'networkidle2' });
-  await page.click(selectors.destinationSearchBtn, { clickCount: 3 });
-  console.log("🔍 destination searchbar found and active");
-
-
-  // Clear any existing text in search input
-  await page.click(selectors.destinationSearchInput, { clickCount: 3 });
-  await page.keyboard.press('Backspace');
-
-  // Type in destination search input
-  await page.type(selectors.destinationSearchInput, "دهکده المپیک", { delay: 100 }); // delay for if prevents fast typing
-  console.log("📝 destination typed");
-
-  // Select first item in the search results
-  await page.waitForSelector(selectors.firstSearchLi, { visible: true, waitUntil: 'networkidle2' });
-  await page.click(selectors.firstSearchLi, { clickCount: 3 });
-  console.log("👆 first item selected");
-  await sleep(2000);
-
-  // submit destination
-  await page.waitForSelector(selectors.destinationSearchSubmit, { visible: true });
-  await sleep(2000);
-  await page.click(selectors.destinationSearchSubmit, { clickCount: 3 });
-  console.log("📤 destination submitted");
-
-
-  page.waitForSelector(selectors.cabPriceSelector, { visible: true })
-    .then(() => page.$(selectors.cabPriceSelector))
-    .then(element => page.evaluate(el => el.textContent.trim(), element))
-    .then(cabPriceText => {
-      console.log("💰🚕 cab Price text:", cabPriceText);
-
-      // Convert price to number
-      const cabPriceNumber = persianToNumber(cabPriceText);
-      console.log("💰🚕 cab price as number:", cabPriceNumber);
-
-      // Transition to Bike price section
-      return page.waitForSelector(selectors.bikePriceTab, { visible: true });
-    })
-    .then(() => page.click(selectors.bikePriceTab, { clickCount: 3 }))
-    .catch(err => console.error("❌ Error during price extraction:", err));
-
-  page.waitForSelector(selectors.bikePriceSelector, { visible: true })
-    .then(() => page.$(selectors.bikePriceSelector))
-    .then(element => page.evaluate(el => el.textContent.trim(), element))
-    .then(bikePriceText => {
-      console.log("💰🏍️ Bike Price text:", bikePriceText);
-
-      // Convert price to number
-      const bikePriceNumber = persianToNumber(bikePriceText);
-      console.log("💰🏍️ Bike price as number:", bikePriceNumber);
-
-      // Transition to Bike price section
-      return page.waitForSelector(selectors.bikeDelivaryTab, { visible: true });
-    })
-    .then(() => page.click(selectors.bikeDelivaryTab, { clickCount: 3 }))
-    .catch(err => console.error("❌ Error during price extraction:", err));
-
-  page.waitForSelector(selectors.bikeDelivaryPriceSelector, { visible: true })
-    .then(() => page.$(selectors.bikeDelivaryPriceSelector))
-    .then(element => page.evaluate(el => el.textContent.trim(), element))
-    .then(bikeDelivaryPriceText => {
-      console.log("💰🛵 Bike delivary Price text:", bikeDelivaryPriceText);
-
-      // Convert price to number
-      const bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
-      console.log("💰🛵 Bike delivary price as number:", bikeDelivaryPriceNumber);
-    })
-    .catch(err => console.error("❌ Error during price extraction:", err));
-
-    
 
   // ---------------------------------------------------------
   await sleep(10000);

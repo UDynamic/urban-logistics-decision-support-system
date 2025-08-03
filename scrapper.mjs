@@ -18,9 +18,6 @@ const selectors = {
   captchaInput: 'input[placeholder="کدی را که در تصویر بالا می‌بینید وارد کنید"]',
   otpInputSelector: 'input',
 
-
-
-
   // menue
   cabRequestBtn: '#ChoiceCab',
 
@@ -32,6 +29,9 @@ const selectors = {
   destinationSearchBtn: 'footer h6',
   destinationSearchInput: 'input[data-qa-id="search-input"]',
   destinationSearchSubmit: 'button[data-qa-id="confirm"]',
+
+  // back button
+  backButton: 'button[aria-label="بازگشت"]',  
 
   cabPriceSelector: 'footer ul li span[data-qa-id="service-type-price-1"]',
   bikePriceTab: 'footer div button:nth-of-type(2)',
@@ -130,15 +130,22 @@ Total routs:  166464
 // 4. OOP implementation
 // #########################################################
 class PriceResult {
-  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText) {
-    this.routeId = routeId;                                // Unique identifier for the route
-    this.cabPriceText = cabPriceText;                      // Original cab price text
-    this.cabPriceNumber = persianToNumber(cabPriceText);   // Numeric cab price
-    this.bikePriceText = bikePriceText;                    // Original bike price text
-    this.bikePriceNumber = persianToNumber(bikePriceText); // Numeric bike price
-    this.bikeDelivaryPriceText = bikeDelivaryPriceText;    // Original bike delivery price text
-    this.bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText); // Numeric bike delivery price
-    this.timestamp = new Date();                           // Timestamp for when the price was fetched
+  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, durationMs) {
+    this.routeId = routeId;
+
+    // Raw text
+    this.cabPriceText = cabPriceText;
+    this.bikePriceText = bikePriceText;
+    this.bikeDelivaryPriceText = bikeDelivaryPriceText;
+
+    // Numbers
+    this.cabPriceNumber = persianToNumber(cabPriceText);
+    this.bikePriceNumber = persianToNumber(bikePriceText);
+    this.bikeDelivaryPriceNumber = persianToNumber(bikeDelivaryPriceText);
+
+    // Metadata
+    this.timestamp = new Date(); // Track when data was fetched
+    this.durationMs = durationMs; // Time spent for this iteration
   }
 }
 
@@ -201,9 +208,9 @@ class PriceScraper {
 
     // 6. Return structured result
     console.log(`[INFO] Extraction complete for route: ${route.id}`);
-    await this.page.click('button[aria-label="بازگشت"]')
+    await this.page.click(this.selectors.backButton);
     await sleep(1000);
-    await this.page.click('button[aria-label="بازگشت"]')
+    await this.page.click(this.selectors.backButton);
     await sleep(1000);
     return new PriceResult(
       route.id,

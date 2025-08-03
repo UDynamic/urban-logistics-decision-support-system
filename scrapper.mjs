@@ -130,7 +130,7 @@ Total routs:  166464
 // 4. OOP implementation
 // #########################################################
 class PriceResult {
-  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, ProcessdurationMs) {
+  constructor(routeId, cabPriceText, bikePriceText, bikeDelivaryPriceText, ProcessDurationMs) {
     this.routeId = routeId;
 
     // Raw text
@@ -145,7 +145,7 @@ class PriceResult {
 
     // Metadata
     this.timestamp = new Date(); // Track when data was fetched
-    this.ProcessdurationMs = ProcessdurationMs; // Time spent for this iteration
+    this.ProcessDurationMs = ProcessDurationMs; // Time spent for this iteration
   }
 }
 
@@ -225,7 +225,7 @@ class PriceScraper {
       cabPriceText,
       bikePriceText,
       bikeDelivaryPriceText,
-      ProcessdurationMs
+      ProcessDurationMs
     );
   }
 }

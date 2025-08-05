@@ -1,0 +1,26 @@
+{
+  "name": "@urban-logistics/workers",
+  "version": "1.0.0",
+  "description": "Background workers for route enrichment and data processing",
+  "main": "worker.mjs",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch worker.mjs",
+    "start": "node worker.mjs",
+    "worker:distance": "node src/distance-worker.js",
+    "worker:price": "node src/price-worker.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bullmq": "^5.1.0",
+    "ioredis": "^5.3.2",
+    "pg": "^8.16.3",
+    "dotenv": "^16.3.1",
+    "winston": "^3.11.0",
+    "axios": "^1.6.2",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+} 

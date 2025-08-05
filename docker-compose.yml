@@ -1,0 +1,189 @@
+version: '3.8'
+
+# =============================================================================
+# Urban Logistics Decision Support System - Docker Compose Configuration
+# =============================================================================
+
+services:
+  # =============================================================================
+  # PostgreSQL Database
+  # =============================================================================
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: urban-logistics-postgres
+    environment:
+      POSTGRES_DB: urban_logistics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-1234}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./db/seeds:/docker-entrypoint-initdb.d/02-seeds
+    networks:
+      - urban-logistics-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =============================================================================
+  # Redis (for caching and queues)
+  # =============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: urban-logistics-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - urban-logistics-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =============================================================================
+  # Backend API (Next.js)
+  # =============================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: urban-logistics-backend
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-1234}@postgres:5432/urban_logistics
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - API_PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - urban-logistics-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # =============================================================================
+  # Frontend (Next.js)
+  # =============================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: urban-logistics-frontend
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - urban-logistics-network
+
+  # =============================================================================
+  # Scraper Service
+  # =============================================================================
+  scraper:
+    build:
+      context: ./scraper
+      dockerfile: Dockerfile
+    container_name: urban-logistics-scraper
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-1234}@postgres:5432/urban_logistics
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SCRAPER_PHONE_NUMBER=${SCRAPER_PHONE_NUMBER}
+      - SCRAPER_HEADLESS=true
+      - SCRAPER_MAX_CONCURRENT_BROWSERS=3
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - urban-logistics-network
+    volumes:
+      - ./data:/app/data
+      - scraper_logs:/app/logs
+    restart: unless-stopped
+
+  # =============================================================================
+  # Worker Service
+  # =============================================================================
+  worker:
+    build:
+      context: ./workers
+      dockerfile: Dockerfile
+    container_name: urban-logistics-worker
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-1234}@postgres:5432/urban_logistics
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - WORKER_CONCURRENCY=5
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - urban-logistics-network
+    volumes:
+      - worker_logs:/app/logs
+    restart: unless-stopped
+
+  # =============================================================================
+  # Nginx Reverse Proxy (Optional)
+  # =============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: urban-logistics-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - urban-logistics-network
+    profiles:
+      - production
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  scraper_logs:
+    driver: local
+  worker_logs:
+    driver: local
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  urban-logistics-network:
+    driver: bridge 

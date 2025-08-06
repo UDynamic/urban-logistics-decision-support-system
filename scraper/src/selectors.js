@@ -34,8 +34,8 @@ export const selectors = {
 };
 
 export const urls = {
-  loginUrl: process.env.TRANSPORT_LOGIN_URL || "https://app.transport.service/login",
-  menuUrl: process.env.TRANSPORT_MENU_URL || "https://app.transport.service/"
+  loginUrl: process.env.TRANSPORT_LOGIN_URL || "https://app.snapp.taxi/login",
+  menuUrl: process.env.TRANSPORT_MENU_URL || "https://app.snapp.taxi/"
 };
 
 export const scraperConfig = {

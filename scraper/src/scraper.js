@@ -39,10 +39,10 @@ export class TransportScraper {
       logger.info('Initializing Transport Scraper...');
       
       // Initialize database connection
-      await this.initializeDatabase();
+      // await this.initializeDatabase();
       
       // Initialize Redis queue
-      await this.initializeQueue();
+      // await this.initializeQueue();
       
       // Launch browser
       await this.launchBrowser();
@@ -93,6 +93,7 @@ export class TransportScraper {
     try {
       this.browser = await puppeteer.launch({
         headless: scraperConfig.headless,
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -102,7 +103,9 @@ export class TransportScraper {
           '--no-zygote',
           '--disable-gpu'
         ],
-        defaultViewport: { width: 1280, height: 720 }
+        // defaultViewport: { width: 1280, height: 720 },
+        userDataDir: "./puppeteer_profile"
+
       });
       
       logger.info('Browser launched successfully');

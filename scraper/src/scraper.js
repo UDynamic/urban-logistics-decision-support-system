@@ -39,10 +39,10 @@ export class TransportScraper {
       logger.info('Initializing Transport Scraper...');
       
       // Initialize database connection
-      await this.initializeDatabase();
+      // await this.initializeDatabase();
       
       // Initialize Redis queue
-      await this.initializeQueue();
+      // await this.initializeQueue();
       
       // Launch browser
       await this.launchBrowser();

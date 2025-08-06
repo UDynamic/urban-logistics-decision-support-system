@@ -93,6 +93,7 @@ export class TransportScraper {
     try {
       this.browser = await puppeteer.launch({
         headless: scraperConfig.headless,
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',

@@ -103,8 +103,9 @@ export class TransportScraper {
           '--no-zygote',
           '--disable-gpu'
         ],
-        // defaultViewport: { width: 1280, height: 720 }
-        
+        // defaultViewport: { width: 1280, height: 720 },
+        userDataDir: "./puppeteer_profile"
+
       });
       
       logger.info('Browser launched successfully');

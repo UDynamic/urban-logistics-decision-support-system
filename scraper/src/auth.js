@@ -17,9 +17,10 @@ export class TransportAuth {
       
       // Navigate to login page
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
-      await sleep(4000);
+      await sleep(2000);
 
-      this.isAuthenticated = this.checkAuthenticationStatus();
+      this.checkAuthenticationStatus();
+
       //checking authentication
       if (this.isAuthenticated) {
         logger.info('Authentication successful!');

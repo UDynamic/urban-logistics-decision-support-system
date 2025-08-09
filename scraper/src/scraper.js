@@ -122,6 +122,8 @@ export class TransportScraper {
 
   async initializeAuthentication() {
     try {
+      
+      // first page selection for authentication
       const pages = await this.browser.pages();
       const page = pages[0];
       const auth = new TransportAuth(page);

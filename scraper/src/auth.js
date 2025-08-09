@@ -17,11 +17,12 @@ export class TransportAuth {
       
       // Navigate to login page
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
-      // await sleep(2000);
+      await sleep(2000);
+
+      this.checkAuthenticationStatus();
 
       //checking authentication
-      if (this.checkAuthenticationStatus()) {
-        this.isAuthenticated = true;
+      if (this.isAuthenticated) {
         logger.info('Authentication successful!');
       } else {
 
@@ -153,11 +154,11 @@ export class TransportAuth {
   async checkAuthenticationStatus() {
     try {
       // Navigate to menu page
-      await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
+      // await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
 
       // Check if we're redirected to login page
       const currentUrl = this.page.url();
-      if (currentUrl.includes('login')) {
+      if (currentUrl !== urls.menuUrl) {
         this.isAuthenticated = false;
         logger.info('Session expired, re-authentication required');
         return false;

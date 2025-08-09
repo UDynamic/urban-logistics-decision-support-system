@@ -17,7 +17,7 @@ export class TransportAuth {
       
       // Navigate to login page
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
-      // await sleep(2000);
+      await sleep(2000);
 
       //checking authentication
       if (this.checkAuthenticationStatus()) {
@@ -153,7 +153,7 @@ export class TransportAuth {
   async checkAuthenticationStatus() {
     try {
       // Navigate to menu page
-      await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
+      // await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
 
       // Check if we're redirected to login page
       const currentUrl = this.page.url();

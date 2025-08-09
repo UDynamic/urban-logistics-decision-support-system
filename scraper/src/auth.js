@@ -17,7 +17,7 @@ export class TransportAuth {
       
       // Navigate to login page
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
-      await sleep(2000);
+      // await sleep(2000);
 
       // Enter phone number
       await this.enterPhoneNumber();

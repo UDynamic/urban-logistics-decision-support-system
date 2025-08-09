@@ -107,7 +107,7 @@ export class TransportScraper {
         userDataDir: "./puppeteer_profile"
 
       });
-      await this.browser.newPage();
+      this.page = await this.browser.newPage();
       const pages = await this.browser.pages();
      
       // closed the first blank tab

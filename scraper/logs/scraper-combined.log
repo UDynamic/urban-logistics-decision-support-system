@@ -134,3 +134,6 @@
 {"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-09T20:07:23.334Z"}
 {"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-09T20:07:23.338Z"}
 {"level":"error","message":"Failed to launch browser: browser is not defined","service":"scraper","stack":"ReferenceError: browser is not defined\n    at TransportScraper.launchBrowser (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:111:21)\n    at async TransportScraper.initialize (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:48:7)\n    at async main (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/scraper.mjs:21:5)","timestamp":"2025-08-09T20:07:25.079Z"}
+{"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-09T20:14:07.804Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-09T20:14:07.812Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-09T20:14:09.043Z"}

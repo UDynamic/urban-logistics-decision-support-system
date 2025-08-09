@@ -107,6 +107,11 @@ export class TransportScraper {
         userDataDir: "./puppeteer_profile"
 
       });
+      const page = await this.browser.newPage();
+      const pages = await browser.pages();
+     
+      // closed the first blank tab
+      await pages[0].close();
       
       logger.info('Browser launched successfully');
     } catch (error) {
@@ -117,9 +122,6 @@ export class TransportScraper {
 
   async initializeAuthentication() {
     try {
-      const page = await this.browser.newPage();
-      const pages = await browser.pages();
-      await pages[0].close();
       const auth = new TransportAuth(page);
       
       // Set user agent

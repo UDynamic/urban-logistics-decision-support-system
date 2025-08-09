@@ -118,6 +118,8 @@ export class TransportScraper {
   async initializeAuthentication() {
     try {
       const page = await this.browser.newPage();
+      const pages = await browser.pages();
+      await pages[0].close();
       const auth = new TransportAuth(page);
       
       // Set user agent

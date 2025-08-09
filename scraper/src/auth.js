@@ -52,7 +52,7 @@ export class TransportAuth {
       await this.page.type(selectors.phoneNumberInput, scraperConfig.phoneNumber);
       
       await this.page.click(selectors.logInSubmitButton);
-      await sleep(2000);
+      await sleep(1000);
       
       logger.info('Phone number entered successfully');
     } catch (error) {

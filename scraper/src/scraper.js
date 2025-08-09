@@ -108,7 +108,7 @@ export class TransportScraper {
 
       });
       await this.browser.newPage();
-      const pages = await browser.pages();
+      const pages = await this.browser.pages();
      
       // closed the first blank tab
       await pages[0].close();

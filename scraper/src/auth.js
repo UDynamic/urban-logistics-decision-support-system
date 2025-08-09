@@ -157,7 +157,7 @@ export class TransportAuth {
 
       // Check if we're redirected to login page
       const currentUrl = this.page.url();
-      if (currentUrl.includes('login')) {
+      if (currentUrl === urls.loginUrl) {
         this.isAuthenticated = false;
         logger.info('Session expired, re-authentication required');
         return false;

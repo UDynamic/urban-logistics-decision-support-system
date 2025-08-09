@@ -19,24 +19,31 @@ export class TransportAuth {
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
       // await sleep(2000);
 
-      // Enter phone number
-      await this.enterPhoneNumber();
-      
-      // Handle captcha if present
-      await this.handleCaptcha();
-      
-      // Wait for OTP input
-      await this.waitForOTP();
-      
-      // Enter OTP
-      await this.enterOTP();
-      
-      // Verify successful login
-      await this.verifyLogin();
-      
-      this.isAuthenticated = true;
-      logger.info('Authentication successful!');
-      
+      //checking authentication
+      if (this.checkAuthenticationStatus()) {
+        this.isAuthenticated = true;
+        logger.info('Authentication successful!');
+      } else {
+
+        // Enter phone number
+        await this.enterPhoneNumber();
+
+        // Handle captcha if present
+        await this.handleCaptcha();
+
+        // Wait for OTP input
+        await this.waitForOTP();
+
+        // Enter OTP
+        await this.enterOTP();
+
+        // Verify successful login
+        await this.verifyLogin();
+
+        this.isAuthenticated = true;
+        logger.info('Authentication successful!');
+      }
+
     } catch (error) {
       logger.error('Authentication failed:', error);
       throw new Error(`Authentication failed: ${error.message}`);
@@ -46,14 +53,14 @@ export class TransportAuth {
   async enterPhoneNumber() {
     try {
       logger.info('Entering phone number...');
-      
+
       await this.page.waitForSelector(selectors.phoneNumberInput, { timeout: 10000 });
       await this.page.click(selectors.phoneNumberInput);
       await this.page.type(selectors.phoneNumberInput, scraperConfig.phoneNumber);
-      
+
       await this.page.click(selectors.logInSubmitButton);
-      await sleep(1000);
-      
+      await sleep(2000);
+
       logger.info('Phone number entered successfully');
     } catch (error) {
       logger.error('Failed to enter phone number:', error);
@@ -65,13 +72,13 @@ export class TransportAuth {
     try {
       // Check if captcha dialog is present
       const captchaDialog = await this.page.$(selectors.captchaDialog);
-      
+
       if (captchaDialog) {
         logger.info('Captcha detected, waiting for manual input...');
-        
+
         // Wait for user to solve captcha manually
         const captchaCode = await askQuestion('Please solve the captcha and enter the code: ');
-        
+
         if (captchaCode) {
           await this.page.type(selectors.captchaInput, captchaCode);
           await this.page.keyboard.press('Enter');
@@ -87,11 +94,11 @@ export class TransportAuth {
   async waitForOTP() {
     try {
       logger.info('Waiting for OTP input field...');
-      
+
       // Wait for OTP input field to appear
       await this.page.waitForSelector(selectors.otpInputSelector, { timeout: 30000 });
       await sleep(1000);
-      
+
       logger.info('OTP input field ready');
     } catch (error) {
       logger.error('Failed to wait for OTP input:', error);
@@ -102,19 +109,19 @@ export class TransportAuth {
   async enterOTP() {
     try {
       logger.info('Waiting for OTP code...');
-      
+
       // Wait for user to provide OTP
       const otpCode = await askQuestion('Please enter the OTP code sent to your phone: ');
-      
+
       if (!otpCode) {
         throw new Error('OTP code is required');
       }
-      
+
       // Enter OTP
       await this.page.type(selectors.otpInputSelector, otpCode);
       await this.page.keyboard.press('Enter');
       await sleep(3000);
-      
+
       logger.info('OTP entered successfully');
     } catch (error) {
       logger.error('Failed to enter OTP:', error);
@@ -125,10 +132,10 @@ export class TransportAuth {
   async verifyLogin() {
     try {
       logger.info('Verifying login success...');
-      
+
       // Wait for redirect to menu page
       await this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
-      
+
       // Check if we're on the menu page
       const currentUrl = this.page.url();
       if (currentUrl.includes('app.snapp.taxi') && !currentUrl.includes('login')) {
@@ -147,7 +154,7 @@ export class TransportAuth {
     try {
       // Navigate to menu page
       await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
-      
+
       // Check if we're redirected to login page
       const currentUrl = this.page.url();
       if (currentUrl.includes('login')) {

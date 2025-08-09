@@ -107,6 +107,11 @@ export class TransportScraper {
         userDataDir: "./puppeteer_profile"
 
       });
+      this.page = await this.browser.newPage();
+      const pages = await this.browser.pages();
+     
+      // closed the first blank tab
+      await pages[0].close();
       
       logger.info('Browser launched successfully');
     } catch (error) {
@@ -117,11 +122,10 @@ export class TransportScraper {
 
   async initializeAuthentication() {
     try {
-      const page = await this.browser.newPage();
       const auth = new TransportAuth(page);
       
       // Set user agent
-      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+      // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
       
       // Authenticate
       await auth.authenticate();
@@ -189,7 +193,7 @@ export class TransportScraper {
 
       // Create new page for this route
       page = await this.browser.newPage();
-      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+      // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
       
       // Navigate to menu
       await page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });

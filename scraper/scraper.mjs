@@ -62,4 +62,7 @@ process.on('SIGTERM', async () => {
 if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 } 
+
+
+// !!!TODO deleted after edits
 main()

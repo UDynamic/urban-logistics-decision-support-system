@@ -137,3 +137,6 @@
 {"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-09T20:14:07.804Z"}
 {"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-09T20:14:07.812Z"}
 {"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-09T20:14:09.043Z"}
+{"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-09T21:34:55.583Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-09T21:34:55.588Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-09T21:34:57.144Z"}

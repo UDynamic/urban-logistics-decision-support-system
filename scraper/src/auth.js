@@ -14,7 +14,7 @@ export class TransportAuth {
   async authenticate() {
     try {
       logger.info('Starting authentication process...');
-      
+
       // Navigate to login page
       await this.page.goto(urls.loginUrl, { waitUntil: 'networkidle2' });
       await sleep(2000);
@@ -156,6 +156,24 @@ export class TransportAuth {
       // Navigate to menu page
       // await this.page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
 
+
+      // old version of authentication checker
+      /*
+      await page.goto(urlLanding, { waitUntil: 'networkidle2' });
+      console.log('🔐 Login page loaded');
+
+      const currentUrl = page.url()
+      if (currentUrl !== "https://app.snapp.taxi/") {
+
+        console.log('⛔ not Authenticated, commencing authentication');
+        // Type the phone number
+        await page.waitForSelector('input[data-qa-id="cellphone-number-input"]', { visible: true })
+        await page.type('input[data-qa-id="cellphone-number-input"]', '09130398835');
+        console.log('🔐 Phone number entered');
+      };
+      */
+      
+      
       // Check if we're redirected to login page
       const currentUrl = this.page.url();
       if (currentUrl !== urls.menuUrl) {

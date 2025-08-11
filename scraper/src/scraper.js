@@ -328,23 +328,39 @@ export class TransportScraper {
       const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column
 
       const query = `
-        INSERT INTO route_history (route_id, origin_id, destination_id, cab_price, bike_price, bike_delivery_price, scraped_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        ON CONFLICT (route_id, scraped_at) DO UPDATE SET
-          cab_price = EXCLUDED.cab_price,
-          bike_price = EXCLUDED.bike_price,
-          bike_delivery_price = EXCLUDED.bike_delivery_price
-      `;
-      
-      await this.dbClient.query(query, [
-        routeId,
-        route.origin.id,
-        route.destination.id,
-        prices.cab,
-        prices.bike,
-        prices.bikeDelivery,
-        timestamp
-      ]);
+      INSERT INTO route_history (
+        route_id, 
+        date, 
+        captured_at, 
+        cab_price_text, 
+        cab_price_number, 
+        bike_price_text, 
+        bike_price_number, 
+        bike_delivery_text, 
+        bike_delivery_number
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (route_id, captured_at, date) DO UPDATE SET
+        cab_price_text = EXCLUDED.cab_price_text,
+        cab_price_number = EXCLUDED.cab_price_number,
+        bike_price_text = EXCLUDED.bike_price_text,
+        bike_price_number = EXCLUDED.bike_price_number,
+        bike_delivery_text = EXCLUDED.bike_delivery_text,
+        bike_delivery_number = EXCLUDED.bike_delivery_number,
+        captured_at = EXCLUDED.captured_at
+    `;
+
+    await this.dbClient.query(query, [
+      routeId,
+      dateOnly,
+      timestamp,
+      prices.cab.text,
+      prices.cab.number,
+      prices.bike.text,
+      prices.bike.number,
+      prices.bikeDelivery.text,
+      prices.bikeDelivery.number
+    ]);
       
     } catch (error) {
       logger.error('Failed to save route data:', error);

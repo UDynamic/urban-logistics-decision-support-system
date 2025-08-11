@@ -1,6 +1,11 @@
 import { selectors, urls, scraperConfig } from './selectors.js';
 import { logger, sleep, askQuestion, retryWithBackoff } from './utils.js';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../config/.env') });
 // =============================================================================
 // Authentication Module
 // =============================================================================
@@ -135,11 +140,12 @@ export class TransportAuth {
       logger.info('Verifying login success...');
 
       // Wait for redirect to menu page
+      await this.page.goto(process.env.TRANSPORT_MENU_URL);
       await this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
 
       // Check if we're on the menu page
       const currentUrl = this.page.url();
-      if (currentUrl.includes('app.snapp.taxi') && !currentUrl.includes('login')) {
+      if (currentUrl === process.env.TRANSPORT_MENU_URL) {
         logger.info('Successfully redirected to menu page');
         return true;
       } else {
@@ -201,3 +207,4 @@ export class TransportAuth {
     }
   }
 } 
+

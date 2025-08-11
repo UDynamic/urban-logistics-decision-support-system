@@ -1,11 +1,15 @@
-import dotenv from 'dotenv';
+
 import fs from 'fs';
 import { TransportScraper } from './src/scraper.js';
 import { logger } from './src/utils.js';
 
 // Load environment variables
-dotenv.config();
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../config/.env') });
 // =============================================================================
 // Main Scraper Entry Point
 // =============================================================================
@@ -63,6 +67,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 } 
 
-
-// !!!TODO deleted after edits
-main()
+// TODO CLEAR
+main();

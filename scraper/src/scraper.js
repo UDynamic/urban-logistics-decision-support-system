@@ -325,7 +325,8 @@ export class TransportScraper {
     try {
       const routeId = generateRouteId(route.origin.id, route.destination.id);
       const timestamp = new Date();
-      
+      const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column
+
       const query = `
         INSERT INTO route_history (route_id, origin_id, destination_id, cab_price, bike_price, bike_delivery_price, scraped_at)
         VALUES ($1, $2, $3, $4, $5, $6, $7)

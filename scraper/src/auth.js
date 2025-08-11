@@ -1,6 +1,9 @@
 import { selectors, urls, scraperConfig } from './selectors.js';
 import { logger, sleep, askQuestion, retryWithBackoff } from './utils.js';
+import dotenv from 'dotenv';
+import path from 'path';
 
+dotenv.config({ path: path.resolve('config/.env') });
 // =============================================================================
 // Authentication Module
 // =============================================================================
@@ -135,6 +138,7 @@ export class TransportAuth {
       logger.info('Verifying login success...');
 
       // Wait for redirect to menu page
+      await this.page.goto(process.env.TRANSPORT_MENU_URL);
       await this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
 
       // Check if we're on the menu page

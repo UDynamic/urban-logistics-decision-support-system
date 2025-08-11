@@ -39,7 +39,7 @@ export const urls = {
 };
 
 export const scraperConfig = {
-  phoneNumber: process.env.SCRAPER_PHONE_NUMBER || '09130398835',
+  phoneNumber: process.env.SCRAPER_PHONE_NUMBER || '09173978579',
   delayBetweenRequests: parseInt(process.env.SCRAPER_DELAY_BETWEEN_REQUESTS) || 2000,
   maxConcurrentBrowsers: parseInt(process.env.SCRAPER_MAX_CONCURRENT_BROWSERS) || 3,
   headless: process.env.SCRAPER_HEADLESS === 'true',

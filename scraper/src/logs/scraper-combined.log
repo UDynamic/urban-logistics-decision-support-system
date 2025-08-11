@@ -190,3 +190,26 @@
 {"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:13:15.297Z"}
 {"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:13:15.298Z"}
 {"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:13:15.299Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:14:44.394Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:14:45.585Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:14:45.589Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T15:15:08.598Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T15:15:08.599Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T15:15:11.089Z"}
+{"level":"info","message":"Captcha detected, waiting for manual input...","service":"scraper","timestamp":"2025-08-11T15:15:11.102Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T15:15:15.881Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T15:15:16.912Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T15:15:16.913Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T15:15:30.359Z"}
+{"level":"info","message":"Verifying login success...","service":"scraper","timestamp":"2025-08-11T15:15:30.360Z"}
+{"level":"info","message":"Successfully redirected to menu page","service":"scraper","timestamp":"2025-08-11T15:15:30.361Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:15:30.362Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:15:30.362Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:15:30.363Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:18:37.799Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:18:38.904Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:18:38.907Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T15:18:51.525Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:18:51.526Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:18:51.527Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:18:51.527Z"}

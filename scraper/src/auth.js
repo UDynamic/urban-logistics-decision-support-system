@@ -140,8 +140,8 @@ export class TransportAuth {
       logger.info('Verifying login success...');
 
       // Wait for redirect to menu page
-    //   await this.page.goto(process.env.TRANSPORT_MENU_URL);
-    //   await this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
+      await this.page.goto(process.env.TRANSPORT_MENU_URL);
+      await this.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 });
 
       // Check if we're on the menu page
       const currentUrl = this.page.url();

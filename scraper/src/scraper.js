@@ -386,3 +386,6 @@ export class TransportScraper {
     }
   }
 } 
+// !TODO REMOVE
+const test = new TransportScraper();
+test.initialize();

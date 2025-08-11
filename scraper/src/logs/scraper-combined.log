@@ -1,0 +1,83 @@
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:36:20.242Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:36:21.808Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:36:21.810Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:36:39.558Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:36:40.904Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:36:45.775Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T13:36:45.783Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T13:36:46.805Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T13:36:46.808Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T13:37:45.282Z"}
+{"level":"info","message":"Verifying login success...","service":"scraper","timestamp":"2025-08-11T13:37:45.297Z"}
+{"level":"error","message":"Login verification failed: Navigation timeout of 15000 ms exceeded","name":"TimeoutError","service":"scraper","stack":"TimeoutError: Navigation timeout of 15000 ms exceeded\n    at new Deferred (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:57:34)\n    at Deferred.create (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:18:16)\n    at new LifecycleWatcher (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:66:46)\n    at CdpFrame.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Frame.js:193:29)\n    at CdpFrame.<anonymous> (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/decorators.js:101:27)\n    at CdpPage.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:601:43)\n    at TransportAuth.verifyLogin (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:138:23)\n    at TransportAuth.authenticate (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:42:20)\n    at async TransportScraper.initializeAuthentication (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:135:7)\n    at async TransportScraper.initialize (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:51:7)","timestamp":"2025-08-11T13:38:00.303Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:41:22.848Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:41:23.893Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:41:23.898Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T13:41:32.727Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T13:41:34.556Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T13:41:35.311Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T13:41:35.316Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:46:22.381Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:46:23.487Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:46:23.489Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T13:46:36.668Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T13:46:36.669Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T13:46:36.670Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T13:46:36.670Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:47:13.909Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:47:15.123Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:47:15.127Z"}
+{"level":"error","message":"Authentication failed: Navigating frame was detached","service":"scraper","stack":"Error: Navigating frame was detached\n    at #onFrameDetached (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:100:47)\n    at file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:36:7\n    at Array.map (<anonymous>)\n    at Object.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:35:20)\n    at CdpFrame.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/common/EventEmitter.js:77:23)\n    at #removeFramesRecursively (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:452:15)\n    at #onClientDisconnect (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:96:42)","timestamp":"2025-08-11T13:47:31.600Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:47:34.983Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:47:36.006Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:47:36.008Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:48:02.348Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:48:02.643Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:48:11.947Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T13:48:11.951Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T13:48:12.964Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T13:48:12.966Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T13:48:22.861Z"}
+{"level":"info","message":"Verifying login success...","service":"scraper","timestamp":"2025-08-11T13:48:22.862Z"}
+{"level":"error","message":"Login verification failed: Navigation timeout of 15000 ms exceeded","name":"TimeoutError","service":"scraper","stack":"TimeoutError: Navigation timeout of 15000 ms exceeded\n    at new Deferred (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:57:34)\n    at Deferred.create (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:18:16)\n    at new LifecycleWatcher (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:66:46)\n    at CdpFrame.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Frame.js:193:29)\n    at CdpFrame.<anonymous> (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/decorators.js:101:27)\n    at CdpPage.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:601:43)\n    at TransportAuth.verifyLogin (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:138:23)\n    at TransportAuth.authenticate (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:42:20)\n    at async TransportScraper.initializeAuthentication (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:135:7)\n    at async TransportScraper.initialize (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:51:7)","timestamp":"2025-08-11T13:48:37.890Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:49:25.943Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:49:27.038Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:49:27.042Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:49:37.585Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:49:37.589Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:49:40.027Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:49:43.965Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:49:45.032Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:49:45.033Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:49:49.318Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:49:49.319Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:49:55.325Z"}
+{"level":"info","message":"Captcha detected, waiting for manual input...","service":"scraper","timestamp":"2025-08-11T13:49:55.573Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T13:50:03.961Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T13:50:04.992Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T13:50:04.995Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T13:50:26.921Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:52:48.635Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:52:49.856Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:52:49.859Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:52:54.310Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:52:54.311Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:53:04.496Z"}
+{"level":"info","message":"Captcha detected, waiting for manual input...","service":"scraper","timestamp":"2025-08-11T13:53:04.512Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T13:53:09.688Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T13:53:10.722Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T13:53:10.725Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T13:53:21.037Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T13:54:16.927Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T13:54:18.213Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T13:54:18.215Z"}
+{"level":"info","message":"Session expired, re-authentication required","service":"scraper","timestamp":"2025-08-11T13:54:29.119Z"}
+{"level":"info","message":"Entering phone number...","service":"scraper","timestamp":"2025-08-11T13:54:29.123Z"}
+{"level":"info","message":"Phone number entered successfully","service":"scraper","timestamp":"2025-08-11T13:54:33.740Z"}
+{"level":"info","message":"Captcha detected, waiting for manual input...","service":"scraper","timestamp":"2025-08-11T13:54:33.761Z"}
+{"level":"info","message":"Waiting for OTP input field...","service":"scraper","timestamp":"2025-08-11T13:54:39.463Z"}
+{"level":"info","message":"OTP input field ready","service":"scraper","timestamp":"2025-08-11T13:54:40.496Z"}
+{"level":"info","message":"Waiting for OTP code...","service":"scraper","timestamp":"2025-08-11T13:54:40.499Z"}
+{"level":"info","message":"OTP entered successfully","service":"scraper","timestamp":"2025-08-11T13:55:08.385Z"}
+{"level":"info","message":"Verifying login success...","service":"scraper","timestamp":"2025-08-11T13:55:08.733Z"}
+{"level":"error","message":"Login verification failed: Navigation timeout of 2000 ms exceeded","name":"TimeoutError","service":"scraper","stack":"TimeoutError: Navigation timeout of 2000 ms exceeded\n    at new Deferred (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:57:34)\n    at Deferred.create (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/Deferred.js:18:16)\n    at new LifecycleWatcher (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:66:46)\n    at CdpFrame.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Frame.js:193:29)\n    at CdpFrame.<anonymous> (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/util/decorators.js:101:27)\n    at CdpPage.waitForNavigation (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:601:43)\n    at TransportAuth.verifyLogin (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:138:23)\n    at TransportAuth.authenticate (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/auth.js:42:20)\n    at async TransportScraper.initializeAuthentication (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:135:7)\n    at async TransportScraper.initialize (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:51:7)","timestamp":"2025-08-11T13:55:10.803Z"}

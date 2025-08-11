@@ -63,6 +63,9 @@ process.on('SIGTERM', async () => {
 });
 
 // Run the scraper
-// if (import.meta.url === `file://${process.argv[1]}`) {
-//   main();
-// } 
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+} 
+
+// TODO CLEAR
+main();

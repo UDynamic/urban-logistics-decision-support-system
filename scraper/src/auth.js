@@ -139,7 +139,7 @@ export class TransportAuth {
 
       // Check if we're on the menu page
       const currentUrl = this.page.url();
-      if (currentUrl.includes('app.snapp.taxi') && !currentUrl.includes('login')) {
+      if (currentUrl === process.env.TRANSPORT_MENU_URL) {
         logger.info('Successfully redirected to menu page');
         return true;
       } else {

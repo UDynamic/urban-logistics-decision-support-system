@@ -323,6 +323,15 @@ export class TransportScraper {
 
   async saveRouteData(route, prices) {
     try {
+      // handling the "no resalt" case for the routes and prices
+      if (!route || !route.origin || !route.destination) {
+        throw new Error('Invalid route object');
+      }
+      if (!prices || !prices.cab || !prices.bike || !prices.bikeDelivery) {
+        throw new Error('Incomplete prices data');
+      }
+
+
       const routeId = generateRouteId(route.origin.id, route.destination.id);
       const timestamp = new Date();
       const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column

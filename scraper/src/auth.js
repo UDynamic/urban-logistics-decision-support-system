@@ -2,8 +2,10 @@ import { selectors, urls, scraperConfig } from './selectors.js';
 import { logger, sleep, askQuestion, retryWithBackoff } from './utils.js';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config({ path: path.resolve('config/.env') });
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../config/.env') });
 // =============================================================================
 // Authentication Module
 // =============================================================================

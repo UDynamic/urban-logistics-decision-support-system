@@ -226,7 +226,7 @@ export class TransportScraper {
       await this.saveRouteData(route, prices);
       
       // Add to enrichment queue
-      await this.queueRouteEnrichment(route);
+      // await this.queueRouteEnrichment(route);
       
       this.stats.successfulRoutes++;
       logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);

@@ -421,3 +421,29 @@
 {"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:36:18.768Z"}
 {"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:36:18.770Z"}
 {"level":"error","message":"Authentication failed: Navigating frame was detached","service":"scraper","stack":"Error: Navigating frame was detached\n    at #onFrameDetached (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:100:47)\n    at file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:36:7\n    at Array.map (<anonymous>)\n    at Object.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:35:20)\n    at CdpFrame.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/common/EventEmitter.js:77:23)\n    at #removeFramesRecursively (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:452:15)\n    at #onClientDisconnect (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:96:42)","timestamp":"2025-08-11T15:36:23.932Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:38:11.432Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:38:12.952Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:38:12.955Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T15:38:19.961Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:38:20.765Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:38:20.765Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:38:20.766Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:39:51.967Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:39:52.973Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:39:52.975Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T15:40:00.455Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:40:00.456Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:40:00.457Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:40:00.458Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:41:17.266Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:41:18.231Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:41:18.233Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-11T15:41:25.904Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-11T15:41:25.905Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-11T15:41:25.905Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-11T15:41:25.906Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully...","service":"scraper","timestamp":"2025-08-11T15:41:28.162Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-11T15:42:07.937Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-11T15:42:08.997Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-11T15:42:08.999Z"}
+{"level":"error","message":"Authentication failed: Navigating frame was detached","service":"scraper","stack":"Error: Navigating frame was detached\n    at #onFrameDetached (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/LifecycleWatcher.js:100:47)\n    at file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:36:7\n    at Array.map (<anonymous>)\n    at Object.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/third_party/mitt/mitt.js:35:20)\n    at CdpFrame.emit (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/common/EventEmitter.js:77:23)\n    at #removeFramesRecursively (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:452:15)\n    at #onClientDisconnect (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/FrameManager.js:96:42)","timestamp":"2025-08-11T15:42:11.075Z"}

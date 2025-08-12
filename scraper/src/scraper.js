@@ -210,6 +210,9 @@ export class TransportScraper {
       await sleep(1000);
       
       // Click on cab request
+      await page.waitForSelector(selectors.cabRequestBtn, { timeout: 5000 }).catch((error) => {
+        logger.error('Failed to find the cabRequestBtn:', error);
+      });
       await page.click(selectors.cabRequestBtn);
       await sleep(2000);
       

@@ -20,7 +20,7 @@ export const selectors = {
   otpInputSelector: 'input',
 
   // Menu
-  cabRequestBtn: '#ChoiceCab',
+  cabRequestBtn: 'div[id="ChoiceCab"]',
 
   // Route class selectors
   originSearchBtn: 'footer h6',

@@ -277,6 +277,10 @@ export class TransportScraper {
       
       // Extract cab price
       try {
+        await page.waitForSelector(selectors.cabPriceSelector, { timeout: 5000 }).catch((error) => {
+          logger.error('Failed to find the cabPriceSelector:', error)
+        });
+
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
@@ -289,7 +293,11 @@ export class TransportScraper {
       // Extract bike price
       try {
         await page.click(selectors.bikePriceTab);
-        await sleep(1000);
+        // await sleep(1000);
+        await page.waitForSelector(selectors.bikePriceSelector, { timeout: 5000 }).catch((error) => {
+          logger.error('Failed to find the bikePriceSelector:', error)
+        });
+
         
         const bikePriceElement = await page.$(selectors.bikePriceSelector);
         if (bikePriceElement) {
@@ -305,6 +313,10 @@ export class TransportScraper {
         await page.click(selectors.bikeDelivaryTab);
         await sleep(1000);
         
+        await page.waitForSelector(selectors.bikeDelivaryPriceSelector, { timeout: 5000 }).catch((error) => {
+          logger.error('Failed to find the bikeDelivaryPriceSelector:', error)
+        });
+
         const bikeDeliveryPriceElement = await page.$(selectors.bikeDelivaryPriceSelector);
         if (bikeDeliveryPriceElement) {
           const bikeDeliveryPriceText = await page.evaluate(el => el.textContent, bikeDeliveryPriceElement);

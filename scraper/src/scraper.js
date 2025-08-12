@@ -355,10 +355,7 @@ export class TransportScraper {
   async saveRouteData(route, prices) {
     try {
       // handling the "no resalt" case for the routes and prices
-      prices.forEach(price => {
-        logger.info(`${price} price for route ${route.origin.name} → ${route.destination.name}`);
-        logger.info(`type of price ${price}: ${typeof(price)}`);
-      });
+      logger.info(prices, typeof(prices));
       
       if (!route || !route.origin || !route.destination) {
         throw new Error('Invalid route object');

@@ -273,18 +273,26 @@ export class TransportScraper {
 
   async extractPrices(page) {
     try {
-      const prices = {};
+      const prices = {
+        cab: null,
+        bike: null,
+        bikeDelivery: null
+      };
       
       // Extract cab price
       try {
         await page.waitForSelector(selectors.cabPriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the cabPriceSelector:', error)
+          logger.error('Failed to find the cabPriceSelector:', error);
         });
-
+  
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
+          logger.debug(`Raw cab price text: "${cabPriceText}"`);
           prices.cab = extractPrice(cabPriceText);
+          logger.debug(`Parsed cab price: ${JSON.stringify(prices.cab)}`);
+        } else {
+          logger.warn('Cab price element not found after waiting.');
         }
       } catch (error) {
         logger.warn('Failed to extract cab price:', error);
@@ -293,16 +301,18 @@ export class TransportScraper {
       // Extract bike price
       try {
         await page.click(selectors.bikePriceTab);
-        // await sleep(1000);
         await page.waitForSelector(selectors.bikePriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the bikePriceSelector:', error)
+          logger.error('Failed to find the bikePriceSelector:', error);
         });
-
-        
+  
         const bikePriceElement = await page.$(selectors.bikePriceSelector);
         if (bikePriceElement) {
           const bikePriceText = await page.evaluate(el => el.textContent, bikePriceElement);
+          logger.debug(`Raw bike price text: "${bikePriceText}"`);
           prices.bike = extractPrice(bikePriceText);
+          logger.debug(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
+        } else {
+          logger.warn('Bike price element not found after waiting.');
         }
       } catch (error) {
         logger.warn('Failed to extract bike price:', error);
@@ -311,16 +321,18 @@ export class TransportScraper {
       // Extract bike delivery price
       try {
         await page.click(selectors.bikeDelivaryTab);
-        await sleep(1000);
-        
         await page.waitForSelector(selectors.bikeDelivaryPriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the bikeDelivaryPriceSelector:', error)
+          logger.error('Failed to find the bikeDelivaryPriceSelector:', error);
         });
-
+  
         const bikeDeliveryPriceElement = await page.$(selectors.bikeDelivaryPriceSelector);
         if (bikeDeliveryPriceElement) {
           const bikeDeliveryPriceText = await page.evaluate(el => el.textContent, bikeDeliveryPriceElement);
+          logger.debug(`Raw bike delivery price text: "${bikeDeliveryPriceText}"`);
           prices.bikeDelivery = extractPrice(bikeDeliveryPriceText);
+          logger.debug(`Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`);
+        } else {
+          logger.warn('Bike delivery price element not found after waiting.');
         }
       } catch (error) {
         logger.warn('Failed to extract bike delivery price:', error);
@@ -329,7 +341,11 @@ export class TransportScraper {
       return prices;
     } catch (error) {
       logger.error('Failed to extract prices:', error);
-      return {};
+      return {
+        cab: null,
+        bike: null,
+        bikeDelivery: null
+      };
     }
   }
 

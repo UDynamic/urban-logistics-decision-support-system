@@ -355,8 +355,9 @@ export class TransportScraper {
   async saveRouteData(route, prices) {
     try {
       // handling the "no resalt" case for the routes and prices
-      ['cab', 'bike', 'bikeDelivery'].forEach(price => {
-        if (!prices[price]) logger.warn(`${price} price missing for route ${route.origin.name} → ${route.destination.name}`);
+      prices.forEach(price => {
+        logger.info(`${price} price for route ${route.origin.name} → ${route.destination.name}`);
+        logger.info(`type of price ${price}: ${typeof(price)}`);
       });
       
       if (!route || !route.origin || !route.destination) {

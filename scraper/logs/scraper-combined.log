@@ -983,3 +983,37 @@
 {"level":"info","message":"Progress: 0% (3/166056)","service":"scraper","timestamp":"2025-08-12T17:06:28.027Z"}
 {"level":"info","message":"Processing batch 2/55352 (3 routes)","service":"scraper","timestamp":"2025-08-12T17:06:30.039Z"}
 {"level":"info","message":"Received SIGINT, shutting down gracefully...","service":"scraper","timestamp":"2025-08-12T17:06:34.176Z"}
+{"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-12T17:13:31.875Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-12T17:13:31.880Z"}
+{"level":"info","message":"Database connection established","service":"scraper","timestamp":"2025-08-12T17:13:31.982Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-12T17:13:32.899Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-12T17:13:32.901Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-12T17:13:42.660Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-12T17:13:42.663Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-12T17:13:42.665Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-12T17:13:42.666Z"}
+{"level":"info","message":"Loading routes from: ../data/routes.json","service":"scraper","timestamp":"2025-08-12T17:13:42.670Z"}
+{"level":"info","message":"Loaded 166056 routes","service":"scraper","timestamp":"2025-08-12T17:13:43.496Z"}
+{"level":"info","message":"Starting to scrape 166056 routes...","service":"scraper","timestamp":"2025-08-12T17:13:43.507Z"}
+{"level":"info","message":"Processing batch 1/55352 (3 routes)","service":"scraper","timestamp":"2025-08-12T17:13:43.520Z"}
+{"level":"warn","message":"cab price missing for route ازگل → امامزاده قاسم","service":"scraper","timestamp":"2025-08-12T17:14:18.542Z"}
+{"level":"warn","message":"bike price missing for route ازگل → امامزاده قاسم","service":"scraper","timestamp":"2025-08-12T17:14:18.542Z"}
+{"level":"warn","message":"bikeDelivery price missing for route ازگل → امامزاده قاسم","service":"scraper","timestamp":"2025-08-12T17:14:18.543Z"}
+{"level":"error","message":"Failed to save route data: Incomplete prices data","service":"scraper","stack":"Error: Incomplete prices data\n    at TransportScraper.saveRouteData (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:366:15)\n    at TransportScraper.scrapeRoute (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:229:18)\n    at async Promise.allSettled (index 2)\n    at async TransportScraper.scrapeRoutes (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:170:9)\n    at async main (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/scraper.mjs:39:5)","timestamp":"2025-08-12T17:14:18.544Z"}
+{"level":"error","message":"Failed to scrape route ازگل → امامزاده قاسم: Incomplete prices data","service":"scraper","stack":"Error: Incomplete prices data\n    at TransportScraper.saveRouteData (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:366:15)\n    at TransportScraper.scrapeRoute (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:229:18)\n    at async Promise.allSettled (index 2)\n    at async TransportScraper.scrapeRoutes (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:170:9)\n    at async main (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/scraper.mjs:39:5)","timestamp":"2025-08-12T17:14:18.546Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully...","service":"scraper","timestamp":"2025-08-12T17:14:24.738Z"}
+{"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-12T17:22:43.880Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-12T17:22:43.884Z"}
+{"level":"info","message":"Database connection established","service":"scraper","timestamp":"2025-08-12T17:22:43.998Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-12T17:22:44.954Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-12T17:22:44.956Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-12T17:22:55.012Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-12T17:22:55.013Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-12T17:22:55.013Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-12T17:22:55.014Z"}
+{"level":"info","message":"Loading routes from: ../data/routes.json","service":"scraper","timestamp":"2025-08-12T17:22:55.015Z"}
+{"level":"info","message":"Loaded 166056 routes","service":"scraper","timestamp":"2025-08-12T17:22:56.203Z"}
+{"level":"info","message":"Starting to scrape 166056 routes...","service":"scraper","timestamp":"2025-08-12T17:22:56.214Z"}
+{"level":"info","message":"Processing batch 1/55352 (3 routes)","service":"scraper","timestamp":"2025-08-12T17:22:56.227Z"}
+{"level":"error","message":"Failed to find the cabRequestBtn: Waiting for selector `div[id=\"ChoiceCab\"]` failed: Waiting failed: 5000ms exceeded","name":"TimeoutError","service":"scraper","stack":"TimeoutError: Waiting for selector `div[id=\"ChoiceCab\"]` failed: Waiting failed: 5000ms exceeded\n    at new WaitTask (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/common/WaitTask.js:45:34)\n    at IsolatedWorld.waitForFunction (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Realm.js:22:26)\n    at CSSQueryHandler.waitFor (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/common/QueryHandler.js:175:95)\n    at async CdpFrame.waitForSelector (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Frame.js:545:21)\n    at async CdpPage.waitForSelector (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/node_modules/puppeteer-core/lib/esm/puppeteer/api/Page.js:1378:20)\n    at async TransportScraper.scrapeRoute (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:213:7)\n    at async Promise.allSettled (index 1)\n    at async TransportScraper.scrapeRoutes (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/src/scraper.js:170:9)\n    at async main (file:///F:/Career/02.%20Software%20Engineer/98.%20Projects/01.%20ULDSS/scraper/scraper.mjs:39:5)","timestamp":"2025-08-12T17:23:07.193Z"}
+{"level":"info","message":"Received SIGINT, shutting down gracefully...","service":"scraper","timestamp":"2025-08-12T17:23:19.843Z"}

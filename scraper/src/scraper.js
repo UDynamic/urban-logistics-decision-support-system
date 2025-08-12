@@ -287,13 +287,13 @@ export class TransportScraper {
         await page.waitForSelector(selectors.cabPriceSelector, { timeout: 5000 }).catch((error) => {
           logger.error('Failed to find the cabPriceSelector:', error);
         });
-
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
+        
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
-          logger.debug(`Raw cab price text: "${cabPriceText}"`);
+          logger.info(`Raw cab price text: "${cabPriceText}"`);
           prices.cab = extractPrice(cabPriceText);
-          logger.debug(`Parsed cab price: ${JSON.stringify(prices.cab)}`);
+          logger.info(`Parsed cab price: ${JSON.stringify(prices.cab)}`);
         } else {
           logger.warn('Cab price element not found after waiting.');
         }
@@ -363,7 +363,7 @@ export class TransportScraper {
 
 
       // handling the "no resalt" case for the routes and prices
-      logger.info(JSON.stringify(prices, null, 2));
+      // logger.info(JSON.stringify(prices, null, 2));
 
       if (!route || !route.origin || !route.destination) {
         throw new Error('Invalid route object');

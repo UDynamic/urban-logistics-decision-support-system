@@ -56,11 +56,20 @@ export function askQuestion(query) {
 // Extract price from text
 export function extractPrice(priceText) {
   if (!priceText) return null;
-  
-  // Remove non-numeric characters except decimal point
-  const numericPrice = priceText.replace(/[^\d.]/g, '');
+
+  // Map Persian digits to English digits
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  let normalized = priceText;
+
+  for(let i=0; i<10; i++) {
+    const regex = new RegExp(persianDigits[i], 'g');
+    normalized = normalized.replace(regex, i.toString());
+  }
+
+  // Remove non-numeric except dot (if decimal exists)
+  const numericPrice = normalized.replace(/[^\d.]/g, '');
   const price = parseFloat(numericPrice);
-  
+
   return isNaN(price) ? null : price;
 }
 

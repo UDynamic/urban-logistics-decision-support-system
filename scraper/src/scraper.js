@@ -311,9 +311,9 @@ export class TransportScraper {
         const bikePriceElement = await page.$(selectors.bikePriceSelector);
         if (bikePriceElement) {
           const bikePriceText = await page.evaluate(el => el.textContent, bikePriceElement);
-          logger.debug(`Raw bike price text: "${bikePriceText}"`);
+          logger.info(`Raw bike price text: "${bikePriceText}"`);
           prices.bike = extractPrice(bikePriceText);
-          logger.debug(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
+          logger.info(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
         } else {
           logger.warn('Bike price element not found after waiting.');
         }
@@ -331,9 +331,9 @@ export class TransportScraper {
         const bikeDeliveryPriceElement = await page.$(selectors.bikeDelivaryPriceSelector);
         if (bikeDeliveryPriceElement) {
           const bikeDeliveryPriceText = await page.evaluate(el => el.textContent, bikeDeliveryPriceElement);
-          logger.debug(`Raw bike delivery price text: "${bikeDeliveryPriceText}"`);
+          logger.info(`Raw bike delivery price text: "${bikeDeliveryPriceText}"`);
           prices.bikeDelivery = extractPrice(bikeDeliveryPriceText);
-          logger.debug(`Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`);
+          logger.info(`Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`);
         } else {
           logger.warn('Bike delivery price element not found after waiting.');
         }

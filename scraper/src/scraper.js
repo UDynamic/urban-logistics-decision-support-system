@@ -341,8 +341,6 @@ export class TransportScraper {
         logger.warn('Failed to extract bike delivery price:', error);
       }
 
-      logger.info(JSON.stringify(prices, null, 2));
-
       return prices;
     } catch (error) {
       logger.error('Failed to extract prices:', error);
@@ -371,9 +369,6 @@ export class TransportScraper {
       if (!prices || !prices.cab || !prices.bike || !prices.bikeDelivery) {
         throw new Error('Incomplete prices data');
       }
-
-
-
 
       const query = `
       INSERT INTO route_history (

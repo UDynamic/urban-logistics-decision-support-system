@@ -354,6 +354,12 @@ export class TransportScraper {
 
   async saveRouteData(route, prices) {
     try {
+
+      const routeId = generateRouteId(route.origin.id, route.destination.id);
+      const timestamp = new Date();
+      const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column
+
+      
       // handling the "no resalt" case for the routes and prices
       logger.info(JSON.stringify(prices, null, 2), "\n", routeId);
       
@@ -365,9 +371,7 @@ export class TransportScraper {
       }
 
 
-      const routeId = generateRouteId(route.origin.id, route.destination.id);
-      const timestamp = new Date();
-      const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column
+      
 
       const query = `
       INSERT INTO route_history (

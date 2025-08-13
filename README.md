@@ -2,6 +2,19 @@
 
 A comprehensive urban logistics decision support system for route optimization and analysis, built with modern web technologies and scalable architecture.
 
+
+## Definition of the App
+
+## The solution or the reason to why someone should fo this project
+
+   * what most common people mean robots are mainly scripts or browser automations. this sort of automation extracts data, stores it, and then we could train an AI model on it.
+
+## Capabilities and expansion opportunities 
+   * one similar business at it's early ages could price it's servise using benchmarking
+
+   * 
+
+
 ## 🌟 Features
 
 - **Real-time Data Collection**: Automated data collection from transportation services using Puppeteer

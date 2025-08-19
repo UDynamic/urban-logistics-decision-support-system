@@ -231,7 +231,7 @@ export class TransportScraper {
 
       // Queue routes
       for (const route of routes) {
-        logger.info("Task started", route.id)
+        logger.info("Task started", route.id);
         cluster.queue(route);
       }
 

@@ -231,7 +231,7 @@ export class TransportScraper {
 
       // Queue routes
       for (const route of routes) {
-        logger.info("Task started", route.id);
+        // logger.info("Task started", route.id);
         cluster.queue(route);
       }
 
@@ -266,7 +266,7 @@ export class TransportScraper {
       // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
       // Navigate to menu
-      await page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
+      await page.goto(urls.menuUrl);
       await sleep(1000);
 
       // Click on cab request

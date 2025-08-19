@@ -277,9 +277,18 @@ export class TransportScraper {
   async extractPrices(page) {
     try {
       const prices = {
-        cab: null,
-        bike: null,
-        bikeDelivery: null
+        cab: {
+          text: null,
+          number: null
+        },
+        bike: {
+          text: null,
+          number: null
+        },
+        bikeDelivery: {
+          text: null,
+          number: null
+        }
       };
 
       // Extract cab price
@@ -369,6 +378,16 @@ export class TransportScraper {
       if (!prices || !prices.cab || !prices.bike || !prices.bikeDelivery) {
         throw new Error('Incomplete prices data');
       }
+
+      console.log(routeId,
+        dateOnly,
+        timestamp,
+        prices.cab.text,
+        prices.cab.number,
+        prices.bike.text,
+        prices.bike.number,
+        prices.bikeDelivery.text,
+        prices.bikeDelivery.number);
 
       const query = `
       INSERT INTO route_history (

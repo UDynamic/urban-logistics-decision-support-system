@@ -204,6 +204,7 @@ export class TransportScraper {
         concurrency: Cluster.CONCURRENCY_PAGE, // Each worker gets its own page
         maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
         puppeteerOptions: {
+          executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           headless: scraperConfig.headless,
           args: ['--no-sandbox', '--disable-setuid-sandbox']
         },

@@ -357,9 +357,18 @@ export class TransportScraper {
     } catch (error) {
       logger.error('Failed to extract prices:', error);
       return {
-        cab: null,
-        bike: null,
-        bikeDelivery: null
+        cab: {
+          text: null,
+          number: null
+        },
+        bike: {
+          text: null,
+          number: null
+        },
+        bikeDelivery: {
+          text: null,
+          number: null
+        }
       };
     }
   }

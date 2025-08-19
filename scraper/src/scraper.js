@@ -205,10 +205,10 @@ export class TransportScraper {
         maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
         puppeteerOptions: {
           executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-          userDataDir: "./puppeteer_profile",
           headless: scraperConfig.headless,
           args: ['--no-sandbox', '--disable-setuid-sandbox']
         },
+        userDataDir: "./puppeteer_profile",
         retryLimit: 2, // Retry failed tasks
         timeout: scraperConfig.timeout // Per task timeout
       });

@@ -217,8 +217,8 @@ export class TransportScraper {
         try {
           logger.info(`starting to scrape route: ${route.origin.name} → ${route.destination.name}`);
           await this.scrapeRoute(page, route);
-          this.stats.successfulRoutes++;
-          logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
+          // this.stats.successfulRoutes++;
+          // logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
         } catch (error) {
           this.stats.failedRoutes++;
           logger.error(`Failed to scrape route ${route.origin.name} → ${route.destination.name}:`, error);
@@ -290,8 +290,8 @@ export class TransportScraper {
       // Add to enrichment queue
       // await this.queueRouteEnrichment(route);
 
-      // this.stats.successfulRoutes++;
-      // logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
+      this.stats.successfulRoutes++;
+      logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
 
     } catch (error) {
       // this.stats.failedRoutes++;

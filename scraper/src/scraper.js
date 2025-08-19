@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { Cluster } from 'puppeteer-cluster';
 import { Client } from 'pg';
 import { Queue } from 'bullmq';
 import { selectors, urls, scraperConfig } from './selectors.js';
@@ -151,6 +152,46 @@ export class TransportScraper {
     }
   }
 
+  // the previous tab parallelism
+  // async scrapeRoutes(routes) {
+  //   try {
+  //     this.stats.startTime = Date.now();
+  //     this.stats.totalRoutes = routes.length;
+
+  //     logger.info(`Starting to scrape ${routes.length} routes...`);
+
+  //     // Process routes in batches
+  //     const batches = chunkArray(routes, scraperConfig.maxConcurrentBrowsers);
+
+  //     for (let i = 0; i < batches.length; i++) {
+  //       const batch = batches[i];
+  //       logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} routes)`);
+
+  //       // Process batch concurrently
+  //       const promises = batch.map(route => this.scrapeRoute(route));
+  //       await Promise.allSettled(promises);
+
+  //       // Progress update
+  //       const progress = calculateProgress(this.stats.processedRoutes, this.stats.totalRoutes);
+  //       logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
+
+  //       // Delay between batches
+  //       if (i < batches.length - 1) {
+  //         await sleep(scraperConfig.delayBetweenRequests);
+  //       }
+  //     }
+
+  //     // Final statistics
+  //     const duration = formatDuration(this.stats.startTime);
+  //     logger.info(`Scraping completed in ${duration}`);
+  //     logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
+
+  //   } catch (error) {
+  //     logger.error('Failed to scrape routes:', error);
+  //     throw error;
+  //   }
+  // }
+
   async scrapeRoutes(routes) {
     try {
       this.stats.startTime = Date.now();
@@ -158,40 +199,59 @@ export class TransportScraper {
 
       logger.info(`Starting to scrape ${routes.length} routes...`);
 
-      // Process routes in batches
-      const batches = chunkArray(routes, scraperConfig.maxConcurrentBrowsers);
+      // Create cluster
+      const cluster = await Cluster.launch({
+        concurrency: Cluster.CONCURRENCY_PAGE, // Each worker gets its own page
+        maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
+        puppeteerOptions: {
+          executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          headless: scraperConfig.headless,
+          userDataDir: path.resolve(__dirname, 'cluster_profile'),
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        },
+        retryLimit: 2, // Retry failed tasks
+        timeout: scraperConfig.timeout // Per task timeout
+      });
 
-      for (let i = 0; i < batches.length; i++) {
-        const batch = batches[i];
-        logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} routes)`);
-
-        // Process batch concurrently
-        const promises = batch.map(route => this.scrapeRoute(route));
-        await Promise.allSettled(promises);
-
-        // Progress update
-        const progress = calculateProgress(this.stats.processedRoutes, this.stats.totalRoutes);
-        logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
-
-        // Delay between batches
-        if (i < batches.length - 1) {
-          await sleep(scraperConfig.delayBetweenRequests);
+      await cluster.task(async ({ page, data: route }) => {
+        try {
+          logger.info(`starting to scrape route: ${route.origin.name} → ${route.destination.name}`);
+          await this.scrapeRoute(page, route);
+          // this.stats.successfulRoutes++;
+          // logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
+        } catch (error) {
+          this.stats.failedRoutes++;
+          logger.error(`Failed to scrape route ${route.origin.name} → ${route.destination.name}:`, error);
+        } finally {
+          this.stats.processedRoutes++;
+          const progress = ((this.stats.processedRoutes / this.stats.totalRoutes) * 100).toFixed(2);
+          logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
         }
+      });
+
+      // Queue routes
+      for (const route of routes) {
+        // logger.info("Task started", route.id);
+        cluster.queue(route);
       }
 
-      // Final statistics
-      const duration = formatDuration(this.stats.startTime);
-      logger.info(`Scraping completed in ${duration}`);
+      // Wait until everything is done
+      await cluster.idle();
+      await cluster.close();
+
+      // Final stats
+      const duration = ((Date.now() - this.stats.startTime) / 1000).toFixed(1);
+      logger.info(`Scraping completed in ${duration}s`);
       logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
 
-    } catch (error) {
+    } catch (error){
       logger.error('Failed to scrape routes:', error);
       throw error;
     }
   }
 
-  async scrapeRoute(route) {
-    let page = null;
+  async scrapeRoute(page, route) {
+    // let page = null;
 
     try {
       // Validate route data
@@ -202,12 +262,12 @@ export class TransportScraper {
       }
 
       // Create new page for this route
-      page = await this.browser.newPage();
+      // page = await this.browser.newPage();
       // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
       // Navigate to menu
-      await page.goto(urls.menuUrl, { waitUntil: 'networkidle2' });
-      await sleep(1000);
+      await page.goto(urls.menuUrl);
+      await sleep(2000);
 
       // Click on cab request
       await page.waitForSelector(selectors.cabRequestBtn, { timeout: 5000 }).catch((error) => {
@@ -235,14 +295,14 @@ export class TransportScraper {
       logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
 
     } catch (error) {
-      this.stats.failedRoutes++;
+      // this.stats.failedRoutes++;
       logger.error(`Failed to scrape route ${route?.origin?.name} → ${route?.destination?.name}:`, error);
     } finally {
-      this.stats.processedRoutes++;
+      // this.stats.processedRoutes++;
 
-      if (page) {
-        await page.close();
-      }
+      // if (page) {
+      //   await page.close();
+      // }
     }
   }
 
@@ -254,7 +314,7 @@ export class TransportScraper {
 
       // Click search button
       await page.click(searchBtn);
-      await sleep(1000);
+      await sleep(2000);
 
       // Enter location name
       await page.type(searchInput, location.name);
@@ -262,7 +322,7 @@ export class TransportScraper {
 
       // Select first result
       await page.click(selectors.firstSearchLi);
-      await sleep(1000);
+      await sleep(2000);
 
       // Confirm selection
       await page.click(searchSubmit);
@@ -297,7 +357,7 @@ export class TransportScraper {
           logger.error('Failed to find the cabPriceSelector:', error);
         });
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
-        
+
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
           logger.info(`Raw cab price text: "${cabPriceText}"`);

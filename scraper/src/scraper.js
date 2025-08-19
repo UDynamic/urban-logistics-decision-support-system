@@ -1,6 +1,5 @@
 import puppeteer from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
-import path from 'path';
 import { Client } from 'pg';
 import { Queue } from 'bullmq';
 import { selectors, urls, scraperConfig } from './selectors.js';

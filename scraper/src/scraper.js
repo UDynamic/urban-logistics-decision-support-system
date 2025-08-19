@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { Cluster } from 'puppeteer-cluster';
 import { Client } from 'pg';
 import { Queue } from 'bullmq';
 import { selectors, urls, scraperConfig } from './selectors.js';
@@ -151,6 +152,46 @@ export class TransportScraper {
     }
   }
 
+  // the previous tab parallelism
+  // async scrapeRoutes(routes) {
+  //   try {
+  //     this.stats.startTime = Date.now();
+  //     this.stats.totalRoutes = routes.length;
+
+  //     logger.info(`Starting to scrape ${routes.length} routes...`);
+
+  //     // Process routes in batches
+  //     const batches = chunkArray(routes, scraperConfig.maxConcurrentBrowsers);
+
+  //     for (let i = 0; i < batches.length; i++) {
+  //       const batch = batches[i];
+  //       logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} routes)`);
+
+  //       // Process batch concurrently
+  //       const promises = batch.map(route => this.scrapeRoute(route));
+  //       await Promise.allSettled(promises);
+
+  //       // Progress update
+  //       const progress = calculateProgress(this.stats.processedRoutes, this.stats.totalRoutes);
+  //       logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
+
+  //       // Delay between batches
+  //       if (i < batches.length - 1) {
+  //         await sleep(scraperConfig.delayBetweenRequests);
+  //       }
+  //     }
+
+  //     // Final statistics
+  //     const duration = formatDuration(this.stats.startTime);
+  //     logger.info(`Scraping completed in ${duration}`);
+  //     logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
+
+  //   } catch (error) {
+  //     logger.error('Failed to scrape routes:', error);
+  //     throw error;
+  //   }
+  // }
+
   async scrapeRoutes(routes) {
     try {
       this.stats.startTime = Date.now();
@@ -158,35 +199,20 @@ export class TransportScraper {
 
       logger.info(`Starting to scrape ${routes.length} routes...`);
 
-      // Process routes in batches
-      const batches = chunkArray(routes, scraperConfig.maxConcurrentBrowsers);
+      // Create cluster
+      const cluster = await Cluster.launch({
+        concurrency: Cluster.CONCURRENCY_PAGE, // Each worker gets its own page
+        maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
+        puppeteerOptions: {
+          headless: scraperConfig.headless,
+          args: ['--no-sandbox', '--disable-setuid-sandbox']
+        },
+        retryLimit: 2, // Retry failed tasks
+        timeout: scraperConfig.timeout // Per task timeout
+      });
 
-      for (let i = 0; i < batches.length; i++) {
-        const batch = batches[i];
-        logger.info(`Processing batch ${i + 1}/${batches.length} (${batch.length} routes)`);
+    } catch {
 
-        // Process batch concurrently
-        const promises = batch.map(route => this.scrapeRoute(route));
-        await Promise.allSettled(promises);
-
-        // Progress update
-        const progress = calculateProgress(this.stats.processedRoutes, this.stats.totalRoutes);
-        logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
-
-        // Delay between batches
-        if (i < batches.length - 1) {
-          await sleep(scraperConfig.delayBetweenRequests);
-        }
-      }
-
-      // Final statistics
-      const duration = formatDuration(this.stats.startTime);
-      logger.info(`Scraping completed in ${duration}`);
-      logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
-
-    } catch (error) {
-      logger.error('Failed to scrape routes:', error);
-      throw error;
     }
   }
 
@@ -297,7 +323,7 @@ export class TransportScraper {
           logger.error('Failed to find the cabPriceSelector:', error);
         });
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
-        
+
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
           logger.info(`Raw cab price text: "${cabPriceText}"`);

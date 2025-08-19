@@ -322,7 +322,8 @@ export class TransportScraper {
         if (bikePriceElement) {
           const bikePriceText = await page.evaluate(el => el.textContent, bikePriceElement);
           logger.info(`Raw bike price text: "${bikePriceText}"`);
-          prices.bike = extractPrice(bikePriceText);
+          prices.bike.text = bikePriceText;
+          prices.bike.number = extractPrice(bikePriceText);
           logger.info(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
         } else {
           logger.warn('Bike price element not found after waiting.');

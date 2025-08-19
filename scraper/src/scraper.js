@@ -207,7 +207,7 @@ export class TransportScraper {
           executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           headless: scraperConfig.headless,
           userDataDir: path.resolve(__dirname, 'cluster_profile'),
-          args: ['--no-sandbox', '--disable-setuid-sandbox']
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         },
         retryLimit: 2, // Retry failed tasks
         timeout: scraperConfig.timeout // Per task timeout
@@ -231,6 +231,7 @@ export class TransportScraper {
 
       // Queue routes
       for (const route of routes) {
+        logger.info("Task started", route.id)
         cluster.queue(route);
       }
 

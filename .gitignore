@@ -3,3 +3,5 @@
 .env
 
 /scraper/puppeteer_profile
+/scraper/src/puppeteer_profile
+/scraper/src/cluster_profile

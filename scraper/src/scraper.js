@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import { Cluster } from 'puppeteer-cluster';
+import path from 'path';
 import { Client } from 'pg';
 import { Queue } from 'bullmq';
 import { selectors, urls, scraperConfig } from './selectors.js';
@@ -206,7 +207,7 @@ export class TransportScraper {
         puppeteerOptions: {
           executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           headless: scraperConfig.headless,
-          userDataDir: "./puppeteer_profile",
+          userDataDir: path.resolve(__dirname, 'puppeteer_profile'),
           args: ['--no-sandbox', '--disable-setuid-sandbox']
         },
         retryLimit: 2, // Retry failed tasks

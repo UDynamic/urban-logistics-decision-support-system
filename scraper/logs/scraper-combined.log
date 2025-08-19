@@ -1694,3 +1694,16 @@
 {"level":"info","message":"Successfully scraped route: ازگل → تجریش","service":"scraper","timestamp":"2025-08-19T17:06:53.935Z"}
 {"level":"info","message":"Progress: 0.00% (6/166056)","service":"scraper","timestamp":"2025-08-19T17:06:53.935Z"}
 {"level":"info","message":"Received SIGINT, shutting down gracefully...","service":"scraper","timestamp":"2025-08-19T17:06:54.713Z"}
+{"level":"info","message":"Starting Urban Logistics Data Collection...","service":"scraper","timestamp":"2025-08-19T17:10:51.775Z"}
+{"level":"info","message":"Initializing Transport Scraper...","service":"scraper","timestamp":"2025-08-19T17:10:51.781Z"}
+{"level":"info","message":"Database connection established","service":"scraper","timestamp":"2025-08-19T17:10:51.882Z"}
+{"level":"info","message":"Browser launched successfully","service":"scraper","timestamp":"2025-08-19T17:10:53.285Z"}
+{"level":"info","message":"Starting authentication process...","service":"scraper","timestamp":"2025-08-19T17:10:53.287Z"}
+{"level":"info","message":"Session is still valid","service":"scraper","timestamp":"2025-08-19T17:11:03.221Z"}
+{"level":"info","message":"Authentication successful!","service":"scraper","timestamp":"2025-08-19T17:11:03.221Z"}
+{"level":"info","message":"Authentication completed","service":"scraper","timestamp":"2025-08-19T17:11:03.222Z"}
+{"level":"info","message":"Scraper initialized successfully","service":"scraper","timestamp":"2025-08-19T17:11:03.222Z"}
+{"level":"info","message":"Loading routes from: ../data/routes.json","service":"scraper","timestamp":"2025-08-19T17:11:03.223Z"}
+{"level":"info","message":"Loaded 166056 routes","service":"scraper","timestamp":"2025-08-19T17:11:08.100Z"}
+{"level":"info","message":"Starting to scrape 166056 routes...","service":"scraper","timestamp":"2025-08-19T17:11:08.121Z"}
+{"level":"error","message":"Failed to scrape routes: Unable to launch browser, error message: Failed to launch the browser process! undefined\n\n\nTROUBLESHOOTING: https://pptr.dev/troubleshooting\n","service":"scraper","stack":"Error: Unable to launch browser, error message: Failed to launch the browser process! undefined\n\n\nTROUBLESHOOTING: https://pptr.dev/troubleshooting\n\n    at Cluster.<anonymous> (F:\\Career\\02. Software Engineer\\98. Projects\\01. ULDSS\\node_modules\\puppeteer-cluster\\dist\\Cluster.js:119:23)\n    at Generator.throw (<anonymous>)\n    at rejected (F:\\Career\\02. Software Engineer\\98. Projects\\01. ULDSS\\node_modules\\puppeteer-cluster\\dist\\Cluster.js:6:65)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","timestamp":"2025-08-19T17:11:08.601Z"}

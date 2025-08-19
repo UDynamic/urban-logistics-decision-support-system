@@ -211,13 +211,44 @@ export class TransportScraper {
         timeout: scraperConfig.timeout // Per task timeout
       });
 
-    } catch {
+      await cluster.task(async ({ page, data: route }) => {
+        try {
+          logger.info(`starting to scrape route: ${route.origin.name} → ${route.destination.name}`);
+          await this.scrapeRoute(page, route);
+          this.stats.successfulRoutes++;
+          logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
+        } catch (error) {
+          this.stats.failedRoutes++;
+          logger.error(`Failed to scrape route ${route.origin.name} → ${route.destination.name}:`, error);
+        } finally {
+          this.stats.processedRoutes++;
+          const progress = ((this.stats.processedRoutes / this.stats.totalRoutes) * 100).toFixed(2);
+          logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
+        }
+      });
 
+      // Queue routes
+      for (const route of routes) {
+        cluster.queue(route);
+      }
+
+      // Wait until everything is done
+      await cluster.idle();
+      await cluster.close();
+
+      // Final stats
+      const duration = ((Date.now() - this.stats.startTime) / 1000).toFixed(1);
+      logger.info(`Scraping completed in ${duration}s`);
+      logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
+
+    } catch (error){
+      logger.error('Failed to scrape routes:', error);
+      throw error;
     }
   }
 
-  async scrapeRoute(route) {
-    let page = null;
+  async scrapeRoute(page, route) {
+    // let page = null;
 
     try {
       // Validate route data
@@ -228,7 +259,7 @@ export class TransportScraper {
       }
 
       // Create new page for this route
-      page = await this.browser.newPage();
+      // page = await this.browser.newPage();
       // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
       // Navigate to menu
@@ -257,18 +288,18 @@ export class TransportScraper {
       // Add to enrichment queue
       // await this.queueRouteEnrichment(route);
 
-      this.stats.successfulRoutes++;
-      logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
+      // this.stats.successfulRoutes++;
+      // logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
 
     } catch (error) {
-      this.stats.failedRoutes++;
+      // this.stats.failedRoutes++;
       logger.error(`Failed to scrape route ${route?.origin?.name} → ${route?.destination?.name}:`, error);
     } finally {
-      this.stats.processedRoutes++;
+      // this.stats.processedRoutes++;
 
-      if (page) {
-        await page.close();
-      }
+      // if (page) {
+      //   await page.close();
+      // }
     }
   }
 

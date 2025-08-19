@@ -277,9 +277,18 @@ export class TransportScraper {
   async extractPrices(page) {
     try {
       const prices = {
-        cab: null,
-        bike: null,
-        bikeDelivery: null
+        cab: {
+          text: null,
+          number: null
+        },
+        bike: {
+          text: null,
+          number: null
+        },
+        bikeDelivery: {
+          text: null,
+          number: null
+        }
       };
 
       // Extract cab price
@@ -292,7 +301,8 @@ export class TransportScraper {
         if (cabPriceElement) {
           const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
           logger.info(`Raw cab price text: "${cabPriceText}"`);
-          prices.cab = extractPrice(cabPriceText);
+          prices.cab.text = cabPriceText;
+          prices.cab.number = extractPrice(cabPriceText);
           logger.info(`Parsed cab price: ${JSON.stringify(prices.cab)}`);
         } else {
           logger.warn('Cab price element not found after waiting.');
@@ -312,7 +322,8 @@ export class TransportScraper {
         if (bikePriceElement) {
           const bikePriceText = await page.evaluate(el => el.textContent, bikePriceElement);
           logger.info(`Raw bike price text: "${bikePriceText}"`);
-          prices.bike = extractPrice(bikePriceText);
+          prices.bike.text = bikePriceText;
+          prices.bike.number = extractPrice(bikePriceText);
           logger.info(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
         } else {
           logger.warn('Bike price element not found after waiting.');
@@ -332,7 +343,8 @@ export class TransportScraper {
         if (bikeDeliveryPriceElement) {
           const bikeDeliveryPriceText = await page.evaluate(el => el.textContent, bikeDeliveryPriceElement);
           logger.info(`Raw bike delivery price text: "${bikeDeliveryPriceText}"`);
-          prices.bikeDelivery = extractPrice(bikeDeliveryPriceText);
+          prices.bikeDelivery.text = bikeDeliveryPriceText;
+          prices.bikeDelivery.number = extractPrice(bikeDeliveryPriceText);
           logger.info(`Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`);
         } else {
           logger.warn('Bike delivery price element not found after waiting.');
@@ -345,9 +357,18 @@ export class TransportScraper {
     } catch (error) {
       logger.error('Failed to extract prices:', error);
       return {
-        cab: null,
-        bike: null,
-        bikeDelivery: null
+        cab: {
+          text: null,
+          number: null
+        },
+        bike: {
+          text: null,
+          number: null
+        },
+        bikeDelivery: {
+          text: null,
+          number: null
+        }
       };
     }
   }
@@ -369,6 +390,16 @@ export class TransportScraper {
       if (!prices || !prices.cab || !prices.bike || !prices.bikeDelivery) {
         throw new Error('Incomplete prices data');
       }
+
+      console.log(routeId,
+        dateOnly,
+        timestamp,
+        prices.cab.text,
+        prices.cab.number,
+        prices.bike.text,
+        prices.bike.number,
+        prices.bikeDelivery.text,
+        prices.bikeDelivery.number);
 
       const query = `
       INSERT INTO route_history (

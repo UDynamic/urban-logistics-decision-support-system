@@ -267,7 +267,7 @@ export class TransportScraper {
 
       // Navigate to menu
       await page.goto(urls.menuUrl);
-      await sleep(1000);
+      await sleep(2000);
 
       // Click on cab request
       await page.waitForSelector(selectors.cabRequestBtn, { timeout: 5000 }).catch((error) => {
@@ -314,7 +314,7 @@ export class TransportScraper {
 
       // Click search button
       await page.click(searchBtn);
-      await sleep(1000);
+      await sleep(2000);
 
       // Enter location name
       await page.type(searchInput, location.name);
@@ -322,7 +322,7 @@ export class TransportScraper {
 
       // Select first result
       await page.click(selectors.firstSearchLi);
-      await sleep(1000);
+      await sleep(2000);
 
       // Confirm selection
       await page.click(searchSubmit);

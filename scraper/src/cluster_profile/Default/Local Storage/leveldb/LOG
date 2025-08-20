@@ -1,3 +1,5 @@
-2025/08/19-21:43:15.856 3648 Reusing MANIFEST F:\Career\02. Software Engineer\98. Projects\01. ULDSS\scraper\src\cluster_profile\Default\Local Storage\leveldb/MANIFEST-000001
-2025/08/19-21:43:15.872 3648 Recovering log #7
-2025/08/19-21:43:15.875 3648 Reusing old log F:\Career\02. Software Engineer\98. Projects\01. ULDSS\scraper\src\cluster_profile\Default\Local Storage\leveldb/000007.log 
+2025/08/21-00:41:36.110 3bc0 Reusing MANIFEST F:\Career\02. Software Engineer\98. Projects\01. ULDSS\scraper\src\cluster_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2025/08/21-00:41:36.132 3bc0 Recovering log #3
+2025/08/21-00:41:36.132 3bc0 Level-0 table #3: started
+2025/08/21-00:41:36.285 3bc0 Level-0 table #3: 27404 bytes OK
+2025/08/21-00:41:36.340 3bc0 Delete type=0 #3

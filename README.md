@@ -363,6 +363,3 @@ This project is licensed under the ISC License.
 - **Documentation**: Check `/docs` folder
 - **API Docs**: Available at `/api/health`
 
----
-
-**Built with ❤️ for urban logistics optimization**

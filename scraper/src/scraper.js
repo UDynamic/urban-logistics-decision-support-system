@@ -209,7 +209,7 @@ export class TransportScraper {
           userDataDir: path.resolve(__dirname, 'cluster_profile'),
           args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         },
-        retryLimit: 2, // Retry failed tasks
+        retryLimit: 3, // Retry failed tasks
         timeout: scraperConfig.timeout // Per task timeout
       });
 
@@ -269,6 +269,7 @@ export class TransportScraper {
       await page.goto(urls.menuUrl);
       await sleep(2000);
 
+      
       // Click on cab request
       await page.waitForSelector(selectors.cabRequestBtn, { timeout: 5000 }).catch((error) => {
         logger.error('Failed to find the cabRequestBtn:', error);

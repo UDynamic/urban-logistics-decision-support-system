@@ -208,19 +208,19 @@ export class TransportScraper {
 
       // Create cluster
       const cluster = await Cluster.launch({
-        concurrency: Cluster.CONCURRENCY_BROWSER, // Each worker gets its own page
+        concurrency: Cluster.CONCURRENCY_PAGE, // Each worker gets its own page
         maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
-        puppeteerOptions: ({ workerId }) => ({
+        puppeteerOptions: {
           executablePath:
             "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-          headless: true,
-          userDataDir: profileDirs[(workerId - 1) % profileDirs.length],
+          headless: scraperConfig.headless,
+          userDataDir: path.resolve(__dirname, "cluster_profile"),
           args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
             "--disable-dev-shm-usage",
           ],
-        }),
+        },
         retryLimit: 2, // Retry failed tasks
         timeout: scraperConfig.timeout, // Per task timeout
       });

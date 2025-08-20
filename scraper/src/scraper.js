@@ -1,9 +1,9 @@
-import puppeteer from 'puppeteer';
-import { Cluster } from 'puppeteer-cluster';
-import { Client } from 'pg';
-import { Queue } from 'bullmq';
-import { selectors, urls, scraperConfig } from './selectors.js';
-import { TransportAuth } from './auth.js';
+import puppeteer from "puppeteer";
+import { Cluster } from "puppeteer-cluster";
+import { Client } from "pg";
+import { Queue } from "bullmq";
+import { selectors, urls, scraperConfig } from "./selectors.js";
+import { TransportAuth } from "./auth.js";
 import {
   logger,
   sleep,
@@ -13,15 +13,15 @@ import {
   retryWithBackoff,
   formatDuration,
   chunkArray,
-  calculateProgress
-} from './utils.js';
+  calculateProgress,
+} from "./utils.js";
 
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../../config/.env') });
+dotenv.config({ path: path.resolve(__dirname, "../../config/.env") });
 // =============================================================================
 // Main Scraper Class
 // =============================================================================
@@ -37,13 +37,13 @@ export class TransportScraper {
       processedRoutes: 0,
       successfulRoutes: 0,
       failedRoutes: 0,
-      startTime: null
+      startTime: null,
     };
   }
 
   async initialize() {
     try {
-      logger.info('Initializing Transport Scraper...');
+      logger.info("Initializing Transport Scraper...");
 
       // Initialize database connection
       await this.initializeDatabase();
@@ -57,9 +57,9 @@ export class TransportScraper {
       // Initialize authentication
       await this.initializeAuthentication();
 
-      logger.info('Scraper initialized successfully');
+      logger.info("Scraper initialized successfully");
     } catch (error) {
-      logger.error('Failed to initialize scraper:', error);
+      logger.error("Failed to initialize scraper:", error);
       throw error;
     }
   }
@@ -68,30 +68,33 @@ export class TransportScraper {
     try {
       this.dbClient = new Client({
         connectionString: process.env.DATABASE_URL,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+        ssl:
+          process.env.NODE_ENV === "production"
+            ? { rejectUnauthorized: false }
+            : false,
       });
 
       await this.dbClient.connect();
-      logger.info('Database connection established');
+      logger.info("Database connection established");
     } catch (error) {
-      logger.error('Failed to connect to database:', error);
+      logger.error("Failed to connect to database:", error);
       throw error;
     }
   }
 
   async initializeQueue() {
     try {
-      this.queue = new Queue('route-enrichment', {
+      this.queue = new Queue("route-enrichment", {
         connection: {
-          host: process.env.REDIS_HOST || 'localhost',
+          host: process.env.REDIS_HOST || "localhost",
           port: process.env.REDIS_PORT || 6379,
-          password: process.env.REDIS_PASSWORD
-        }
+          password: process.env.REDIS_PASSWORD,
+        },
       });
 
-      logger.info('Redis queue initialized');
+      logger.info("Redis queue initialized");
     } catch (error) {
-      logger.error('Failed to initialize queue:', error);
+      logger.error("Failed to initialize queue:", error);
       throw error;
     }
   }
@@ -100,19 +103,19 @@ export class TransportScraper {
     try {
       this.browser = await puppeteer.launch({
         headless: scraperConfig.headless,
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        executablePath:
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
         args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu'
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-accelerated-2d-canvas",
+          "--no-first-run",
+          "--no-zygote",
+          "--disable-gpu",
         ],
         // defaultViewport: { width: 1280, height: 720 },
-        userDataDir: "./puppeteer_profile"
-
+        userDataDir: "./puppeteer_profile",
       });
       this.page = await this.browser.newPage();
       const pages = await this.browser.pages();
@@ -120,16 +123,15 @@ export class TransportScraper {
       // closed the first blank tab
       await pages[0].close();
 
-      logger.info('Browser launched successfully');
+      logger.info("Browser launched successfully");
     } catch (error) {
-      logger.error('Failed to launch browser:', error);
+      logger.error("Failed to launch browser:", error);
       throw error;
     }
   }
 
   async initializeAuthentication() {
     try {
-
       // first page selection for authentication
       const pages = await this.browser.pages();
       const page = pages[0];
@@ -145,9 +147,9 @@ export class TransportScraper {
       this.authenticatedPage = page;
       this.auth = auth;
 
-      logger.info('Authentication completed');
+      logger.info("Authentication completed");
     } catch (error) {
-      logger.error('Failed to initialize authentication:', error);
+      logger.error("Failed to initialize authentication:", error);
       throw error;
     }
   }
@@ -199,33 +201,53 @@ export class TransportScraper {
 
       logger.info(`Starting to scrape ${routes.length} routes...`);
 
+      const profileDirs = [
+        path.resolve(__dirname, "../../scraper/cluster_profile_1"),
+        path.resolve(__dirname, "../../scraper/cluster_profile_2"),
+      ];
+
       // Create cluster
       const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_PAGE, // Each worker gets its own page
         maxConcurrency: scraperConfig.maxConcurrentBrowsers, // How many in parallel
         puppeteerOptions: {
-          executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          executablePath:
+            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           headless: scraperConfig.headless,
-          userDataDir: path.resolve(__dirname, 'cluster_profile'),
-          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+          userDataDir: path.resolve(__dirname, "cluster_profile"),
+          args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+          ],
         },
         retryLimit: 2, // Retry failed tasks
-        timeout: scraperConfig.timeout // Per task timeout
+        timeout: scraperConfig.timeout, // Per task timeout
       });
 
       await cluster.task(async ({ page, data: route }) => {
         try {
-          logger.info(`starting to scrape route: ${route.origin.name} → ${route.destination.name}`);
+          logger.info(
+            `starting to scrape route: ${route.origin.name} → ${route.destination.name}`
+          );
           await this.scrapeRoute(page, route);
           // this.stats.successfulRoutes++;
           // logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
         } catch (error) {
           this.stats.failedRoutes++;
-          logger.error(`Failed to scrape route ${route.origin.name} → ${route.destination.name}:`, error);
+          logger.error(
+            `Failed to scrape route ${route.origin.name} → ${route.destination.name}:`,
+            error
+          );
         } finally {
           this.stats.processedRoutes++;
-          const progress = ((this.stats.processedRoutes / this.stats.totalRoutes) * 100).toFixed(2);
-          logger.info(`Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`);
+          const progress = (
+            (this.stats.processedRoutes / this.stats.totalRoutes) *
+            100
+          ).toFixed(2);
+          logger.info(
+            `Progress: ${progress}% (${this.stats.processedRoutes}/${this.stats.totalRoutes})`
+          );
         }
       });
 
@@ -242,10 +264,11 @@ export class TransportScraper {
       // Final stats
       const duration = ((Date.now() - this.stats.startTime) / 1000).toFixed(1);
       logger.info(`Scraping completed in ${duration}s`);
-      logger.info(`Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`);
-
-    } catch (error){
-      logger.error('Failed to scrape routes:', error);
+      logger.info(
+        `Statistics: ${this.stats.successfulRoutes} successful, ${this.stats.failedRoutes} failed`
+      );
+    } catch (error) {
+      logger.error("Failed to scrape routes:", error);
       throw error;
     }
   }
@@ -256,7 +279,7 @@ export class TransportScraper {
     try {
       // Validate route data
       if (!validateRouteData(route)) {
-        logger.warn('Invalid route data:', route);
+        logger.warn("Invalid route data:", route);
         this.stats.failedRoutes++;
         return;
       }
@@ -270,17 +293,19 @@ export class TransportScraper {
       await sleep(2000);
 
       // Click on cab request
-      await page.waitForSelector(selectors.cabRequestBtn, { timeout: 5000 }).catch((error) => {
-        logger.error('Failed to find the cabRequestBtn:', error);
-      });
+      await page
+        .waitForSelector(selectors.cabRequestBtn, { timeout: 5000 })
+        .catch((error) => {
+          logger.error("Failed to find the cabRequestBtn:", error);
+        });
       await page.click(selectors.cabRequestBtn);
       await sleep(2000);
 
       // Set origin
-      await this.setLocation(page, route.origin, 'origin');
+      await this.setLocation(page, route.origin, "origin");
 
       // Set destination
-      await this.setLocation(page, route.destination, 'destination');
+      await this.setLocation(page, route.destination, "destination");
 
       // Extract prices
       const prices = await this.extractPrices(page);
@@ -292,14 +317,17 @@ export class TransportScraper {
       // await this.queueRouteEnrichment(route);
 
       this.stats.successfulRoutes++;
-      logger.info(`Successfully scraped route: ${route.origin.name} → ${route.destination.name}`);
-
+      logger.info(
+        `Successfully scraped route: ${route.origin.name} → ${route.destination.name}`
+      );
     } catch (error) {
       // this.stats.failedRoutes++;
-      logger.error(`Failed to scrape route ${route?.origin?.name} → ${route?.destination?.name}:`, error);
+      logger.error(
+        `Failed to scrape route ${route?.origin?.name} → ${route?.destination?.name}:`,
+        error
+      );
     } finally {
       // this.stats.processedRoutes++;
-
       // if (page) {
       //   await page.close();
       // }
@@ -308,9 +336,18 @@ export class TransportScraper {
 
   async setLocation(page, location, type) {
     try {
-      const searchBtn = type === 'origin' ? selectors.originSearchBtn : selectors.destinationSearchBtn;
-      const searchInput = type === 'origin' ? selectors.originSearchInput : selectors.destinationSearchInput;
-      const searchSubmit = type === 'origin' ? selectors.originSearchSubmit : selectors.destinationSearchSubmit;
+      const searchBtn =
+        type === "origin"
+          ? selectors.originSearchBtn
+          : selectors.destinationSearchBtn;
+      const searchInput =
+        type === "origin"
+          ? selectors.originSearchInput
+          : selectors.destinationSearchInput;
+      const searchSubmit =
+        type === "origin"
+          ? selectors.originSearchSubmit
+          : selectors.destinationSearchSubmit;
 
       // Click search button
       await page.click(searchBtn);
@@ -327,7 +364,6 @@ export class TransportScraper {
       // Confirm selection
       await page.click(searchSubmit);
       await sleep(2000);
-
     } catch (error) {
       logger.error(`Failed to set ${type} location:`, error);
       throw error;
@@ -339,119 +375,144 @@ export class TransportScraper {
       const prices = {
         cab: {
           text: null,
-          number: null
+          number: null,
         },
         bike: {
           text: null,
-          number: null
+          number: null,
         },
         bikeDelivery: {
           text: null,
-          number: null
-        }
+          number: null,
+        },
       };
 
       // Extract cab price
       try {
-        await page.waitForSelector(selectors.cabPriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the cabPriceSelector:', error);
-        });
+        await page
+          .waitForSelector(selectors.cabPriceSelector, { timeout: 5000 })
+          .catch((error) => {
+            logger.error("Failed to find the cabPriceSelector:", error);
+          });
         const cabPriceElement = await page.$(selectors.cabPriceSelector);
 
         if (cabPriceElement) {
-          const cabPriceText = await page.evaluate(el => el.textContent, cabPriceElement);
+          const cabPriceText = await page.evaluate(
+            (el) => el.textContent,
+            cabPriceElement
+          );
           logger.info(`Raw cab price text: "${cabPriceText}"`);
           prices.cab.text = cabPriceText;
           prices.cab.number = extractPrice(cabPriceText);
           logger.info(`Parsed cab price: ${JSON.stringify(prices.cab)}`);
         } else {
-          logger.warn('Cab price element not found after waiting.');
+          logger.warn("Cab price element not found after waiting.");
         }
       } catch (error) {
-        logger.warn('Failed to extract cab price:', error);
+        logger.warn("Failed to extract cab price:", error);
       }
 
       // Extract bike price
       try {
         await page.click(selectors.bikePriceTab);
-        await page.waitForSelector(selectors.bikePriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the bikePriceSelector:', error);
-        });
+        await page
+          .waitForSelector(selectors.bikePriceSelector, { timeout: 5000 })
+          .catch((error) => {
+            logger.error("Failed to find the bikePriceSelector:", error);
+          });
 
         const bikePriceElement = await page.$(selectors.bikePriceSelector);
         if (bikePriceElement) {
-          const bikePriceText = await page.evaluate(el => el.textContent, bikePriceElement);
+          const bikePriceText = await page.evaluate(
+            (el) => el.textContent,
+            bikePriceElement
+          );
           logger.info(`Raw bike price text: "${bikePriceText}"`);
           prices.bike.text = bikePriceText;
           prices.bike.number = extractPrice(bikePriceText);
           logger.info(`Parsed bike price: ${JSON.stringify(prices.bike)}`);
         } else {
-          logger.warn('Bike price element not found after waiting.');
+          logger.warn("Bike price element not found after waiting.");
         }
       } catch (error) {
-        logger.warn('Failed to extract bike price:', error);
+        logger.warn("Failed to extract bike price:", error);
       }
 
       // Extract bike delivery price
       try {
         await page.click(selectors.bikeDelivaryTab);
-        await page.waitForSelector(selectors.bikeDelivaryPriceSelector, { timeout: 5000 }).catch((error) => {
-          logger.error('Failed to find the bikeDelivaryPriceSelector:', error);
-        });
+        await page
+          .waitForSelector(selectors.bikeDelivaryPriceSelector, {
+            timeout: 5000,
+          })
+          .catch((error) => {
+            logger.error(
+              "Failed to find the bikeDelivaryPriceSelector:",
+              error
+            );
+          });
 
-        const bikeDeliveryPriceElement = await page.$(selectors.bikeDelivaryPriceSelector);
+        const bikeDeliveryPriceElement = await page.$(
+          selectors.bikeDelivaryPriceSelector
+        );
         if (bikeDeliveryPriceElement) {
-          const bikeDeliveryPriceText = await page.evaluate(el => el.textContent, bikeDeliveryPriceElement);
-          logger.info(`Raw bike delivery price text: "${bikeDeliveryPriceText}"`);
+          const bikeDeliveryPriceText = await page.evaluate(
+            (el) => el.textContent,
+            bikeDeliveryPriceElement
+          );
+          logger.info(
+            `Raw bike delivery price text: "${bikeDeliveryPriceText}"`
+          );
           prices.bikeDelivery.text = bikeDeliveryPriceText;
           prices.bikeDelivery.number = extractPrice(bikeDeliveryPriceText);
-          logger.info(`Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`);
+          logger.info(
+            `Parsed bike delivery price: ${JSON.stringify(prices.bikeDelivery)}`
+          );
         } else {
-          logger.warn('Bike delivery price element not found after waiting.');
+          logger.warn("Bike delivery price element not found after waiting.");
         }
       } catch (error) {
-        logger.warn('Failed to extract bike delivery price:', error);
+        logger.warn("Failed to extract bike delivery price:", error);
       }
 
       return prices;
     } catch (error) {
-      logger.error('Failed to extract prices:', error);
+      logger.error("Failed to extract prices:", error);
       return {
         cab: {
           text: null,
-          number: null
+          number: null,
         },
         bike: {
           text: null,
-          number: null
+          number: null,
         },
         bikeDelivery: {
           text: null,
-          number: null
-        }
+          number: null,
+        },
       };
     }
   }
 
   async saveRouteData(route, prices) {
     try {
-
       const routeId = generateRouteId(route.origin.id, route.destination.id);
       const timestamp = new Date();
-      const dateOnly = timestamp.toISOString().split('T')[0]; // YYYY-MM-DD format for `date` column
-
+      const dateOnly = timestamp.toISOString().split("T")[0]; // YYYY-MM-DD format for `date` column
 
       // handling the "no resalt" case for the routes and prices
       // logger.info(JSON.stringify(prices, null, 2));
 
       if (!route || !route.origin || !route.destination) {
-        throw new Error('Invalid route object');
+        throw new Error("Invalid route object");
       }
       if (!prices || !prices.cab || !prices.bike || !prices.bikeDelivery) {
-        throw new Error('Incomplete prices data');
+        throw new Error("Incomplete prices data");
       }
 
-      console.log(routeId,
+      console.log(
+        routeId,
         dateOnly,
         timestamp,
         prices.cab.text,
@@ -459,7 +520,8 @@ export class TransportScraper {
         prices.bike.text,
         prices.bike.number,
         prices.bikeDelivery.text,
-        prices.bikeDelivery.number);
+        prices.bikeDelivery.number
+      );
 
       const query = `
       INSERT INTO route_history (
@@ -493,33 +555,36 @@ export class TransportScraper {
         prices.bike.text,
         prices.bike.number,
         prices.bikeDelivery.text,
-        prices.bikeDelivery.number
+        prices.bikeDelivery.number,
       ]);
-
     } catch (error) {
-      logger.error('Failed to save route data:', error);
+      logger.error("Failed to save route data:", error);
       throw error;
     }
   }
 
   async queueRouteEnrichment(route) {
     try {
-      await this.queue.add('enrich-route', {
-        routeId: generateRouteId(route.origin.id, route.destination.id),
-        origin: route.origin,
-        destination: route.destination
-      }, {
-        removeOnComplete: 100,
-        removeOnFail: 50
-      });
+      await this.queue.add(
+        "enrich-route",
+        {
+          routeId: generateRouteId(route.origin.id, route.destination.id),
+          origin: route.origin,
+          destination: route.destination,
+        },
+        {
+          removeOnComplete: 100,
+          removeOnFail: 50,
+        }
+      );
     } catch (error) {
-      logger.error('Failed to queue route enrichment:', error);
+      logger.error("Failed to queue route enrichment:", error);
     }
   }
 
   async cleanup() {
     try {
-      logger.info('Cleaning up scraper resources...');
+      logger.info("Cleaning up scraper resources...");
 
       if (this.authenticatedPage) {
         await this.authenticatedPage.close();
@@ -537,9 +602,9 @@ export class TransportScraper {
         await this.queue.close();
       }
 
-      logger.info('Cleanup completed');
+      logger.info("Cleanup completed");
     } catch (error) {
-      logger.error('Failed to cleanup:', error);
+      logger.error("Failed to cleanup:", error);
     }
   }
-} 
+}

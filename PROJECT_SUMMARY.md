@@ -4,32 +4,6 @@
 
 The project has been successfully restructured from a monolithic approach to a modular, scalable architecture for urban logistics decision support.
 
-## 📁 Before vs After Structure
-
-### ❌ **REMOVED FILES** (Replaced by new modular structure)
-- `scrapper.mjs` → Replaced by `scraper/` module
-- `main.mjs` → Empty file, not needed
-- `data/importRouts.js` → Replaced by `backend/src/lib/db.ts` and `workers/src/distance-worker.js`
-- `data/importNeighborhoods.js` → Replaced by `backend/src/lib/db.ts`
-- `data/importDistricts.js` → Replaced by `backend/src/lib/db.ts`
-- `retired/retired.js` → Already deprecated
-- `retired/draft.mjs` → Empty file
-- `retired/` → Directory removed (empty)
-
-### 🔄 **MOVED FILES** (Reorganized for better structure)
-- `data/generateRoutes.mjs` → `scripts/generate-routes.mjs`
-- `data/generateNeighborhoodCodes.mjs` → `scripts/generate-neighborhood-codes.mjs`
-
-### ✅ **KEPT FILES** (Still needed)
-- `data/Districts.json` → Urban districts data
-- `data/routes.json` → Generated routes (33MB)
-- `package.json` → Updated with workspace configuration
-- `package-lock.json` → Auto-generated
-- `.gitignore` → Version control
-- `tmp/` → Chrome cache (can be ignored)
-
-## 🏗️ **NEW MODULAR STRUCTURE**
-
 ```
 urban-logistics-decision-support-system/
 ├── 📁 scraper/                 # Puppeteer data collection logic

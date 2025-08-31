@@ -17,7 +17,7 @@ export default function HomePage() {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   
   const { routes, isLoading, error } = useRoutes(selectedOrigin);
-
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />

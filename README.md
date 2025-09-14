@@ -363,3 +363,7 @@ This project is licensed under the ISC License.
 - **Documentation**: Check `/docs` folder
 - **API Docs**: Available at `/api/health`
 
+
+
+## Plan
+* now learning about state managers

@@ -366,4 +366,4 @@ This project is licensed under the ISC License.
 
 
 ## Plan
-* now learning about state managers
+* now learning about state managers (client and server state managers)

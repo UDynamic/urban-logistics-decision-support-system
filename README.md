@@ -362,8 +362,3 @@ This project is licensed under the ISC License.
 - **Issues**: Create GitHub issues
 - **Documentation**: Check `/docs` folder
 - **API Docs**: Available at `/api/health`
-
-
-
-## Plan
-* now learning about state managers (client and server state managers)

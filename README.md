@@ -47,9 +47,9 @@ A comprehensive urban logistics decision support system for route optimization a
 
 ## <div align="center">1. Frontend
 
-### 1.1 Frontend Framework
+## 1.1 Frontend Framework
 
-### 1.2 State Management Options
+## 1.2 State Management Options
 Available strategies for managing client state:  
 
 1. **Context API** – Built into React, good for simple state sharing, but scales poorly with complex applications.  

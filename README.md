@@ -7,6 +7,8 @@ For those who primarily perform logistical services (Cabs, Bike Deliveries and b
 
 
 ### What is it?!
+It's a live dashboard for targeted routes to acquire historical data and analysis on the economical factors of the service prices on traveled distance using live trafical and logistical data. 
+
 
 ## <div align="center">🌟 Features
 

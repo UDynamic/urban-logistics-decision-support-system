@@ -1,22 +1,32 @@
 # <div align="center">🚛 Urban Logistics Decision Support System
 
-A comprehensive urban logistics decision support system for route optimization and analysis, built with modern web technologies and scalable architecture.
+A modern, web-based decision support system designed to help urban logistics professionals **optimize routes and manage service requests efficiently**. 
+
+Built with scalable architecture and modern web technologies, it transforms raw logistics data into actionable insights.
+
+---
+
+## Who Is This For?
 
 
-## Definition of the App
+- **Cabs, bike couriers, and delivery riders** who juggle multiple service requests daily.  
+- Anyone struggling to **decide the optimal set of services** to accept from a pool of requests.  
+- Professionals looking to **maximize efficiency, reduce travel time, and increase daily earnings**.
 
-## The solution or the reason to why someone should fo this project
+---
 
-   * what most common people mean robots are mainly scripts or browser automations. this sort of automation extracts data, stores it, and then we could train an AI model on it.
+## What Problem Does It Solve?
 
-## Capabilities and expansion opportunities 
-   * one similar business at it's early ages could price it's servise using benchmarking
+Urban logistics is complex: multiple service requests, changing priorities, and dynamic urban traffic patterns make decision-making hard. This system **targets a list of routs chosen by the client and demonstrates the live status plus historical patterns of those routes**.
 
-   * 
+---
 
 
 ## <div align="center">🌟 Features
 
+
+- **Route Optimization:** Calculate the fastest and most efficient routes.  
+- **Service Prioritization:** Automatically suggest the best services to accept.  
 - **Real-time Data Collection**: Automated data collection from transportation services using Puppeteer
 - **Route Enrichment**: Distance and travel time data from OSRM API
 - **Interactive Frontend**: Modern React/Next.js interface with map visualization
@@ -26,7 +36,7 @@ A comprehensive urban logistics decision support system for route optimization a
 - **Docker Support**: Complete containerization for easy deployment
 
 ## <div align="center">🏗️ Architecture
-
+!!! . to be updated !!! 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend API   │    │   Scraper       │
@@ -47,7 +57,7 @@ A comprehensive urban logistics decision support system for route optimization a
 
 ## 1. Frontend
 
-### 1.1 Frontend Framework Options
+### 1.1 Frontend Framework 
 Available frontend frameworks considered for this project:  
 
 1. **React** – Popular, component-based library with a large ecosystem and strong community support. Excellent for building dynamic UIs.  
@@ -101,313 +111,141 @@ Here’s why **Redux Toolkit** was chosen over alternatives:
 ✅ **Summary**  
 While **Context API**, **SWR**, and **React Query** each serve specific use cases, for long-term scalability, maintainability, and consistency, **Redux Toolkit** provides the most robust and future-proof solution.  
 
+### 1.3. Styling / UI Framework
+Available frontend styling and component framework options considered:  
+
+1. **Material UI (MUI)** – Comprehensive React component library with prebuilt components, responsive design, and strong theming support.  
+2. **Tailwind CSS** – Utility-first CSS framework allowing fine-grained, low-level styling with high flexibility and low bundle overhead.  
+3. **Bootstrap** – Popular component library with grid system, but heavier and less flexible for modern React projects.  
+4. **Chakra UI** – Accessible, composable React component library with built-in theming; lighter alternative to MUI.  
+5. **shadcn/ui** – Headless component primitives for React built with Tailwind, allowing custom design without losing accessibility.  
+
+
+Here’s why the combination **Material UI, shadcn/ui, and Tailwind CSS** was chosen for the project:  
+
+- **Rapid Development with Prebuilt Components (Material UI)**  
+  MUI provides a rich set of prebuilt, customizable components that accelerate UI development while ensuring accessibility and responsiveness.  
+
+- **Custom Design Flexibility (Tailwind + shadcn/ui)**  
+  Tailwind CSS allows utility-based styling for pixel-perfect layouts, while shadcn/ui provides headless components that integrate seamlessly with Tailwind for full design control.  
+
+- **Consistency and Theming**  
+  MUI’s theming system ensures consistent colors, typography, and spacing across the application, while Tailwind and shadcn/ui enable fine-grained adjustments when needed.  
+
+- **Developer Productivity**  
+  The combination balances rapid prototyping with flexibility: MUI for standard components, Tailwind + shadcn/ui for custom components, reducing repetitive CSS writing.  
+
+- **Community Support & Ecosystem**  
+  All three technologies have strong community support, good documentation, and maintainable patterns for long-term project growth.  
+
+✅ **Summary**  
+By combining **Material UI, shadcn/ui, and Tailwind CSS**, the project achieves a **balance of speed, flexibility, and consistency**, enabling rapid development of both standard and custom UI components while maintaining a maintainable and scalable styling architecture.  
+
 ---
 
 ## 2. Backend
-*(To be defined — depending on project architecture and service requirements)*  
+
+### 2.1 Backend Framework 
+Available backend frameworks considered for this project:  
+
+1. **Express.js** – Minimal and flexible Node.js framework, widely adopted, integrates well with JavaScript/TypeScript stack.  
+2. **NestJS** – Full-featured, structured Node.js framework with strong TypeScript support and modular architecture.  
+3. **Django** – Python-based framework with built-in ORM, authentication, and admin panel. Powerful but requires switching language from frontend JS.  
+4. **Flask** – Lightweight Python framework, simple to set up, but lacks batteries-included features of Django.  
+
+Here’s why **Express.js** was chosen for the backend:
+
+- **Unified Language Stack**  
+  Using JavaScript/TypeScript on both frontend (React + Next.js) and backend simplifies development and reduces context switching for the team.  
+
+- **Integration with Puppeteer**  
+  The scrapper in this project is written in Puppeteer (Node.js). Express.js allows seamless integration without bridging different languages or environments.  
+
+- **Simplicity & Flexibility**  
+  Express.js is minimal and unopinionated, giving full control over routing, middleware, and API design without overhead.  
+
+- **Performance & Ecosystem**  
+  Node.js and Express.js are performant for I/O-heavy operations (like scraping, API requests) and have a mature ecosystem of packages for logging, authentication, and validation.  
+
+- **Scalability & Community Support**  
+  Widely adopted with strong community support, making it easy to maintain, scale, and onboard new developers.  
+
+✅ **Summary**  
+Express.js provides the **best balance of simplicity, performance, and language unification** for this project. Its native compatibility with Puppeteer and the JavaScript stack makes it the optimal choice for the backend.  
 
 ---
-## 🚀 Quick Start
+## 3. Databases
+Available database options considered for this project:  
 
-### Prerequisites
+1. **MongoDB** – NoSQL document-oriented database, flexible schema, ideal for JSON-like, unstructured, or rapidly evolving data.  
+2. **PostgreSQL** – Relational SQL database with ACID compliance, strong query capabilities, and support for complex relationships.  
+3. **Redis** – In-memory key-value store, ideal for caching, session storage, and fast lookups.  
+4. **MySQL** – Relational SQL database, reliable but less feature-rich than PostgreSQL for advanced queries.  
+5. **SQLite** – Lightweight file-based SQL database, suited for prototyping or small projects.  
 
-- Node.js 18+ 
-- Docker & Docker Compose (optional)
-- PostgreSQL (if not using Docker)
-- Redis (if not using Docker)
+Here’s why the combination of **MongoDB, PostgreSQL, and Redis** was chosen:
 
-### 1. Clone and Setup
+- **Flexible & Rapidly Changing Data (MongoDB)**  
+  MongoDB stores **scraped price data**, which may have varying fields, frequent updates, and semi-structured JSON objects. Its flexible schema allows rapid iteration without migration overhead.  
 
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd urban-logistics-decision-support-system
+- **Structured & Transactional Data (PostgreSQL)**  
+  PostgreSQL stores **critical user data, roles, permissions, and relational entities**. Its ACID compliance ensures data integrity for authentication, access control, and transactional operations.  
 
-# Run the setup script (Linux/Mac)
-chmod +x scripts/setup.sh
-./scripts/setup.sh
+- **High-Performance Caching (Redis)**  
+  Redis caches **frequently accessed data**, such as latest price snapshots, aggregated queries, or session information, enabling **fast response times** for the frontend.  
 
-# Or run setup manually (Windows)
-npm install
-npm run docker:up
-npm run db:migrate
-npm run db:seed
-```
-
-### 2. Configure Environment
-
-```bash
-# Copy and edit environment variables
-cp config/env.example .env
-# Edit .env with your configuration
-```
-
-### 3. Start Development
-
-```bash
-# Start all services
-npm run dev
-
-# Or start individual services
-npm run dev:scraper   # Start scraper only
-npm run dev:workers   # Start workers only
-npm run dev:backend   # Start backend API only
-npm run dev:frontend  # Start frontend only
-```
-
-### 4. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **API Health Check**: http://localhost:3001/api/health
-
-## 🐳 Docker Deployment
-
-### Development with Docker
-
-```bash
-# Start all services
-npm run docker:up
-
-# Stop all services
-npm run docker:down
-
-# View logs
-docker-compose logs -f scraper
-```
-
-### Production Deployment
-
-```bash
-# Build and start production services
-docker-compose --profile production up -d
-
-# Scale workers
-docker-compose up -d --scale worker=3
-```
-
-## 🛠️ Utility Scripts
-
-### Data Generation
-
-```bash
-# Generate neighborhood codes for districts
-npm run generate:neighborhood-codes
-
-# Generate routes from districts data
-npm run generate:routes
-```
-
-### Database Operations
-
-```bash
-# Run database migrations
-npm run db:migrate
-
-# Seed database with initial data
-npm run db:seed
-```
+- **Optimized Data Access per Use Case**  
+  - MongoDB → raw price data from the scraper  
+  - PostgreSQL → structured, relational data for user management and application rules  
+  - Redis → ephemeral, high-speed cache for hot data and computed aggregations  
 
-## 📁 Project Structure
-
-```
-urban-logistics-decision-support-system/
-├── scraper/                 # Puppeteer data collection logic
-│   ├── src/
-│   │   ├── scraper.js      # Main scraper class
-│   │   ├── selectors.js    # CSS selectors
-│   │   ├── auth.js         # Authentication
-│   │   └── utils.js        # Helper functions
-│   └── scraper.mjs         # Entry point
-├── workers/                 # Background job processing
-│   ├── src/
-│   │   ├── distance-worker.js
-│   │   └── queue.js
-│   └── worker.mjs
-├── backend/                 # Next.js API
-│   ├── src/app/api/        # API routes
-│   ├── src/lib/            # Database & utilities
-│   └── src/types/          # TypeScript types
-├── frontend/                # React client
-│   ├── src/app/            # Next.js app directory
-│   ├── src/components/     # React components
-│   └── src/hooks/          # Custom hooks
-├── db/                      # Database management
-│   ├── migrations/         # Database migrations
-│   ├── seeds/              # Seed data
-│   └── schema.sql          # Complete schema
-├── config/                  # Configuration files
-├── scripts/                 # Utility scripts
-│   ├── setup.sh            # Project setup script
-│   ├── generate-routes.mjs # Generate routes from districts
-│   └── generate-neighborhood-codes.mjs
-├── data/                    # Data files
-│   ├── Districts.json      # Tehran districts data
-│   └── routes.json         # Generated routes
-└── docker-compose.yml       # Docker services
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Key environment variables in `.env`:
-
-```bash
-# Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/urban_logistics
-
-# Redis
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# Scraper
-SCRAPER_PHONE_NUMBER=your_phone_number
-SCRAPER_HEADLESS=true
-SCRAPER_MAX_CONCURRENT_BROWSERS=3
-
-# API Keys
-GOOGLE_MAPS_API_KEY=your_google_maps_key
-OSRM_BASE_URL=https://router.project-osrm.org/route/v1
-```
+- **Scalability & Reliability**  
+  This combination leverages **the strengths of each database**: MongoDB for flexible, high-write data, PostgreSQL for transactional reliability, and Redis for ultra-fast in-memory access. All three have mature ecosystems and horizontal scaling capabilities.  
 
-### Database Schema
-
-The application uses a partitioned PostgreSQL database:
+✅ **Summary**  
+By combining **MongoDB, PostgreSQL, and Redis**, the project achieves **optimal performance, flexibility, and reliability**. Each database is used where it’s most effective: MongoDB for evolving scraped data, PostgreSQL for structured user and transactional data, and Redis for high-speed caching and session management, ensuring a fast and robust full-stack architecture.  
 
-- **districts**: Urban district information
-- **neighborhoods**: Neighborhood data with coordinates
-- **routes**: Route definitions
-- **route_history**: Partitioned table for historical data
+---
 
-## 📊 API Endpoints
+## 4. Scrapers & Crawlers
+Available tools and strategies for web scraping:  
 
-### Routes API
+1. **BeautifulSoup (Python)** – Lightweight HTML/XML parser, good for static pages, but limited for modern JavaScript-heavy sites.  
+2. **Scrapy (Python)** – Powerful, scalable crawling framework, but requires Python stack and extra setup.  
+3. **Selenium (Multi-language)** – Browser automation tool, versatile but slower for large-scale scraping.  
+4. **Cheerio (Node.js)** – Fast HTML parser for static content, but lacks full browser simulation.  
+5. **Puppeteer (Node.js)** – Headless Chrome/Chromium automation tool, excellent for dynamic and JavaScript-rendered pages.  
+6. **Playwright (Multi-language)** – Modern browser automation library, supports multiple browsers, good alternative to Puppeteer.  
 
-```bash
-# Get latest routes
-GET /api/routes
+Here’s why **Puppeteer** was chosen and later **upgraded to Puppeteer Cluster**:
 
-# Get routes by origin
-GET /api/routes?origin=D01_N01&limit=50
+- **Lack of Direct API Access**  
+  Service providers do not expose official APIs for price data. Scraping is necessary to **extract structured information** from their web interfaces.  
 
-# Get route history
-GET /api/routes/[routeId]?days=7
-```
+- **Same Language as Backend (Node.js)**  
+  Puppeteer integrates seamlessly with the **Express.js backend** since both are JavaScript-based. This avoids the overhead of running a separate Python stack (Scrapy, BeautifulSoup).  
 
-### Neighborhoods API
+- **Dynamic Content Handling**  
+  Puppeteer renders **JavaScript-heavy pages**, clicks through navigation, and extracts data from sites that do not expose their data in static HTML.  
 
-```bash
-# Get all neighborhoods
-GET /api/neighborhoods
+- **🚀 Initial Implementation with Vanilla Puppeteer**  
+  A **basic Puppeteer script** was first implemented to prove feasibility and validate data extraction.  
+  - ✅ Successfully scraped required information.  
+  - ⚠️ However, performance was limited — running sequentially on a single browser instance made it **too slow for larger datasets**.  
 
-# Search neighborhoods
-GET /api/neighborhoods?search=تهران
-```
+- **Upgrade to Puppeteer Cluster**  
+  To address performance bottlenecks, the scraper was upgraded to **Puppeteer Cluster**, which enables **concurrent browser instances**.  
+  - Parallel scraping tasks improve throughput significantly.  
+  - Automatic task queue and error handling.  
+  - Optimized resource usage for large-scale scraping.  
 
-### Health Check
+- **Scalability for Future Loads**  
+  With Puppeteer Cluster, the scraper can scale horizontally, handling multiple sites, user roles, or price sources simultaneously.  
 
-```bash
-GET /api/health
-```
+✅ **Summary**  
+The project uses **Puppeteer** because of its seamless integration with the Node.js backend and ability to handle dynamic websites. After confirming functionality with **vanilla Puppeteer**, the implementation was **upgraded to Puppeteer Cluster** for concurrency, efficiency, and performance, ensuring scalable and reliable large-scale data extraction.  
 
-## 🔄 Data Pipeline
-
-1. **Data Collection**: Puppeteer collects data from transportation services
-2. **Storage**: Data saved to partitioned PostgreSQL table
-3. **Enrichment**: Workers fetch distance/time data from OSRM
-4. **API**: Backend serves data to frontend
-5. **Visualization**: Frontend displays routes with interactive map
-
-## 🚀 Performance Optimizations
-
-- **Database Partitioning**: Monthly partitions for route_history
-- **Connection Pooling**: Optimized PostgreSQL connections
-- **Redis Caching**: API response caching
-- **Concurrent Scraping**: Multiple browser instances
-- **Queue Processing**: Background job processing with BullMQ
-
-## 🛠️ Development
-
-### Adding New Features
-
-1. **API Routes**: Add to `backend/src/app/api/`
-2. **Components**: Add to `frontend/src/components/`
-3. **Database**: Add migrations in `db/migrations/`
-4. **Workers**: Add to `workers/src/`
-
-### Testing
-
-```bash
-# Run tests
-npm test
-
-# Type checking
-npm run type-check
-
-# Linting
-npm run lint
-```
-
-### Database Migrations
-
-```bash
-# Create new migration
-npm run db:migrate:create
-
-# Run migrations
-npm run db:migrate
-
-# Seed data
-npm run db:seed
-```
-
-## 📈 Monitoring
-
-### Logs
-
-```bash
-# View scraper logs
-tail -f logs/scraper-combined.log
-
-# View worker logs
-tail -f logs/worker-combined.log
-
-# View Docker logs
-docker-compose logs -f
-```
-
-### Health Checks
-
-- API Health: `GET /api/health`
-- Database: Connection pool monitoring
-- Redis: Queue status monitoring
-
-## 🔒 Security
-
-- Environment-based configuration
-- Input validation with Zod
-- Rate limiting on API endpoints
-- CORS configuration
-- SQL injection prevention
-
-## 🚀 Deployment
-
-### Production Checklist
-
-- [ ] Set `NODE_ENV=production`
-- [ ] Configure SSL certificates
-- [ ] Set up monitoring and logging
-- [ ] Configure backup strategy
-- [ ] Set up CI/CD pipeline
-- [ ] Configure load balancing
-
-### Scaling
-
-- **Horizontal**: Add more worker instances
-- **Vertical**: Increase database resources
-- **Caching**: Add Redis cluster
-- **CDN**: Add content delivery network
+---
 
 ## 🤝 Contributing
 

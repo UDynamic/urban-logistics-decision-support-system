@@ -46,8 +46,39 @@ A comprehensive urban logistics decision support system for route optimization a
 # <div align="center">⚙️ Technical Stack ⚙️</div>
 
 ## 1. Frontend
+# <div align="center">⚙️ Technical Stack ⚙️</div>
 
-### 1.1 State Management
+---
+
+## 1. Frontend
+
+### 1.1 Frontend Framework Options
+Available frontend frameworks considered for this project:  
+
+1. **React** – Popular, component-based library with a large ecosystem and strong community support. Excellent for building dynamic UIs.  
+2. **Vue.js** – Lightweight framework with reactive data binding and simple learning curve. Good for small-to-medium projects.  
+3. **Angular** – Full-featured framework with built-in routing, forms, and dependency injection. Strong TypeScript support but steeper learning curve.  
+4. **Svelte** – Compiler-based framework offering highly optimized output. Less mature ecosystem compared to React and Vue.  
+
+Here’s why **React with Next.js** was chosen for the frontend:
+
+- **Component-Based Architecture**  
+  React’s modular components make UI development and maintenance scalable and reusable across the project.  
+
+- **Performance & SEO (Next.js)**  
+  Next.js provides server-side rendering (SSR) and static site generation (SSG), improving performance and SEO compared to plain React.  
+
+- **Ecosystem & Community**  
+  React has a massive ecosystem of libraries, tools, and developer support. Next.js enhances it with routing, API routes, and full-stack capabilities.  
+
+- **Scalability & Flexibility**  
+  The combination allows gradual adoption of advanced features like incremental static regeneration, API routes, and edge functions without locking into a rigid framework.  
+
+✅ **Summary**  
+React + Next.js offers the best balance of **developer experience, scalability, performance, and ecosystem support**, making it the optimal choice for the frontend of this project.  
+
+
+### 1.2 State Management
 Available strategies for managing client state:  
 
 1. **Context API** – Built into React, good for simple state sharing, but scales poorly with complex applications.  

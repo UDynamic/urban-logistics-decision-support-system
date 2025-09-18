@@ -2,18 +2,11 @@
 
 A comprehensive urban logistics decision support system for route optimization and analysis, built with modern web technologies and scalable architecture.
 
+### For whom is it made for?!
+For those who primarily perform logistical services (Cabs, Bike Deliveries and bikers) as their daily occupation struggling with the decision making process of optimizing their daily portfolio of accepted services from a poll of  service requisition. 
 
-## Definition of the App
 
-## The solution or the reason to why someone should fo this project
-
-   * what most common people mean robots are mainly scripts or browser automations. this sort of automation extracts data, stores it, and then we could train an AI model on it.
-
-## Capabilities and expansion opportunities 
-   * one similar business at it's early ages could price it's servise using benchmarking
-
-   * 
-
+### What is it?!
 
 ## <div align="center">🌟 Features
 

@@ -1,17 +1,31 @@
 # <div align="center">🚛 Urban Logistics Decision Support System
 
-A comprehensive urban logistics decision support system for route optimization and analysis, built with modern web technologies and scalable architecture.
+A modern, web-based decision support system designed to help urban logistics professionals **optimize routes and manage service requests efficiently**. 
 
-### For whom is it made for?!
-For those who primarily perform logistical services (Cabs, Bike Deliveries and bikers) as their daily occupation struggling with the decision making process of optimizing their daily portfolio of accepted services from a poll of  service requisition. 
+Built with scalable architecture and modern web technologies, it transforms raw logistics data into actionable insights.
 
+---
 
-### What is it?!
-It's a live dashboard for targeted routes to acquire historical data and analysis on the economical factors of the service prices on traveled distance using live trafical and logistical data. 
+## Who Is This For?
+
+- **Cabs, bike couriers, and delivery riders** who juggle multiple service requests daily.  
+- Anyone struggling to **decide the optimal set of services** to accept from a pool of requests.  
+- Professionals looking to **maximize efficiency, reduce travel time, and increase daily earnings**.
+
+---
+
+## What Problem Does It Solve?
+
+Urban logistics is complex: multiple service requests, changing priorities, and dynamic urban traffic patterns make decision-making hard. This system **targets a list of routs chosen by the client and demonstrates the live status plus historical patterns of those routes**.
+
+---
 
 
 ## <div align="center">🌟 Features
 
+
+- **Route Optimization:** Calculate the fastest and most efficient routes.  
+- **Service Prioritization:** Automatically suggest the best services to accept.  
 - **Real-time Data Collection**: Automated data collection from transportation services using Puppeteer
 - **Route Enrichment**: Distance and travel time data from OSRM API
 - **Interactive Frontend**: Modern React/Next.js interface with map visualization

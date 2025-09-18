@@ -47,29 +47,66 @@ A comprehensive urban logistics decision support system for route optimization a
 
 ## Frontend
 
-### State Management
-here’s why I chose **Redux Toolkit** as the project’s state management solution:  
+### State Management  
+
+#### Evaluated Options  
+
+Several state management solutions were considered for this project:  
+
+- **Context API**  
+  - Built-in to React, suitable for lightweight global state.  
+  - Strengths: No external dependencies, simple for small apps.  
+  - Limitations: Re-renders can become expensive; lacks advanced tooling and patterns for large-scale applications.  
+
+- **SWR**  
+  - Lightweight data-fetching library by Vercel, focused on server state.  
+  - Strengths: Automatic caching, revalidation, and simple API.  
+  - Limitations: Focused only on server data; does not address client/UI state.  
+
+- **React Query (TanStack Query)**  
+  - Feature-rich library for managing server state.  
+  - Strengths: Smart caching, request deduplication, background updates, pagination, optimistic updates.  
+  - Limitations: Specializes in server state only; requires pairing with another library (e.g., Zustand or Context) for client state.  
+
+- **Zustand**  
+  - Minimal, lightweight state management library for client state.  
+  - Strengths: Simple API, good for local/UI state.  
+  - Limitations: Lacks built-in server state management or advanced dev tools ecosystem.  
+
+- **Redux Toolkit (RTK)**  
+  - Official, modern Redux wrapper providing simplified APIs and patterns.  
+  - Strengths: Centralized predictable store, supports both client and server state, mature ecosystem, scalable patterns, built-in RTK Query for advanced server state handling.  
+  - Limitations: Slightly more boilerplate compared to lightweight solutions, but mitigated by RTK’s abstractions.  
+
+---
+
+#### Justification for Redux Toolkit  
 
 - **Unified State Management**  
-  Redux manages both UI and server state in one predictable store. No split brain between React Query and other tools.  
+  Redux Toolkit enables both UI and server state to be managed in one predictable store. Alternatives like SWR or React Query would still require an additional library (Zustand/Context) to cover client state, leading to a fragmented setup.  
 
 - **Scalability for Teams**  
-  Mature ecosystem (DevTools, middleware, RTK Query) and widely known patterns make onboarding easier for developers.  
+  Redux has a mature ecosystem (Redux DevTools, middleware, RTK Query) and is widely known across the developer community. This reduces onboarding costs and ensures consistent practices in team environments.  
 
 - **Flexibility & Control**  
-  We aren’t locked into React Query’s caching rules — we define exactly how to cache, normalize, and invalidate data.  
+  Redux does not enforce fixed caching rules (unlike React Query or SWR). Developers have full control over caching, normalization, and invalidation strategies, making it adaptable to project-specific requirements.  
 
 - **Future-Proof**  
-  Redux is battle-tested and universal, while React Query is narrower and specialized in fetching.  
+  Redux is a proven and battle-tested solution, with long-term community support. While libraries like SWR or React Query excel in specialized niches, Redux provides a universal approach for application-wide state management.  
 
 - **RTK Query as Middle Ground**  
-  If advanced caching and invalidation are needed, RTK Query brings React Query–like features *inside Redux* without adding another library.  
+  If advanced server-state features are required, RTK Query provides React Query–like capabilities (caching, deduplication, revalidation) directly within Redux. This avoids the need to adopt multiple libraries and preserves architectural simplicity.  
+
+---
 
 ✅ **Summary Argument**  
-React Query is excellent for API data, but for long-term scalability and a single source of truth, **Redux Toolkit** gives us more control and consistency. With RTK Query available, we can always enable advanced server-state features without splitting our stack.  
+While Context API, SWR, React Query, and Zustand each provide valuable features, they address **only parts** of the state management problem. For a scalable, maintainable, and future-proof architecture, **Redux Toolkit** is chosen as the single solution capable of managing both UI and server state, with RTK Query available to cover advanced data-fetching needs when necessary.  
 
+---
 
 ## Backend
+(Documentation placeholder — to be defined based on backend stack and architecture decisions.)
+
 ---
 ## 🚀 Quick Start
 

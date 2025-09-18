@@ -35,7 +35,7 @@ Urban logistics is complex: multiple service requests, changing priorities, and 
 - **Docker Support**: Complete containerization for easy deployment
 
 ## <div align="center">🏗️ Architecture
-
+!!! . to be updated !!! 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Backend API   │    │   Scraper       │

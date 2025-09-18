@@ -47,7 +47,7 @@ A comprehensive urban logistics decision support system for route optimization a
 
 ## 1. Frontend
 
-### 1.1 State Management Options
+### 1.1 State Management
 Available strategies for managing client state:  
 
 1. **Context API** – Built into React, good for simple state sharing, but scales poorly with complex applications.  
@@ -55,9 +55,6 @@ Available strategies for managing client state:
 3. **React Query** – Excellent for server state management, caching, and synchronization, but limited for broader application state.  
 4. **Redux Toolkit (RTK)** – Centralized, predictable state container with rich ecosystem, DevTools, and middleware support.  
 
----
-
-### 1.2 Justification for **Redux Toolkit**
 Here’s why **Redux Toolkit** was chosen over alternatives:
 
 - **Unified State Management**  

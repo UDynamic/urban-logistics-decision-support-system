@@ -46,11 +46,6 @@ A comprehensive urban logistics decision support system for route optimization a
 # <div align="center">⚙️ Technical Stack ⚙️</div>
 
 ## 1. Frontend
-# <div align="center">⚙️ Technical Stack ⚙️</div>
-
----
-
-## 1. Frontend
 
 ### 1.1 Frontend Framework Options
 Available frontend frameworks considered for this project:  

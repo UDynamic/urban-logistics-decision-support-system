@@ -51,7 +51,6 @@ A comprehensive urban logistics decision support system for route optimization a
 
     1.2 **State Management Options**
         Available strategies for managing client state:
-
         1. **Context API** – Built into React, good for simple state sharing, but scales poorly with complex applications.
         2. **SWR** – Lightweight library focused on data fetching and caching; lacks full global state control.
         3. **React Query** – Excellent for server state management, caching, and synchronization, but limited for broader application state.
@@ -59,7 +58,6 @@ A comprehensive urban logistics decision support system for route optimization a
 
     1.3 **Justification for Redux Toolkit**
         Reasons for selecting Redux Toolkit over other options:
-
         - **Unified State Management**
             - Manages both UI and server state in a single predictable store. No fragmentation between client and server logic.
         - **Team Scalability**

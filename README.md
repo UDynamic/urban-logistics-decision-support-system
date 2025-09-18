@@ -42,7 +42,35 @@ A comprehensive urban logistics decision support system for route optimization a
 │   Partitioned   │    │   Port: 6379    │    │   Background    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+---
+# Technical Stack
 
+## Frontend
+
+### State Management
+here’s why I chose **Redux Toolkit** as the project’s state management solution:  
+
+- **Unified State Management**  
+  Redux manages both UI and server state in one predictable store. No split brain between React Query and other tools.  
+
+- **Scalability for Teams**  
+  Mature ecosystem (DevTools, middleware, RTK Query) and widely known patterns make onboarding easier for developers.  
+
+- **Flexibility & Control**  
+  We aren’t locked into React Query’s caching rules — we define exactly how to cache, normalize, and invalidate data.  
+
+- **Future-Proof**  
+  Redux is battle-tested and universal, while React Query is narrower and specialized in fetching.  
+
+- **RTK Query as Middle Ground**  
+  If advanced caching and invalidation are needed, RTK Query brings React Query–like features *inside Redux* without adding another library.  
+
+✅ **Summary Argument**  
+React Query is excellent for API data, but for long-term scalability and a single source of truth, **Redux Toolkit** gives us more control and consistency. With RTK Query available, we can always enable advanced server-state features without splitting our stack.  
+
+
+## Backend
+---
 ## 🚀 Quick Start
 
 ### Prerequisites

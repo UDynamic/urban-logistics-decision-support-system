@@ -7,7 +7,6 @@ Built with scalable architecture and modern web technologies, it transforms raw 
 ---
 ## Who Is This For?
 
-
 - **Cabs, bike couriers, and delivery riders** who juggle multiple service requests daily.  
 - Anyone struggling to **decide the optimal set of services** to accept from a pool of requests.  
 - Professionals looking to **maximize efficiency, reduce travel time, and increase daily earnings**.

@@ -56,6 +56,9 @@ Urban logistics is complex: multiple service requests, changing priorities, and 
 ## 1. Frontend
 
 ### 1.1 Frontend Framework 
+
+React + Next.js offers the best balance of **developer experience, scalability, performance, and ecosystem support**, making it the optimal choice for the frontend of this project.  
+
 Available frontend frameworks considered for this project:  
 
 1. **React** – Popular, component-based library with a large ecosystem and strong community support. Excellent for building dynamic UIs.  
@@ -76,9 +79,6 @@ Here’s why **React with Next.js** was chosen for the frontend:
 
 - **Scalability & Flexibility**  
   The combination allows gradual adoption of advanced features like incremental static regeneration, API routes, and edge functions without locking into a rigid framework.  
-
-✅ **Summary**  
-React + Next.js offers the best balance of **developer experience, scalability, performance, and ecosystem support**, making it the optimal choice for the frontend of this project.  
 
 
 ### 1.2 State Management

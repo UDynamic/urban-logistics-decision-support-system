@@ -111,6 +111,10 @@ Here’s why **Redux Toolkit** was chosen over alternatives:
   Integrates React Query–like features *inside Redux*, offering advanced server-state management without adding another library.  
 
 ### 1.3. Styling / UI Framework
+
+By combining **Material UI, shadcn/ui, and Tailwind CSS**, the project achieves a **balance of speed, flexibility, and consistency**, enabling rapid development of both standard and custom UI components while maintaining a maintainable and scalable styling architecture.
+
+
 Available frontend styling and component framework options considered:  
 
 1. **Material UI (MUI)** – Comprehensive React component library with prebuilt components, responsive design, and strong theming support.  
@@ -136,9 +140,7 @@ Here’s why the combination **Material UI, shadcn/ui, and Tailwind CSS** was ch
 
 - **Community Support & Ecosystem**  
   All three technologies have strong community support, good documentation, and maintainable patterns for long-term project growth.  
-
-✅ **Summary**  
-By combining **Material UI, shadcn/ui, and Tailwind CSS**, the project achieves a **balance of speed, flexibility, and consistency**, enabling rapid development of both standard and custom UI components while maintaining a maintainable and scalable styling architecture.  
+  
 
 ---
 

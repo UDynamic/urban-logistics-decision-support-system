@@ -82,6 +82,10 @@ React + Next.js offers the best balance of **developer experience, scalability, 
 
 
 ### 1.2 State Management
+
+While **Context API**, **SWR**, and **React Query** each serve specific use cases, for long-term scalability, maintainability, and consistency, **Redux Toolkit** provides the most robust and future-proof solution.  
+
+
 Available strategies for managing client state:  
 
 1. **Context API** – Built into React, good for simple state sharing, but scales poorly with complex applications.  
@@ -105,9 +109,6 @@ Here’s why **Redux Toolkit** was chosen over alternatives:
 
 - **RTK Query Advantage**  
   Integrates React Query–like features *inside Redux*, offering advanced server-state management without adding another library.  
-
-✅ **Summary**  
-While **Context API**, **SWR**, and **React Query** each serve specific use cases, for long-term scalability, maintainability, and consistency, **Redux Toolkit** provides the most robust and future-proof solution.  
 
 ### 1.3. Styling / UI Framework
 Available frontend styling and component framework options considered:  

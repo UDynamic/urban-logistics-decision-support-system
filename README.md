@@ -4,8 +4,6 @@ A modern, web-based decision support system designed to help urban logistics pro
 
 Built with scalable architecture and modern web technologies, it transforms raw logistics data into actionable insights.
 
-
-
 ---
 ## Who Is This For?
 
